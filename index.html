@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Gaming History</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap">
+<style>
+:root{--bg:#0b0407;--red:#ff4a3f;--rd:#c8352f;--rf:#3a0f14;--pf:#13060a;--cy:#46e3ea;--yl:#f4e63a;--txt:#f1d9d6;--b:2px;--k:10px;
+ --P:polygon(0 0,calc(100% - var(--k)) 0,100% var(--k),100% 100%,var(--k) 100%,0 calc(100% - var(--k)));
+ --Pi:polygon(0 0,calc(100% - var(--k) + 1px) 0,100% calc(var(--k) - 1px),100% 100%,calc(var(--k) - 1px) 100%,0 calc(100% - var(--k) + 1px))}
+*{box-sizing:border-box;margin:0}
+html{background:var(--bg)}
+body{min-height:100vh;color:var(--txt);font-family:Rajdhani,"Segoe UI",sans-serif;font-weight:600;
+ background:radial-gradient(ellipse 90% 60% at 50% -10%,rgba(255,60,50,.22),transparent 65%),radial-gradient(ellipse at 50% 120%,rgba(70,227,234,.07),transparent 60%),
+ linear-gradient(rgba(255,74,63,.045) 1px,transparent 1px) 0 0/36px 36px,linear-gradient(90deg,rgba(255,74,63,.045) 1px,transparent 1px) 0 0/36px 36px,var(--bg)}
+body::before,body::after{content:"";position:fixed;top:0;bottom:0;width:10px;pointer-events:none;z-index:2;
+ background:repeating-linear-gradient(transparent 0 11px,rgba(255,74,63,.45) 11px 12px) right/5px 100% no-repeat}
+body::before{left:8px}body::after{right:8px;transform:scaleX(-1)}
+.cut{position:relative;background:var(--bd);clip-path:var(--P)}
+.cut::before{content:"";position:absolute;inset:var(--b);background:var(--fill);clip-path:var(--Pi)}
+.cut>*{position:relative;z-index:1}
+.topbar{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:12px 40px 0;background:linear-gradient(#150609 70%,rgba(21,6,9,.92));border-bottom:2px solid var(--rd);box-shadow:0 6px 26px rgba(255,60,50,.18)}
+.topbar::after{content:"";position:absolute;left:0;bottom:-2px;width:220px;height:2px;background:var(--cy);box-shadow:0 0 10px var(--cy)}
+.brand{font-size:13px;letter-spacing:.3em;color:var(--rd);padding-bottom:12px}
+.brand b{display:inline-block;width:8px;height:8px;background:var(--cy);margin-right:10px;animation:bl 1.4s steps(2) infinite}
+@keyframes bl{50%{opacity:.25}}
+.tabs{display:flex;align-items:center;gap:18px;padding-bottom:10px;flex-wrap:wrap;justify-content:center}
+.key{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 5px;border:2px solid var(--cy);color:var(--cy);font-size:13px;font-weight:700}
+.tab{font-size:17px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);text-decoration:none;padding:0 4px 2px;border-bottom:2px solid transparent;white-space:nowrap}
+.tab:hover{color:#fff}
+.tab.active{color:var(--cy);text-shadow:0 0 12px rgba(70,227,234,.55);border-color:var(--cy)}
+.tab.locked{color:#6b2f33;cursor:not-allowed}
+.tab.locked small{font-size:10px;letter-spacing:.15em;margin-left:6px;padding:1px 4px;border:1px solid #6b2f33;vertical-align:middle}
+#shell{transition:padding-right .28s cubic-bezier(.2,.8,.2,1)}
+body.pan #shell{padding-right:434px}
+.view{display:none}.view.on{display:block}
+body.home #status{visibility:hidden}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:14px;overflow-x:auto;padding:6px 4px 14px}
+.card{--bd:var(--rd);--fill:var(--pf);--k:18px;display:flex;flex-direction:column;justify-content:space-between;min-height:380px;padding:18px 20px 22px;color:var(--txt);text-decoration:none;transition:transform .15s}
+.card::after{content:"";position:absolute;z-index:0;inset:var(--b);background:repeating-linear-gradient(135deg,rgba(255,74,63,.06) 0 2px,transparent 2px 12px);clip-path:var(--Pi);pointer-events:none}
+.card .top{display:flex;justify-content:space-between;align-items:center}
+.card .big{font-size:84px;font-weight:700;line-height:1;letter-spacing:.04em;color:transparent;-webkit-text-stroke:2px rgba(255,74,63,.55);margin:30px 0}
+.card h2{font-size:28px;letter-spacing:.08em;text-transform:uppercase;color:#fff;line-height:1.1}
+.card p{margin-top:8px;font-size:15px;letter-spacing:.06em;color:var(--rd)}
+.card .bar{height:4px;margin-top:16px;background:var(--rd)}
+.card.open:hover{--bd:var(--cy);--fill:#0a1418;transform:translateY(-6px)}
+.card.open:hover .big{-webkit-text-stroke-color:var(--cy)}
+.card.open:hover .bar{background:var(--cy);box-shadow:0 0 12px var(--cy)}
+.card.open:hover p{color:var(--cy)}
+.card.locked{--bd:#3a1518;opacity:.55;cursor:not-allowed}
+.card.locked .big{-webkit-text-stroke-color:rgba(255,74,63,.2)}
+.card.locked .bar{background:#3a1518}
+.status{justify-self:end;display:flex;gap:10px;padding-bottom:10px}
+.chip{padding:3px 14px;font-size:16px;letter-spacing:.08em;border:2px solid;background:rgba(0,0,0,.35)}
+.chip.r{color:var(--red);border-color:var(--rd)}.chip.c{color:var(--cy);border-color:var(--cy)}
+main{max-width:1480px;margin:0 auto;padding:30px 40px 40px}
+.ghost{text-align:center;font-size:13px;letter-spacing:.45em;color:rgba(255,74,63,.35);margin-bottom:6px}
+.sec{display:flex;align-items:center;gap:14px;margin:0 0 14px;color:var(--cy);border-top:2px solid rgba(70,227,234,.55);padding-top:8px}
+.sec h1{font-size:22px;font-weight:700;letter-spacing:.12em;color:#fff;text-transform:uppercase}
+.sec span{margin-left:auto;color:var(--rd);font-size:13px;letter-spacing:.25em}
+.tier{display:grid;grid-template-columns:210px minmax(0,1fr);gap:8px;margin-bottom:10px}
+.label{--bd:color-mix(in srgb,var(--tc) 75%,#000);--fill:color-mix(in srgb,var(--tc) 13%,#14060a);display:flex;flex-direction:column;justify-content:center;gap:3px;padding:12px 14px 12px 24px;min-height:104px}
+.label::after{content:"";position:absolute;z-index:2;left:0;top:0;bottom:0;width:7px;background:var(--tc)}
+.label b{font-size:clamp(34px,3.6vw,52px);letter-spacing:.06em;color:var(--tc);line-height:1.1;text-transform:uppercase;overflow-wrap:anywhere}
+.label span{font-size:14px;color:var(--txt);opacity:.8;letter-spacing:.12em}
+.label i{font-style:normal;font-size:12px;letter-spacing:.2em;color:var(--cy)}
+.items{--bd:#5c1c20;--fill:var(--pf);display:flex;flex-wrap:wrap;gap:5px;padding:10px 12px;align-content:flex-start;min-height:104px}
+.cell{position:relative;width:96px;height:96px;cursor:pointer}
+.g{position:absolute;inset:0;background:#6a2024;padding:2px;clip-path:var(--P);--k:9px;transition:background .12s}
+.g>*{width:100%;height:100%;display:block;object-fit:cover;clip-path:var(--Pi);--k:9px}
+.ph{display:grid!important;place-items:center;font-weight:700;font-size:24px;letter-spacing:.05em;color:var(--tc);background:repeating-linear-gradient(135deg,#1b0a0e 0 6px,#240d12 6px 12px)}
+.cell::after{content:"";position:absolute;inset:-4px;pointer-events:none;opacity:0;transition:opacity .12s;
+ --l:linear-gradient(var(--cy),var(--cy));
+ background:var(--l) 0 0/12px 2px,var(--l) 0 0/2px 12px,var(--l) 100% 0/12px 2px,var(--l) 100% 0/2px 12px,var(--l) 0 100%/12px 2px,var(--l) 0 100%/2px 12px,var(--l) 100% 100%/12px 2px,var(--l) 100% 100%/2px 12px;background-repeat:no-repeat}
+.cell:hover{z-index:5}.cell:hover::after{opacity:1}
+.cell:hover .g{background:var(--cy)}
+.empty{color:#7a3034;font-size:14px;letter-spacing:.25em;align-self:center}
+#tip{position:fixed;z-index:100;pointer-events:none;opacity:0;left:0;top:0;--bd:var(--cy);--fill:#06161a;max-width:min(420px,calc(100vw - 16px));transition:opacity .08s}
+#tip span{display:block;padding:7px 18px 7px 14px;font-size:17px;letter-spacing:.05em;color:#e8fdff;overflow-wrap:anywhere}
+.msg{padding:60px 20px;text-align:center;letter-spacing:.25em;color:var(--cy);font-size:16px}
+.msg.err{color:var(--red)}
+.btn{display:inline-block;margin-top:18px;min-width:200px;padding:10px 26px;font:700 16px Rajdhani,sans-serif;letter-spacing:.2em;color:var(--red);cursor:pointer;border:0;--bd:var(--red);--fill:var(--pf);text-transform:uppercase}
+.btn:hover{--bd:var(--cy);color:var(--cy)}
+.foot{display:flex;justify-content:center;align-items:center;gap:30px;padding:10px 40px 40px;flex-wrap:wrap}
+.hint{display:flex;align-items:center;gap:8px;color:var(--cy);font-size:15px;letter-spacing:.08em}
+.hint .key{color:var(--cy)}
+#panel{position:fixed;z-index:60;top:78px;right:14px;bottom:14px;width:min(410px,calc(100vw - 20px));--bd:var(--cy);--fill:#0a0709;transform:translateX(calc(100% + 40px));transition:transform .28s cubic-bezier(.2,.8,.2,1);--k:16px}
+#panel.on{transform:none}
+#panel .pin{height:100%;overflow-y:auto;padding:16px 18px 20px;scrollbar-width:thin;scrollbar-color:var(--rd) transparent}
+.p-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.p-top .x{background:none;border:2px solid var(--cy);color:var(--cy);font:700 13px Rajdhani,sans-serif;letter-spacing:.1em;padding:2px 10px;cursor:pointer}
+.p-top .x:hover{background:var(--cy);color:#000}
+.p-cover{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.p-cover .pc{flex:none;width:104px;height:104px;background:var(--rd);padding:2px;clip-path:var(--P)}
+.p-cover .pc>*{width:100%;height:100%;object-fit:cover;display:grid;place-items:center;clip-path:var(--Pi);font-size:26px;font-weight:700;color:var(--tc);background:#1b0a0e}
+.p-cover h3{font-size:24px;line-height:1.1;color:#fff;letter-spacing:.04em;overflow-wrap:anywhere}
+.p-tier{display:flex;align-items:stretch;margin-bottom:16px;border:2px solid color-mix(in srgb,var(--tc) 70%,#000);background:color-mix(in srgb,var(--tc) 12%,#13060a)}
+.p-tier .n{padding:4px 16px;font-size:44px;font-weight:700;line-height:1.1;color:var(--tc);border-right:2px solid color-mix(in srgb,var(--tc) 70%,#000)}
+.p-tier .t{padding:6px 14px;display:flex;flex-direction:column;justify-content:center}
+.p-tier small{font-size:12px;letter-spacing:.25em;color:var(--cy)}
+.p-tier b{font-size:30px;letter-spacing:.08em;color:var(--tc);text-transform:uppercase}
+.p-h{font-size:13px;letter-spacing:.3em;color:var(--cy);border-top:2px solid rgba(70,227,234,.5);padding-top:6px;margin:6px 0 10px}
+.rt{margin-bottom:12px}
+.rt .l{display:flex;justify-content:space-between;align-items:baseline}
+.rt .l b{font-size:18px;letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.rt .l em{font-style:normal;font-size:20px;font-weight:700;color:var(--sc)}
+.rt p{font-size:13px;letter-spacing:.08em;color:var(--rd);margin:0 0 5px}
+.seg{display:flex;gap:4px}
+.seg i{flex:1;height:10px;background:#2a0f13}
+.seg i.on{background:var(--sc);box-shadow:0 0 8px color-mix(in srgb,var(--sc) 60%,transparent)}
+.q5,.q4{--sc:var(--cy)}.q3{--sc:var(--yl)}.q2,.q1{--sc:var(--red)}.q0{--sc:#6b2f33}.dq{--sc:#ff6b3d}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.box{border:2px solid #5c1c20;background:#13060a;padding:8px 12px}
+.box.wide{grid-column:1/-1}
+.box small{display:block;font-size:12px;letter-spacing:.25em;color:var(--rd)}
+.box strong{display:block;font-size:22px;color:#fff;letter-spacing:.04em;overflow-wrap:anywhere}
+.box .seg{margin-top:6px}
+.cell.sel::after{opacity:1}.cell.sel .g{background:var(--cy)}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(4,240px)}}
+@media(max-width:760px){body.pan #shell{padding-right:0}.topbar{grid-template-columns:1fr;padding:10px 18px 0;gap:6px}.brand{display:none}.status{justify-self:start}main{padding:22px 18px}.tier{grid-template-columns:1fr}.label{min-height:0}
+ .cell{width:78px;height:78px}body::before,body::after{display:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><b></b>NET//ARCHIVE</div>
+  <nav class="tabs"><span class="key">Q</span>
+    <a class="tab active" href="#home" data-r="home">Home</a>
+    <a class="tab" href="#tier" data-r="tier">Games Tier List</a>
+    <span class="tab locked">Female Characters<small>LOCKED</small></span>
+    <span class="tab locked">Firearms<small>LOCKED</small></span>
+    <span class="tab locked">KSA Achievements<small>LOCKED</small></span>
+  <span class="key">E</span></nav>
+  <div class="status" id="status"><span class="chip c">LOADING…</span></div>
+</header>
+<div id="shell"><main>
+  <section class="view on" id="view-home">
+    <div class="ghost">MAIN MENU</div>
+    <div class="sec"><h1>Main Menu</h1><span>// SELECT A SECTION</span></div>
+    <div class="cards">
+      <a class="cut card open" href="#tier"><div class="top"><span class="key">01</span><span class="chip c">OPEN</span></div><div class="big">TIER</div><div><h2>Games Tier List</h2><p>My Gaming History, ranked</p><div class="bar"></div></div></a>
+      <div class="cut card locked"><div class="top"><span class="key">02</span><span class="chip r">LOCKED</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Coming soon</p><div class="bar"></div></div></div>
+      <div class="cut card locked"><div class="top"><span class="key">03</span><span class="chip r">LOCKED</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Coming soon</p><div class="bar"></div></div></div>
+      <div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA Achievements</h2><p>Coming soon</p><div class="bar"></div></div></div>
+    </div>
+  </section>
+  <section class="view" id="view-tier">
+    <div class="ghost">GAMES TIER LIST</div>
+    <div class="sec"><h1>Games Tier List</h1><span>// ALL GAMES</span></div>
+    <div id="app"><div class="msg">CONNECTING TO NETWORK…</div></div>
+    <div class="foot">
+      <button class="cut btn" onclick="load()"><span>Refresh data</span></button>
+      <div class="hint"><span class="key">R</span>Refresh</div>
+    </div>
+  </section>
+</main></div>
+<aside class="cut" id="panel" aria-label="Game details"><div class="pin" id="pin"></div></aside>
+<div class="cut" id="tip"><span></span></div>
+<script>
+const BASE="https://docs.google.com/spreadsheets/d/e/2PACX-1vRnb3oGsDwoGWWIiNRmjyTqjCV5Ar5HMoGDfcakMvAtAjm6wHCxvkgg2BLnskpWios1u106VA4a-9gY/";
+const URL_MAIN=BASE+"pub?gid=0&single=true&output=csv";
+const URL_CFG=BASE+"pub?gid=78213888&single=true&output=csv";
+const IMG_COL=12; // column M: direct cover image URL (A=0, B=1, ... M=12)
+const PALETTE=["#ff3d3d","#ff6b3d","#ffa13d","#f4e63a","#7ef0c6","#46e3ea","#5aa0ff"];
+
+const ALL=[];
+function parseCSV(t){
+  const rows=[];let r=[],f="",q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){ if(c=='"'){ if(t[i+1]=='"'){f+='"';i++} else q=false } else f+=c }
+    else if(c=='"') q=true;
+    else if(c==","){r.push(f);f=""}
+    else if(c=="\n"){r.push(f);rows.push(r);r=[];f=""}
+    else if(c!="\r") f+=c;
+  }
+  if(f!==""||r.length){r.push(f);rows.push(r)}
+  return rows;
+}
+const num=s=>{s=(s||"").trim().replace(",",".");return s!==""&&!isNaN(s)?parseFloat(s):NaN};
+const imgFrom=s=>{s=(s||"").trim();const m=s.match(/https?:\/\/[^\s")]+/);return m?m[0]:""};
+
+const DOC="https://docs.google.com/spreadsheets/d/1CmoD0lO2PDJzZYQ8y-axJYh5nUlWf6Q1QeiJFF0Sl3Q/";
+const ALT={
+  [URL_MAIN]:[DOC+"gviz/tq?tqx=out:csv&gid=0",DOC+"export?format=csv&gid=0"],
+  [URL_CFG]:[DOC+"gviz/tq?tqx=out:csv&gid=78213888",DOC+"export?format=csv&gid=78213888"]
+};
+async function getText(u){
+  const list=[u+"&_="+Date.now(),...(ALT[u]||[])];
+  let last;
+  for(const x of list){
+    try{const r=await fetch(x);if(!r.ok)throw new Error("HTTP "+r.status);return await r.text()}
+    catch(e){last=e}
+  }
+  throw new Error(last&&last.message==="Failed to fetch"
+    ?"Failed to fetch (the browser blocked the request to Google; try opening the page through a local server)":last.message);
+}
+
+async function getHtmlImages(){ // row index (0-based) -> image url, best effort
+  const map={};
+  try{
+    const doc=new DOMParser().parseFromString(await getText(URL_HTML),"text/html");
+    doc.querySelectorAll("tr").forEach(tr=>{
+      const th=tr.querySelector("th");if(!th)return;
+      const n=parseInt(th.textContent);if(!n)return;
+      const img=tr.querySelectorAll("td")[11]?.querySelector("img");
+      if(img&&img.src)map[n-1]=img.src;
+    });
+  }catch(e){}
+  return map;
+}
+
+function buildTiers(cfg){
+  let t=[];
+  for(let i=3;i<=9&&i<cfg.length;i++){
+    const from=num(cfg[i][1]),to=num(cfg[i][2]),name=(cfg[i][3]||"").trim();
+    if(name&&!isNaN(from)) t.push({name,from,to:isNaN(to)?from:to,items:[]});
+  }
+  t.sort((a,b)=>a.from-b.from);
+  t.forEach((x,i)=>x.color=PALETTE[Math.round(i*(PALETTE.length-1)/Math.max(1,t.length-1))]);
+  return t;
+}
+function place(tiers,v){
+  let t=tiers.find(x=>v>=x.from&&v<=x.to);
+  if(!t){ // gap between ranges: nearest tier starting at or below the value
+    t=[...tiers].reverse().find(x=>v>=x.from)||tiers[0];
+  }
+  return t;
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ini=n=>n.replace(/[^\p{L}\p{N} ]/gu,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+async function load(){
+  const app=document.getElementById("app"),st=document.getElementById("status");
+  closePanel();ALL.length=0;app.innerHTML='<div class="msg">LOADING DATA…</div>';st.innerHTML='<span class="chip c">LOADING…</span>';
+  try{
+    const [mainT,cfgT]=await Promise.all([getText(URL_MAIN),getText(URL_CFG)]);
+    const main=parseCSV(mainT),cfg=parseCSV(cfgT);
+    const tiers=buildTiers(cfg);
+    if(!tiers.length)throw new Error("Config sheet is empty or could not be parsed");
+    let total=0;
+    main.forEach((row,i)=>{
+      if(i===0)return;
+      const v=num(row[1]),name=(row[2]||"").trim();
+      if(isNaN(v)||!name)return;                         // no tier value: skip
+      const tr=place(tiers,v),it={id:ALL.length,name,img:imgFrom(row[IMG_COL]),v,tier:tr,
+        st:row[3],gp:row[4],vi:row[5],vb:row[6],se:row[7],diff:(row[15]||"").trim(),dd:row[16]||"",time:(row[18]||"").trim()};
+      ALL.push(it);tr.items.push(it); // sheet order = newest first
+      total++;
+    });
+    app.innerHTML=tiers.map(t=>`
+      <section class="tier" style="--tc:${t.color}">
+        <div class="cut label"><b>${esc(t.name)}</b><span>${t.from.toFixed(1)} – ${t.to.toFixed(1)}</span><i>${t.items.length} GAMES</i></div>
+        <div class="cut items">${t.items.length?t.items.map(g=>`
+          <div class="cell" data-id="${g.id}" data-n="${esc(g.name)}"><div class="g">${g.img?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(g.img)}" alt="" onerror="this.outerHTML='<div class=ph>${esc(ini(g.name))}</div>'">`:`<div class="ph">${esc(ini(g.name))}</div>`}</div></div>`).join(""):'<div class="empty">// NO DATA</div>'}
+        </div>
+      </section>`).join("");
+    st.innerHTML=`<span class="chip r">GAMES ${total}</span><span class="chip c">TIERS ${tiers.length}</span>`;
+  }catch(e){
+    app.innerHTML=`<div class="msg err">LOAD ERROR: ${esc(String(e.message||e))}<br><button class="cut btn" onclick="load()"><span>RETRY</span></button></div>`;
+    st.innerHTML='<span class="chip r">OFFLINE</span>';
+  }
+}
+const tip=document.getElementById("tip"),tt=tip.firstElementChild;
+document.addEventListener("mousemove",e=>{
+  const g=e.target.closest&&e.target.closest(".cell");
+  if(!g){tip.style.opacity=0;return}
+  tt.textContent=g.dataset.n;
+  const w=tip.offsetWidth,h=tip.offsetHeight,vw=document.documentElement.clientWidth;
+  let x=Math.min(Math.max(8,e.clientX-w/2),vw-w-8),y=e.clientY-h-18;
+  if(y<8)y=e.clientY+24;
+  tip.style.left=x+"px";tip.style.top=y+"px";tip.style.opacity=1;
+});
+const RATE=[["Story","Plot & narrative","st"],["Gameplay","Mechanics & systems","gp"],["Visuals","Visual style & design","vi"],["Vibe","Atmosphere, emotion & music","vb"],["Setting","World & setting","se"]];
+const seg=(n,max,c)=>`<div class="seg ${c}">${Array.from({length:max},(_,i)=>`<i${i<n?' class="on"':""}></i>`).join("")}</div>`;
+function rateRow(r,g){
+  const v=num(g[r[2]]),ok=!isNaN(v)&&v>=1&&v<=5,q=ok?6-Math.round(v):0; // lower value = better score
+  return `<div class="rt"><div class="l"><b>${r[0]}</b><em class="q${q}">${ok?q+"/5":"N/A"}</em></div><p>${r[1]}</p>${seg(q,5,"q"+q)}</div>`;
+}
+const panel=document.getElementById("panel"),pin=document.getElementById("pin");
+let selEl=null;
+function openPanel(id){
+  const g=ALL[id];if(!g)return;
+  const m=g.dd.match(/(\d+)\s*\/\s*(\d+)/),t=num(g.time);
+  pin.parentElement.style.setProperty("--tc",g.tier.color);
+  pin.style.setProperty("--tc",g.tier.color);
+  const cover=g.img?`<img src="${esc(g.img)}" referrerpolicy="no-referrer" alt="" onerror="this.outerHTML='<div>${esc(ini(g.name))}</div>'">`:`<div>${esc(ini(g.name))}</div>`;
+  pin.innerHTML=`
+    <div class="p-top"><span class="chip c">GAME DATA</span><button class="x" id="px">ESC · CLOSE</button></div>
+    <div class="p-cover"><div class="pc">${cover}</div><h3>${esc(g.name)}</h3></div>
+    <div class="p-tier"><div class="n">${g.v.toFixed(1)}</div><div class="t"><small>OVERALL TIER</small><b>${esc(g.tier.name)}</b></div></div>
+    <div class="p-h">// RATINGS</div>
+    ${RATE.map(r=>rateRow(r,g)).join("")}
+    <div class="p-h">// PLAYTHROUGH</div>
+    <div class="info">
+      <div class="box"><small>PLAYTIME</small><strong>${isNaN(t)?"—":t+" H"}</strong></div>
+      <div class="box"><small>DIFFICULTY</small><strong>${esc(g.diff||"—")}</strong></div>
+      <div class="box wide"><small>DIFFICULTY LEVEL${m?" · "+m[1]+" / "+m[2]:""}</small>${m?seg(+m[1],+m[2],"dq"):"<strong>—</strong>"}</div>
+    </div>`;
+  document.getElementById("px").onclick=closePanel;
+  if(selEl)selEl.classList.remove("sel");
+  selEl=document.querySelector(`.cell[data-id="${id}"]`);if(selEl)selEl.classList.add("sel");
+  panel.classList.add("on");document.body.classList.add("pan");pin.scrollTop=0;
+}
+function closePanel(){panel.classList.remove("on");document.body.classList.remove("pan");if(selEl){selEl.classList.remove("sel");selEl=null}}
+document.addEventListener("click",e=>{
+  const c=e.target.closest&&e.target.closest(".cell");
+  if(c){openPanel(+c.dataset.id);return}
+  if(panel.classList.contains("on")&&!e.target.closest("#panel"))closePanel();
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
+let loaded=false,cur="home";
+const ORDER=["home","tier"];
+function route(){
+  cur=location.hash==="#tier"?"tier":"home";
+  document.body.classList.toggle("home",cur==="home");
+  document.getElementById("view-home").classList.toggle("on",cur==="home");
+  document.getElementById("view-tier").classList.toggle("on",cur==="tier");
+  document.querySelectorAll(".tab[data-r]").forEach(t=>t.classList.toggle("active",t.dataset.r===cur));
+  if(cur==="tier"&&!loaded){loaded=true;load()}
+}
+window.addEventListener("hashchange",()=>{closePanel();route()});
+document.addEventListener("keydown",e=>{
+  const k=e.key.toLowerCase();
+  if(k==="r"&&cur==="tier")load();
+  if(k==="q"||k==="e"){const d=k==="e"?1:-1;location.hash="#"+ORDER[(ORDER.indexOf(cur)+d+ORDER.length)%ORDER.length]}
+});
+route();
+</script>
+</body>
+</html>
