@@ -120,6 +120,10 @@ body.pan #shell{padding-right:434px}
 #prRange::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:26px;margin-top:-10px;background:#0b0407;border:2px solid var(--cy);box-shadow:0 0 10px var(--cy)}
 #prRange::-moz-range-track{height:6px;background:linear-gradient(90deg,#46e3ea,#ff4a3f)}
 #prRange::-moz-range-thumb{width:12px;height:22px;border-radius:0;background:#0b0407;border:2px solid #46e3ea}
+.plin{flex:1;min-height:0;display:flex;flex-direction:column;clip-path:var(--Pi);overflow:hidden}
+#panel{padding:var(--b)}
+#panel .pin{clip-path:var(--Pi)}
+.cdots{display:none}
 .view{display:none}.view.on{display:block}
 body.home #status{visibility:hidden}
 .cards{display:grid;grid-template-columns:repeat(6,minmax(190px,1fr));gap:14px;overflow-x:auto;padding:6px 4px 14px}
@@ -151,8 +155,9 @@ main{max-width:1480px;margin:0 auto;padding:30px 40px 40px}
 .label b{font-size:clamp(34px,3.6vw,52px);letter-spacing:.06em;color:var(--tc);line-height:1.1;text-transform:uppercase;overflow-wrap:anywhere}
 .label span{font-size:14px;color:var(--txt);opacity:.8;letter-spacing:.12em}
 .label i{font-style:normal;font-size:12px;letter-spacing:.2em;color:var(--cy)}
-.items{--bd:#5c1c20;--fill:var(--pf);display:flex;flex-wrap:wrap;gap:5px;padding:10px 12px;align-content:flex-start;min-height:104px}
-.cell{position:relative;width:96px;height:96px;cursor:pointer}
+.items{--bd:#5c1c20;--fill:var(--pf);display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:5px;padding:10px 12px;align-content:start;min-height:104px}
+.items .empty{grid-column:1/-1}
+.cell{position:relative;aspect-ratio:1;cursor:pointer}
 .g{position:absolute;inset:0;background:#6a2024;padding:2px;clip-path:var(--P);--k:9px;transition:background .12s}
 .g>*{width:100%;height:100%;display:block;object-fit:cover;clip-path:var(--Pi);--k:9px}
 .ph{display:grid!important;place-items:center;font-weight:700;font-size:24px;letter-spacing:.05em;color:var(--tc);background:repeating-linear-gradient(135deg,#1b0a0e 0 6px,#240d12 6px 12px)}
@@ -283,7 +288,7 @@ body.home .avwrap{display:flex}
 .plc.on{border-color:var(--cy);background:#081a1d}.plc.on b{color:var(--cy)}.plc.on .cov{border-color:var(--cy)}
 .hc-trk{display:flex;flex-direction:column;overflow:hidden!important}
 .plempty{flex:1;display:grid;place-items:center;border:2px dashed #3a1518;color:#7a3034;letter-spacing:.3em;font-size:14px}
-.pl-open{--bd:var(--cy);--fill:#0a0709;flex:1;min-height:0;display:flex;flex-direction:column}
+.pl-open{padding:var(--b);--bd:var(--cy);--fill:#0a0709;flex:1;min-height:0;display:flex;flex-direction:column}
 .pl-head{display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:2px solid #1b3a3e}
 .pl-head b{font-size:19px;letter-spacing:.08em;color:#fff;margin-right:auto}
 .pl-head input{width:min(220px,40%);background:#06161a;border:2px solid #1b7f84;color:var(--cy);font:600 14px Rajdhani,sans-serif;letter-spacing:.1em;padding:3px 10px;outline:0}
@@ -320,7 +325,82 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
 @media(max-width:1000px){.avwrap{left:18px;top:84px;transform:scale(.7);transform-origin:left top}.avnick{display:none}.homeLayout{height:auto;min-height:0}.homeLayout.mini .hub{height:78vh}.hub-cols{grid-template-columns:1fr;overflow-y:auto;scrollbar-width:none}.hub-cols>div{overflow:visible}.hb-info span{display:none}.trk{grid-template-columns:30px 26px minmax(0,1fr) 44px}.trk .al{display:none}.cards{overflow-x:auto}.homeLayout.mini .cards{grid-template-columns:repeat(6,150px)}}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(6,220px)}}
 @media(max-width:760px){.profile{grid-template-columns:1fr}.av-rail{height:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden}.ab-row{grid-template-columns:1fr;gap:6px}.temp{grid-template-columns:1fr}body.pan #shell{padding-right:0}.topbar{grid-template-columns:1fr;padding:10px 18px 0;gap:6px}.brand{display:none}.status{justify-self:start}main{padding:22px 18px}.tier{grid-template-columns:1fr}.label{min-height:0}
- .cell{width:78px;height:78px}body::before,body::after{display:none}}
+ .items{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}body::before,body::after{display:none}}
+.mbar{display:none}
+@media(max-width:760px){
+ .topbar{display:block;height:54px;padding:0 14px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+ .topbar .brand,.topbar .tabs,.topbar .status{display:none}
+ .mbar{display:flex;align-items:center;gap:12px;height:52px}
+ .m-dots{flex:1;justify-content:center}
+ body.home .m-dots{visibility:hidden}
+ .m-menu{position:relative;flex:none;max-width:54vw}
+ .m-title{display:flex;align-items:center;gap:8px;max-width:100%;background:none;border:2px solid var(--cy);color:var(--cy);padding:3px 10px;height:30px;font:700 14px Rajdhani,sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+ .m-title span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .m-title i{font-style:normal;transition:transform .2s}.m-title.open i{transform:rotate(180deg)}
+ .m-title.open{background:var(--cy);color:#000}
+ .m-list{position:absolute;right:0;top:36px;min-width:210px;background:#0d0508;border:2px solid var(--cy);padding:4px;z-index:40;box-shadow:0 8px 24px rgba(0,0,0,.7)}
+ .m-list a,.m-list .lk{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;font-size:16px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--txt)}
+ .m-list a.cur{background:#081a1d;color:var(--cy);box-shadow:inset 3px 0 0 var(--cy)}
+ .m-list .lk{color:#6b2f33;cursor:not-allowed}.m-list .lk small{font-size:10px;letter-spacing:.15em;border:1px solid #6b2f33;padding:0 4px}
+ .cdots{display:flex;justify-content:center;gap:6px;flex:none}
+ .cdots i{display:block;width:10px;height:10px;border:2px solid #5c1c20;cursor:pointer}
+ .cdots i.ok{border-color:var(--rd)}
+ .cdots i.on{background:var(--cy);border-color:var(--cy);box-shadow:0 0 8px var(--cy)}
+ .m-dots{display:flex;gap:6px}
+ .m-dots i{display:block;width:10px;height:10px;border:2px solid #5c1c20}
+ .m-dots i.ok{border-color:var(--rd);cursor:pointer}
+ .m-dots i.on{background:var(--cy);border-color:var(--cy);box-shadow:0 0 8px var(--cy)}
+ .m-home{display:grid;place-items:center;height:30px;padding:0 12px;border:2px solid var(--cy);color:var(--cy);font-weight:700;font-size:14px;letter-spacing:.12em;text-decoration:none}
+ body.home .m-home{background:var(--cy);color:#000}
+ body.hubopen .topbar{transform:translateY(-110%)}
+ /* home: stacked swipe cards, avatars below, About Me drawer at the bottom */
+ .homeLayout{position:fixed;left:0;right:0;top:54px;bottom:0;height:auto;min-height:0;max-width:none;margin:0;padding:6px 12px calc(10px + env(safe-area-inset-bottom));z-index:10;transition:top .35s cubic-bezier(.2,.8,.2,1)}
+ body.hubopen .homeLayout{top:0;padding-top:10px}
+ .stage{justify-content:space-evenly;overflow:hidden;min-height:0;transition:opacity .3s}
+ .stage .sec{display:none}
+ .homeLayout.mini .stage{flex:0 0 0;opacity:0;pointer-events:none}
+ .cards{display:block;position:relative;flex:none;width:100%;height:min(40vh,360px);padding:0;overflow:visible;touch-action:pan-y}
+ .cards .card{position:absolute;left:50%;top:0;width:min(72vw,300px);height:100%;min-height:0;margin:0;padding:14px 16px 18px;
+  transform:translateX(calc(-50% + var(--d,0)*54px)) scale(calc(1 - var(--ad,0)*.07));z-index:calc(20 - var(--ad,0));
+  opacity:calc(1 - (var(--ad,0) - 2)*.5);filter:brightness(calc(1 - var(--ad,0)*.14));
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .3s,filter .3s}
+ .cards .card.locked{filter:brightness(calc((1 - var(--ad,0)*.14)*.65))}
+ .cards .card.open:hover{transform:translateX(calc(-50% + var(--d,0)*54px)) scale(calc(1 - var(--ad,0)*.07))}
+ .card .big{font-size:76px;margin:16px 0}.card.open .big{font-size:96px}
+ .card h2{font-size:24px}.card.open h2{font-size:30px}.card p,.card.open p{font-size:14px}
+ .avwrap{position:static;display:flex;flex:none;transform:none!important;align-items:center;gap:6px;pointer-events:auto}
+ .avrow{display:flex;flex-direction:column;align-items:center}
+ .avst{width:calc(104px + (var(--n,1) - 1)*22px);height:calc(104px + (var(--n,1) - 1)*8px);--dx:10px;--dy:6px}
+ .avc{width:104px;height:104px}
+ .avnick{display:block;text-align:center}.avnick h2{font-size:22px;margin:0 0 2px}
+ .hub{height:78px}
+ .homeLayout.mini .hub{height:auto;flex:1 1 auto;min-height:0}
+ .handle{padding:8px 22px;font-size:14px;margin:6px auto}
+ .hub-bar{padding:0 12px}.hb-pl .cov{width:38px;height:38px}
+ .hub-body{padding:10px 12px 12px}
+ .hub-cols{display:flex;flex-direction:column;gap:12px;height:100%;overflow:hidden}
+ .hub-cols>div{overflow:visible;min-height:0}
+ .hc-about{flex:none;display:block!important;overflow:visible!important}
+ .hc-about .ab2-h{display:none}
+ .hc-about .ab2{display:grid;grid-template-columns:86px 1fr;gap:8px;padding:3px 0;font-size:13px;border-bottom:1px solid #22090d}
+ .hc-about .ab2 small{font-size:10px}
+ .hc-about .socials2{display:flex;flex-direction:row;flex-wrap:wrap;margin:8px 0 0;gap:6px}
+ .plcol{flex:none}.plcol .ab2-h{display:none}
+ .plgrid{flex-direction:row;gap:10px;overflow-x:auto;padding-bottom:4px}
+ .plc{flex:none;flex-direction:column;align-items:stretch;width:96px;gap:5px;padding:4px}
+ .plc .cov{width:100%;height:auto;aspect-ratio:1}.plc b{font-size:13px}
+ .hc-trk{flex:1;min-height:0;overflow:hidden!important}
+ .hub-cols,.hc-about,.plgrid{scrollbar-width:none}
+ .hc-about::-webkit-scrollbar,.plgrid::-webkit-scrollbar{display:none}
+ /* tier page */
+ .subtabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.sub{flex:none;padding:7px 14px;font-size:15px}
+ .period{flex-wrap:wrap;gap:10px 16px}
+ #panel{top:auto;left:8px;right:8px;bottom:8px;width:auto;height:82vh;transform:translateY(calc(100% + 30px))}
+ #panel.on{transform:none}
+ #pp{top:60px;bottom:auto;width:calc(100vw - 16px);transform:translate(-50%,calc(-100% - 80px))}
+ #pp.on{transform:translate(-50%,0)}
+ body.hubopen #pp{top:8px}
+}
 </style>
 </head>
 <body>
@@ -335,6 +415,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
     <span class="tab locked">Series<small>LOCKED</small></span>
     <span class="tab locked">Anime<small>LOCKED</small></span>
   <span class="key">E</span></nav>
+  <div class="mbar"><a class="m-home" href="#home">HOME</a><div class="m-dots" id="mDots"></div><div class="m-menu"><button class="m-title" id="mTitleBtn" type="button" aria-haspopup="true"><span id="mTitle">Home</span><i>▾</i></button><div class="m-list" id="mList" hidden></div></div></div>
   <div class="status" id="status"><span class="chip c">LOADING…</span></div>
 </header>
 <div id="shell"><main>
@@ -345,6 +426,14 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
       <div class="cards">
         <a class="cut card open" href="#tier"><div class="top"><span class="key">01</span><span class="chip c">OPEN</span></div><div class="big">TIER</div><div><h2>Games Tier List</h2><p>My Gaming History, ranked</p><div class="bar"></div></div></a>
         <div class="cut card locked"><div class="top"><span class="key">02</span><span class="chip r">LOCKED</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">03</span><span class="chip r">LOCKED</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA Achievements</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">05</span><span class="chip r">LOCKED</span></div><div class="big">SER</div><div><h2>Series</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">06</span><span class="chip r">LOCKED</span></div><div class="big">ANI</div><div><h2>Anime</h2><p>Coming soon</p><div class="bar"></div></div></div>
+      </div>
+      <div class="cdots" id="cDots"></div>
+      <div class="avwrap" id="avWrap">
+        <div class="avrow" id="avRow">
+          <div class="avst" id="avSt" title="Click or scroll to flip through avatars"></div>
+          <div class="avdots" id="avDots"></div>
+        </div>
+        <div class="avnick"><small>// OPERATOR</small><h2>warranty</h2><span class="onl"><i></i>ONLINE</span><span class="avdate" id="avDate"></span></div>
       </div>
     </div>
       <button class="cut handle" id="hubHandle" type="button" aria-label="Expand About Me panel"><span><i class="ar">▲</i> ABOUT ME &amp; PLAYLISTS <i class="ar">▲</i></span></button>
@@ -358,7 +447,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
             <div class="hc-about">
         <div class="ab2-h">// ABOUT ME</div>
         <div class="ab2"><small>Personality</small><span>INTJ-T · Left-Handed</span></div>
-        <div class="ab2"><small>Worldview</small><span>Deism</span></div>
+        <div class="ab2"><small>Worldview</small><span>Fractal Holographic Multiverse</span></div>
         <div class="ab2"><small>Temperament</small><span class="tmp"><i class="tbar"><b style="flex:75"></b><b style="flex:25"></b></i>Flegmatic 75% · Melancholic 25%</span></div>
         <div class="ab2"><small>Profession</small><span>Theoretical physicist · Astrophysicist &amp; Space engineer · IT-specialist</span></div>
         <div class="ab2"><small>Gaming</small><span>Minecraft veteran · Kerbal Space Program professional</span></div>
@@ -373,8 +462,8 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
             <div class="hc-trk">
               <div class="plempty" id="plEmpty">// SELECT A PLAYLIST</div>
               <div class="cut pl-open" id="plOpen" hidden>
-                <div class="pl-head"><b id="plTitle"></b><input id="plFilter" type="search" placeholder="FILTER TRACKS…" autocomplete="off"><button class="x" id="plClose" type="button">CLOSE</button></div>
-                <div class="trk-list" id="plTracks"></div>
+                <div class="plin"><div class="pl-head"><b id="plTitle"></b><input id="plFilter" type="search" placeholder="FILTER TRACKS…" autocomplete="off"><button class="x" id="plClose" type="button">CLOSE</button></div>
+                <div class="trk-list" id="plTracks"></div></div>
               </div>
             </div>
           </div>
@@ -405,14 +494,6 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
   </section>
 </main></div>
 <aside class="cut" id="panel" aria-label="Game details"><div class="pin" id="pin"></div></aside>
-<div class="avwrap" id="avWrap">
-  <div class="avrow" id="avRow">
-    <div class="avst" id="avSt" title="Click or scroll to flip through avatars"></div>
-    <div class="avdots" id="avDots"></div>
-  </div>
-  <div class="avnick"><small>// OPERATOR</small><h2>warranty</h2><span class="onl"><i></i>ONLINE</span><span class="avdate" id="avDate"></span></div>
-</div>
-
 <div class="cut" id="pp">
   <div class="pp-cover" id="ppCover"></div>
   <div class="pp-mid"><div class="pp-t" id="ppT">—</div><div class="pp-a" id="ppA"></div><div class="pp-bar"><i id="ppFill"></i></div><div class="pp-time"><span id="ppCur">0:00</span><span id="ppDur">0:30</span></div></div>
@@ -481,7 +562,7 @@ const PLAYLIST_LINKS=[
    the backticks. The name only has to match the Spotify title loosely
    (case, spaces and symbols are ignored).
    =================================================================== */
-const PLAYLIST_CSV={
+  const PLAYLIST_CSV={
   "Vibe_Mode_ON_v1.18": String.raw`Track URI,ISRC,Track Name,Album Name,Artist Name(s),Release Date,Duration (ms),Popularity,Explicit,Added By,Added At,Genres,Record Label,Danceability,Energy,Key,Loudness,Mode,Speechiness,Acousticness,Instrumentalness,Liveness,Valence,Tempo,Time Signature
 spotify:track:1NWWK5nbIoizXOJlSXHoXi,RUAH62674619,"современный ковбой","Вот мой альбом, сори","СЕРЕГА ПИРАТ",2026-06-26,173921,50,true,pzl86hnvnpb7zplevy66b9hdm,2026-07-07T19:57:32Z,"","The Fence",0.615,0.589,0,-8.091,1,0.0393,0.0834,0.00000196,0.348,0.764,107.989,4
 spotify:track:61Y2thB7FfqfdCwVr4G7Fc,RUAH62674620,"в аквапарке","Вот мой альбом, сори","СЕРЕГА ПИРАТ",2026-06-26,156246,48,false,pzl86hnvnpb7zplevy66b9hdm,2026-07-07T19:57:49Z,"","The Fence",0.626,0.839,4,-6.573,1,0.0471,0.136,0.0792,0.211,0.682,125.966,4
@@ -1438,7 +1519,7 @@ function rateRow(r,g){
   return `<div class="rt"><div class="l"><b>${r[0]}</b><em class="q${q}">${ok?q+"/5":"N/A"}</em></div><p>${r[1]}</p>${seg(q,5,"q"+q)}</div>`;
 }
 const panel=document.getElementById("panel"),pin=document.getElementById("pin");
-let selEl=null;
+let selEl=null,panelHist=false;
 function openPanel(id){
   const g=ALL[id];if(!g)return;
   const col=g.un?(g.color||"#46e3ea"):g.tier.color;
@@ -1474,9 +1555,16 @@ function openPanel(id){
   document.getElementById("px").onclick=closePanel;
   if(selEl)selEl.classList.remove("sel");
   selEl=document.querySelector(`.cell[data-id="${id}"]`);if(selEl)selEl.classList.add("sel");
+  if(!panel.classList.contains("on")&&!panelHist){history.pushState({gp:1},"",location.href);panelHist=true}
   panel.classList.add("on");document.body.classList.add("pan");pin.scrollTop=0;
 }
-function closePanel(){panel.classList.remove("on");document.body.classList.remove("pan");if(selEl){selEl.classList.remove("sel");selEl=null}}
+function closePanel(fromPop){
+  const was=panel.classList.contains("on");
+  panel.classList.remove("on");document.body.classList.remove("pan");
+  if(selEl){selEl.classList.remove("sel");selEl=null}
+  if(panelHist){panelHist=false;if(!fromPop&&was)history.back()} // drop the history entry we pushed when opening
+}
+window.addEventListener("popstate",()=>{if(panelHist){panelHist=false;closePanel(true)}}); // browser/swipe "back" only collapses the panel
 document.addEventListener("click",e=>{
   const c=e.target.closest&&e.target.closest(".cell");
   if(c){openPanel(+c.dataset.id);return}
@@ -1627,7 +1715,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
 
   /* --- bottom panel: expands upward and squeezes the main menu into small buttons --- */
   const lay=$("homeLayout"),handle=$("hubHandle");
-  function setHub(o){hub.classList.toggle("open",o);lay.classList.toggle("mini",o);handle.classList.toggle("open",o)}
+  function setHub(o){hub.classList.toggle("open",o);lay.classList.toggle("mini",o);handle.classList.toggle("open",o);document.body.classList.toggle("hubopen",o)}
   const isOpen=()=>hub.classList.contains("open");
   handle.addEventListener("click",()=>setHub(!isOpen()));
   $("hubBar").addEventListener("click",e=>{
@@ -1635,6 +1723,11 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
     if(c){setHub(true);setTimeout(()=>openPl(+c.dataset.i),420);return}
     setHub(!isOpen());
   });
+  let ty=null,okStart=false; // swipe up on the bottom panel opens it, swipe down on its top part closes it
+  const ts=e=>{ty=e.touches[0].clientY;okStart=!!e.target.closest(".handle,.hub-bar,.hc-about,.plcol")};
+  const te=e=>{if(ty==null)return;const dy=e.changedTouches[0].clientY-ty;ty=null;if(!okStart)return;
+    if(dy<-40&&!isOpen())setHub(true);else if(dy>50&&isOpen())setHub(false)};
+  [handle,hub].forEach(el=>{el.addEventListener("touchstart",ts,{passive:true});el.addEventListener("touchend",te,{passive:true})});
   let lock=0;
   window.addEventListener("wheel",e=>{
     if(cur!=="home"||Date.now()<lock)return;
@@ -1669,6 +1762,37 @@ function showSub(k){
   document.querySelectorAll(".sub").forEach(b=>b.classList.toggle("on",b.dataset.s===k));
 }
 document.querySelectorAll(".sub").forEach(b=>b.addEventListener("click",()=>showSub(b.dataset.s)));
+(function(){ // drop-down with all tabs (right side of the mobile top bar)
+  const items=[["Home","#home"],["Games Tier List","#tier"],["Female Characters",""],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
+  const btn=document.getElementById("mTitleBtn"),list=document.getElementById("mList");
+  list.innerHTML=items.map(x=>x[1]?`<a href="${x[1]}" data-h="${x[1]}">${x[0]}</a>`:`<span class="lk">${x[0]}<small>LOCKED</small></span>`).join("");
+  btn.addEventListener("click",e=>{e.stopPropagation();list.hidden=!list.hidden;btn.classList.toggle("open",!list.hidden)});
+  document.addEventListener("click",e=>{if(!e.target.closest(".m-menu")){list.hidden=true;btn.classList.remove("open")}});
+})();
+(function(){ // page squares in the mobile top bar (one per section; locked sections are dim)
+  const secs=[["Games Tier List","#tier"],["Female Characters",""],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
+  const d=document.getElementById("mDots");
+  d.innerHTML=secs.map(x=>`<i class="${x[1]?"ok":""}" data-h="${x[1]}" title="${x[0]}${x[1]?"":" (locked)"}"></i>`).join("");
+  d.addEventListener("click",e=>{const i=e.target.closest("i");if(i&&i.dataset.h)location.hash=i.dataset.h});
+})();
+(function(){ // main menu on phones: cards overlap and are flipped by swiping sideways
+  const wrap=document.querySelector(".cards"),cards=[...wrap.querySelectorAll(".card")],mq=matchMedia("(max-width:760px)");
+  let idx=0,sx=null;
+  const cd=document.getElementById("cDots");
+  cd.innerHTML=cards.map((c,k)=>`<i class="${c.classList.contains("locked")?"":"ok"}" data-k="${k}"></i>`).join("");
+  const lay=()=>{cards.forEach((c,k)=>{c.style.setProperty("--d",k-idx);c.style.setProperty("--ad",Math.abs(k-idx))});[...cd.children].forEach((d,k)=>d.classList.toggle("on",k===idx))};
+  cd.addEventListener("click",e=>{const d=e.target.closest("i");if(d){idx=+d.dataset.k;lay()}});
+  lay();
+  wrap.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+  wrap.addEventListener("touchend",e=>{
+    if(sx==null||!mq.matches)return;const dx=e.changedTouches[0].clientX-sx;sx=null;
+    if(Math.abs(dx)>35){idx=Math.max(0,Math.min(cards.length-1,idx+(dx<0?1:-1)));lay()}
+  },{passive:true});
+  wrap.addEventListener("click",e=>{ // tapping a card behind brings it to the front instead of opening it
+    if(!mq.matches)return;const c=e.target.closest(".card"),k=cards.indexOf(c);
+    if(c&&k!==idx){e.preventDefault();idx=k;lay()}
+  });
+})();
 let loaded=false,cur="home";
 const ORDER=["home","tier"];
 function route(){
@@ -1676,10 +1800,14 @@ function route(){
   document.body.classList.toggle("home",cur==="home");
   document.getElementById("view-home").classList.toggle("on",cur==="home");
   document.getElementById("view-tier").classList.toggle("on",cur==="tier");
+  document.getElementById("mTitle").textContent=cur==="tier"?"Games Tier List":"Home";
+  document.querySelectorAll("#mList a").forEach(a=>a.classList.toggle("cur",a.dataset.h==="#"+cur));
+  document.getElementById("mList").hidden=true;document.getElementById("mTitleBtn").classList.remove("open");
+  document.querySelectorAll("#mDots i").forEach((d,k)=>d.classList.toggle("on",cur==="tier"&&k===0));
   document.querySelectorAll(".tab[data-r]").forEach(t=>t.classList.toggle("active",t.dataset.r===cur));
   if(cur==="tier"&&!loaded){loaded=true;load()}
 }
-window.addEventListener("hashchange",()=>{closePanel();route()});
+window.addEventListener("hashchange",()=>{panelHist=false;closePanel(true);route()});
 document.addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();
   if(k==="r"&&cur==="tier")load();
