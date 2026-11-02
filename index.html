@@ -122,7 +122,7 @@ body.pan #shell{padding-right:434px}
 #prRange::-moz-range-thumb{width:12px;height:22px;border-radius:0;background:#0b0407;border:2px solid #46e3ea}
 .plin{flex:1;min-height:0;display:flex;flex-direction:column;clip-path:var(--Pi);overflow:hidden}
 #panel{padding:var(--b)}
-#panel .pin{clip-path:var(--Pi)}
+#panel .pin{clip-path:var(--Pi);overscroll-behavior:contain}
 .cdots{display:none}
 .ev{display:grid;grid-template-columns:210px 26px minmax(0,1fr);gap:0 16px;margin-bottom:6px}
 .ev-d{text-align:right;padding:2px 0 14px}
@@ -143,6 +143,48 @@ body.pan #shell{padding-right:434px}
 .uc-t h3{font-size:18px;line-height:1.15;color:#fff;letter-spacing:.03em;margin-bottom:4px;overflow-wrap:anywhere}
 .uc-t p{font-size:13px;line-height:1.3;color:#a86a6a;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .uc-t p.dim{color:#5c2a2e}
+.tier{content-visibility:auto;contain-intrinsic-size:auto 170px}
+html,body{overscroll-behavior-y:contain}
+.hb-soc{display:flex;flex-wrap:nowrap;gap:8px;margin:0;flex:none}
+.hb-soc .soc.sm{padding:4px 12px 4px 6px}
+body.female #status{visibility:hidden}
+.ftier{content-visibility:visible!important;margin-bottom:46px}
+.fitems{position:relative;display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:16px;padding:16px;align-content:start;min-height:120px;border:2px solid #5c1c20;background:var(--pf)}
+.fitems .empty{grid-column:1/-1}
+.fc{position:relative;aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
+.fc .ff{position:absolute;inset:0;border:2px solid #6a2024;background:linear-gradient(180deg,#4a1418 0%,#0b0407 100%);transition:border-color .2s,box-shadow .2s}
+.fc:hover .ff,.fc.sel .ff{border-color:var(--cy);box-shadow:0 0 12px rgba(70,227,234,.28)}
+/* the portrait may leave the frame on every side except the bottom; the side edges hold it only for the lowest (100 - --y) percent */
+.fc .pw{position:absolute;inset:2px;clip-path:polygon(-160px -160px,calc(100% + 160px) -160px,calc(100% + 160px) var(--y,0%),100% var(--y,0%),100% 100%,0 100%,0 var(--y,0%),-160px var(--y,0%))}
+.fc img{position:absolute;left:50%;bottom:0;width:115%;height:auto;aspect-ratio:1;transform:translateX(-50%);transform-origin:50% 100%;
+ filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transition:transform .22s cubic-bezier(.2,.8,.2,1);pointer-events:none;-webkit-user-drag:none}
+.fc:hover,.fc.sel{z-index:5}
+.fc:hover img,.fc.sel img{transform:translateX(-50%) scale(1.11)}
+/* resting position is always centred; "Right" / "Left" only decide the hover growth. The origin is set permanently (at scale 1 it has no visible effect), so it never jumps when the cursor leaves: Right keeps the left edge and the bottom fixed, Left keeps the right edge and the bottom fixed */
+.fc.fr img{transform-origin:0 100%}
+.fc.fl img{transform-origin:100% 100%}
+.fc .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;font-weight:700;color:var(--tc);background:repeating-linear-gradient(135deg,#150709 0 6px,#1b0a0e 6px 12px)}
+.fc.q .ff{display:grid;place-items:center}
+.fc .qm{font-size:clamp(70px,7.4vw,100px);font-weight:700;line-height:1;color:var(--tc);text-shadow:0 0 20px color-mix(in srgb,var(--tc) 55%,transparent);transition:transform .2s}
+.fc.q:hover .qm{transform:scale(1.08)}
+.ftier .label b{font-size:clamp(22px,2.2vw,30px)}
+#tip .tf{display:block;margin-top:1px;font-size:12px;letter-spacing:.1em;color:#6f9094}
+.si img{width:62%;height:62%;object-fit:contain;display:block}
+.card.bgi{--ov:linear-gradient(180deg,rgba(11,4,7,.9) 0%,rgba(11,4,7,.42) 36%,rgba(11,4,7,.92) 100%)}
+.card.bgi.open:hover{--ov:linear-gradient(180deg,rgba(11,4,7,.78) 0%,rgba(11,4,7,.22) 36%,rgba(11,4,7,.86) 100%)}
+.card.bgi::before{ /* picture + dark top/bottom for the text + neon tint + scanlines */
+ background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.30) 0 1px,transparent 1px 3px),var(--ov),linear-gradient(135deg,rgba(255,74,63,.24),rgba(70,227,234,.16)),var(--img1),var(--img2),linear-gradient(var(--fill),var(--fill));
+ background-size:auto,auto,auto,cover,cover,auto;background-position:0 0,0 0,0 0,center,center,0 0;background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat}
+.hub-bar .hb-soc{margin:0!important;align-self:center;align-items:center}
+.hub-bar .soc.sm{margin:0;align-self:center}
+.card.bgi .big{display:none}
+.card.bgi::after{display:none}
+.fitems.tall{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))} /* the tile IS the frame, so gaps and edge padding are the same as the vertical ones */
+/* by Hotness: full-length 9:21 portraits. The lowest 25% of the character hides behind the frame and slides back out on hover.
+   The frame is narrow (the tile itself); the portrait is wider than it (about 144% of the frame). */
+.fc.tall{aspect-ratio:1/2.216}
+.fc.tall img{aspect-ratio:auto;height:auto;width:143.75%;transform:translateX(-50%) translateY(25%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.fc.tall:hover img,.fc.tall.sel img{transform:translateX(-50%) translateY(0) scale(1.14)}
 .view{display:none}.view.on{display:block}
 body.home #status{visibility:hidden}
 .cards{display:grid;grid-template-columns:repeat(6,minmax(190px,1fr));gap:14px;overflow-x:auto;padding:6px 4px 14px}
@@ -229,12 +271,11 @@ main{max-width:1480px;margin:0 auto;padding:30px 40px 40px}
 .cell.sel::after{opacity:1}.cell.sel .g{background:var(--cy)}
 .homeLayout{height:calc(100vh - 150px);min-height:600px;max-width:1360px;margin:0 auto;display:flex;flex-direction:column}
 .stage{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center}
-.cards{grid-template-columns:1.8fr repeat(5,minmax(0,1fr));gap:14px;width:100%;margin:0 auto;overflow:visible;padding:10px 4px;transition:grid-template-columns .4s}
+.cards{grid-template-columns:var(--cols,minmax(0,1.8fr) repeat(5,minmax(0,1fr)));gap:14px;width:100%;margin:0 auto;overflow:visible;padding:10px 4px;transition:grid-template-columns .4s}
 .card{min-height:430px;padding:18px 18px 22px;transition:min-height .4s,padding .4s}
 .card .big{font-size:60px;margin:26px 0;transition:font-size .4s,margin .4s,opacity .3s}.card h2{font-size:24px;transition:font-size .4s}.card p{font-size:14px;transition:font-size .3s,margin .3s,opacity .3s}
 .card .bar{transition:height .3s,margin .3s,opacity .3s}
-.card.open{--fill:#1a0709}.card.open .big{font-size:128px;-webkit-text-stroke-color:rgba(70,227,234,.5)}
-.card.open h2{font-size:44px}.card.open p{font-size:18px}
+@media(min-width:761px){.card.act{--fill:#1a0709}.card.act .big{font-size:128px;-webkit-text-stroke-color:rgba(70,227,234,.5)}.card.act h2{font-size:44px}.card.act p{font-size:18px}}
 .stage .sec{transition:opacity .3s,max-height .4s,margin .4s;max-height:80px;overflow:hidden}
 /* expanded bottom panel squeezes the menu into small rectangular buttons */
 .homeLayout.mini .stage{justify-content:flex-start}
@@ -288,8 +329,8 @@ body.home .avwrap{display:flex}
 .hub-cols>div{min-height:0;overflow-y:auto;scrollbar-width:none}
 .hub-cols>div::-webkit-scrollbar{display:none}
 .ab2-h{font-size:11px;letter-spacing:.3em;color:var(--rd);margin-bottom:6px}
-.ab2{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:5px 0;font-size:14px;letter-spacing:.03em;color:#cdb9b6;border-bottom:1px solid #22090d}
-.ab2 small{font-size:11px;letter-spacing:.2em;color:#8a4a4e;text-transform:uppercase;align-self:center}
+.ab2{display:block;padding:6px 0;font-size:14px;letter-spacing:.03em;color:#cdb9b6;border-bottom:1px solid #22090d}
+.ab2 small{display:block;margin-bottom:2px;font-size:11px;letter-spacing:.2em;color:#8a4a4e;text-transform:uppercase}
 .tmp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .tbar{display:flex;width:70px;height:5px;gap:2px}.tbar b{display:block;background:var(--cy);opacity:.75}.tbar b+b{background:var(--red)}
 .socials2{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
@@ -341,7 +382,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
 .pp-ctl{display:flex;flex-direction:column;gap:6px}
 .pp-ctl button{width:34px;height:30px;border:2px solid var(--cy);background:none;color:var(--cy);font-size:13px;cursor:pointer}
 .pp-ctl button:hover{background:var(--cy);color:#000}
-@media(max-width:1000px){.avwrap{left:18px;top:84px;transform:scale(.7);transform-origin:left top}.avnick{display:none}.homeLayout{height:auto;min-height:0}.homeLayout.mini .hub{height:78vh}.hub-cols{grid-template-columns:1fr;overflow-y:auto;scrollbar-width:none}.hub-cols>div{overflow:visible}.hb-info span{display:none}.trk{grid-template-columns:30px 26px minmax(0,1fr) 44px}.trk .al{display:none}.cards{overflow-x:auto}.homeLayout.mini .cards{grid-template-columns:repeat(6,150px)}}
+@media(max-width:1000px){.avwrap{left:18px;top:84px;transform:scale(.7);transform-origin:left top}.avnick{display:none}.homeLayout{height:auto;min-height:0}.homeLayout.mini .hub{height:78vh}.hub-cols{grid-template-columns:1fr;overflow-y:auto;scrollbar-width:none}.hub-cols>div{overflow:visible}.hb-info span{display:none}.hb-soc .tx{display:none}.hb-soc .soc.sm{padding:4px}.trk{grid-template-columns:30px 26px minmax(0,1fr) 44px}.trk .al{display:none}.cards{overflow-x:auto}.homeLayout.mini .cards{grid-template-columns:repeat(6,150px)}}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(6,220px)}}
 @media(max-width:760px){.profile{grid-template-columns:1fr}.av-rail{height:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden}.ab-row{grid-template-columns:1fr;gap:6px}.temp{grid-template-columns:1fr}body.pan #shell{padding-right:0}.topbar{grid-template-columns:1fr;padding:10px 18px 0;gap:6px}.brand{display:none}.status{justify-self:start}main{padding:22px 18px}.tier{grid-template-columns:1fr}.label{min-height:0}
  .items{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}body::before,body::after{display:none}}
@@ -377,7 +418,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  body.hubopen .homeLayout{top:0;padding-top:10px}
  .stage{justify-content:space-evenly;overflow:hidden;min-height:0;transition:opacity .3s}
  .stage .sec{display:none}
- .homeLayout.mini .stage{flex:0 0 0;opacity:0;pointer-events:none}
+ .homeLayout.mini .stage{display:none}
  .cards{display:block;position:relative;flex:none;width:100%;height:clamp(190px,34vh,320px);padding:0;overflow:visible;touch-action:pan-y}
  .cards.drag .card{transition:none}
  .cards .card{position:absolute;left:50%;top:0;width:min(66vw,270px);height:100%;min-height:0;margin:0;padding:12px 14px 16px;
@@ -393,7 +434,10 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  .avst{width:calc(104px + (var(--n,1) - 1)*22px);height:calc(104px + (var(--n,1) - 1)*8px);--dx:10px;--dy:6px}
  .avc{width:104px;height:104px}
  .avnick{display:block;text-align:left}.avnick h2{font-size:22px;margin:0 0 2px}
- .hub{height:78px}
+ .hub{height:78px;clip-path:none;background:var(--fill);border:2px solid var(--bd)}
+ .hub::before{display:none}
+ .handle{animation:none}
+ .g,.g>*{clip-path:none}
  .homeLayout.mini .hub{height:auto;flex:1 1 auto;min-height:0}
  .handle{padding:8px 22px;font-size:14px;margin:6px auto}
  .hub-bar{padding:0 12px}.hb-pl .cov{width:38px;height:38px}
@@ -402,7 +446,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  .hub-cols>div{overflow:visible;min-height:0}
  .hc-about{flex:none;display:block!important;overflow:visible!important}
  .hc-about .ab2-h{display:none}
- .hc-about .ab2{display:grid;grid-template-columns:86px 1fr;gap:8px;padding:3px 0;font-size:13px;border-bottom:1px solid #22090d}
+ .hc-about .ab2{display:block;padding:4px 0;font-size:13px;border-bottom:1px solid #22090d}
  .hc-about .ab2 small{font-size:10px}
  .hc-about .socials2{display:flex;flex-direction:row;flex-wrap:wrap;margin:8px 0 0;gap:6px}
  .plcol{flex:none}.plcol .ab2-h{display:none}
@@ -417,6 +461,9 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  .hub-cols,.hc-about,.plgrid{scrollbar-width:none}
  .hc-about::-webkit-scrollbar,.plgrid::-webkit-scrollbar{display:none}
  .ev{grid-template-columns:18px minmax(0,1fr);gap:0 12px}.ev-d{grid-column:2;grid-row:1;text-align:left;padding-bottom:8px}.ev-n{grid-column:1;grid-row:1/3}.ev-g{grid-column:2;grid-row:2;grid-template-columns:1fr}.ev-d b{font-size:24px}
+ .ftier{gap:0;margin-bottom:14px}
+ .fitems.tall{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
+ .fitems{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px;padding:12px;margin-top:10px}
  /* tier page */
  .subtabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sub{padding:8px 6px;font-size:14px;letter-spacing:.06em;text-align:center}
  .period{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
@@ -439,7 +486,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
   <nav class="tabs"><span class="key">Q</span>
     <a class="tab active" href="#home" data-r="home">Home</a>
     <a class="tab" href="#tier" data-r="tier">Games Tier List</a>
-    <span class="tab locked">Female Characters<small>LOCKED</small></span>
+    <a class="tab" href="#female" data-r="female">Female Characters</a>
     <span class="tab locked">Firearms<small>LOCKED</small></span>
     <span class="tab locked">KSA Achievements<small>LOCKED</small></span>
     <span class="tab locked">Series<small>LOCKED</small></span>
@@ -454,8 +501,8 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
     <div class="stage">
       <div class="sec"><h1>Main Menu</h1><span>// SELECT A SECTION</span></div>
       <div class="cards">
-        <a class="cut card open" href="#tier"><div class="top"><span class="key">01</span><span class="chip c">OPEN</span></div><div class="big">TIER</div><div><h2>Games Tier List</h2><p>My Gaming History, ranked</p><div class="bar"></div></div></a>
-        <div class="cut card locked"><div class="top"><span class="key">02</span><span class="chip r">LOCKED</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">03</span><span class="chip r">LOCKED</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA Achievements</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">05</span><span class="chip r">LOCKED</span></div><div class="big">SER</div><div><h2>Series</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">06</span><span class="chip r">LOCKED</span></div><div class="big">ANI</div><div><h2>Anime</h2><p>Coming soon</p><div class="bar"></div></div></div>
+        <a class="cut card open hero bgi" href="#tier" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_games.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_games.png')"><div class="top"><span class="key">01</span><span class="chip c">OPEN</span></div><div class="big">TIER</div><div><h2>Games Tier List</h2><p>My Gaming History, ranked</p><div class="bar"></div></div></a>
+        <a class="cut card open bgi" href="#female" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_characters.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_characters.png')"><div class="top"><span class="key">02</span><span class="chip c">OPEN</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Portrait tier list</p><div class="bar"></div></div></a><div class="cut card locked"><div class="top"><span class="key">03</span><span class="chip r">LOCKED</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA Achievements</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">05</span><span class="chip r">LOCKED</span></div><div class="big">SER</div><div><h2>Series</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">06</span><span class="chip r">LOCKED</span></div><div class="big">ANI</div><div><h2>Anime</h2><p>Coming soon</p><div class="bar"></div></div></div>
       </div>
       <div class="cdots" id="cDots"></div>
       <div class="avwrap" id="avWrap">
@@ -470,7 +517,12 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
       <div class="cut hub" id="hub">
         <div class="hub-bar" id="hubBar">
           <div class="hb-info"><small>ABOUT ME</small><span>INTJ-T · Left-Handed · Theoretical physicist · Astrophysicist · IT-specialist</span></div>
-          <div class="hb-pl" id="hbPl"></div>
+          <div class="socials2 hb-soc">
+          <a class="cut soc sm" href="https://t.me/warranty_v2" target="_blank" rel="noopener"><span class="si" data-ic="tg_mini.png">TG</span><span class="tx"><small>TELEGRAM</small><b>@warranty_v2</b></span></a>
+          <a class="cut soc sm" href="https://open.spotify.com/user/pzl86hnvnpb7zplevy66b9hdm" target="_blank" rel="noopener"><span class="si" data-ic="spotify_mini.png">SP</span><span class="tx"><small>SPOTIFY</small><b>Open profile</b></span></a>
+          <button class="cut soc sm" id="dcBtn" type="button" data-copy="warranty"><span class="si" data-ic="discord_mini.png">DC</span><span class="tx"><small>DISCORD · COPY</small><b>warranty</b></span></button>
+          <a class="cut soc sm" href="https://steamcommunity.com/id/warranty97/" target="_blank" rel="noopener"><span class="si" data-ic="steam_mini.png">ST</span><span class="tx"><small>STEAM</small><b>warranty97</b></span></a>
+        </div>
         </div>
         <div class="hub-body" id="hubBody">
           <div class="hub-cols">
@@ -481,12 +533,6 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
         <div class="ab2"><small>Temperament</small><span class="tmp"><i class="tbar"><b style="flex:75"></b><b style="flex:25"></b></i>Flegmatic 75% · Melancholic 25%</span></div>
         <div class="ab2"><small>Profession</small><span>Theoretical physicist · Astrophysicist &amp; Space engineer · IT-specialist</span></div>
         <div class="ab2"><small>Gaming</small><span>Minecraft veteran · Kerbal Space Program professional</span></div>
-        <div class="socials2">
-          <a class="cut soc sm" href="https://t.me/warranty_v2" target="_blank" rel="noopener"><span class="si">TG</span><span class="tx"><small>TELEGRAM</small><b>@warranty_v2</b></span></a>
-          <a class="cut soc sm" href="https://open.spotify.com/user/pzl86hnvnpb7zplevy66b9hdm" target="_blank" rel="noopener"><span class="si">SP</span><span class="tx"><small>SPOTIFY</small><b>Open profile</b></span></a>
-          <button class="cut soc sm" id="dcBtn" type="button" data-copy="warranty"><span class="si">DC</span><span class="tx"><small>DISCORD · COPY</small><b>warranty</b></span></button>
-          <a class="cut soc sm" href="https://steamcommunity.com/id/warranty97/" target="_blank" rel="noopener"><span class="si">ST</span><span class="tx"><small>STEAM</small><b>warranty97</b></span></a>
-        </div>
       </div>
             <div class="plcol"><div class="ab2-h">// PLAYLISTS</div><div class="plgrid" id="plGrid"></div></div>
             <div class="hc-trk">
@@ -517,9 +563,18 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
     </div>
     <div id="ant" hidden></div>
     <div class="foot">
-      <button class="cut btn" onclick="load()"><span>Refresh data</span></button>
+      <button class="cut btn" onclick="load(true)"><span>Refresh data</span></button>
       <div class="hint"><span class="key">R</span>Refresh</div>
     </div>
+  </section>
+  <section class="view" id="view-female">
+    <div class="sec"><span id="femMode">// OVERALL</span></div>
+    <div class="subtabs">
+      <button class="cut sub on" data-fs="all"><span>Overall</span></button>
+      <button class="cut sub" data-fs="hot"><span>by Hotness</span></button>
+    </div>
+    <div id="femApp"><div class="msg">LOADING…</div></div>
+    <div id="femHot" hidden><div class="msg">LOADING…</div></div>
   </section>
 </main></div>
 <aside class="cut" id="panel" aria-label="Game details"><div class="pin" id="pin"></div></aside>
@@ -1335,17 +1390,32 @@ const driveId=u=>{const m=String(u||"").match(/\/d\/([\w-]+)|[?&]id=([\w-]+)/);r
 function imgCands(u){
   u=String(u||"").trim();if(!u)return[];
   const id=/(^|\/\/)(drive|docs)\.google\.com/.test(u)?driveId(u):null;
-  return id?[`https://lh3.googleusercontent.com/d/${id}=w400`,`https://drive.google.com/thumbnail?id=${id}&sz=w400`,`https://drive.google.com/uc?export=view&id=${id}`]:[u];
+  return id?[`https://lh3.googleusercontent.com/d/${id}=w256`,`https://drive.google.com/thumbnail?id=${id}&sz=w256`,`https://drive.google.com/uc?export=view&id=${id}`]:[u];
+}
+const IMGQ={q:[],active:0,max:8,io:null};
+function imgPump(){ // at most 8 images are requested at a time, nearest to the viewport first
+  while(IMGQ.active<IMGQ.max&&IMGQ.q.length){
+    const im=IMGQ.q.shift();if(!im.isConnected||im.getAttribute("src"))continue;
+    IMGQ.active++;let done=false;const fin=()=>{if(done)return;done=true;IMGQ.active--;imgPump()};
+    im.addEventListener("load",fin,{once:true});im.addEventListener("error",fin,{once:true});
+    im.src=im.dataset.s0;
+  }
+}
+function watchImgs(root){
+  const list=(root||document).querySelectorAll("img[data-s0]:not([src])");
+  if(!("IntersectionObserver" in window)){list.forEach(im=>{im.src=im.dataset.s0});return}
+  if(!IMGQ.io)IMGQ.io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){IMGQ.io.unobserve(en.target);IMGQ.q.push(en.target)}});imgPump()},{rootMargin:"700px 0px"});
+  list.forEach(im=>IMGQ.io.observe(im));
 }
 function imgNext(im){ // the next candidate URL, finally the initials placeholder
   const c=JSON.parse(im.dataset.c),n=+im.dataset.n+1;
   if(n<c.length){im.dataset.n=n;im.src=c[n]}
   else{const ph=document.createElement("div");ph.className="ph";ph.textContent=im.dataset.i;im.replaceWith(ph)}
 }
-function gimg(g){
+function gimg(g,eager){
   const c=imgCands(g.img),i=ini(g.name);
   if(!c.length)return `<div class="ph">${esc(i)}</div>`;
-  return `<img loading="lazy" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(i)}" src="${esc(c[0])}" onerror="imgNext(this)">`;
+  return `<img decoding="async" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(i)}" ${eager?`src="${esc(c[0])}"`:`data-s0="${esc(c[0])}"`} onerror="imgNext(this)">`;
 }
 let TIERS=[];
 const cellHtml=g=>`<div class="cell" data-id="${g.id}" data-n="${esc(g.name)}"><div class="g">${gimg(g)}</div></div>`;
@@ -1356,23 +1426,31 @@ const tierHtml=(ts,keepEmpty)=>ts.filter(t=>keepEmpty||t.items.length).map(t=>`
       </section>`).join("");
 const filterTiers=f=>TIERS.map(t=>({...t,items:t.items.filter(f)}));
 function renderCmp(){ // completed = ANY playthrough finished, not only the latest one
-  document.getElementById("cmp").innerHTML=tierHtml(filterTiers(g=>g.done))||'<div class="msg">NO COMPLETED GAMES</div>';
+  document.getElementById("cmp").innerHTML=tierHtml(filterTiers(g=>g.done))||'<div class="msg">NO COMPLETED GAMES</div>';watchImgs(document.getElementById("cmp"));
 }
 const fmtPeriod=n=>n<24?n+(n===1?" MONTH":" MONTHS"):Math.floor(n/12)+" YEARS"+(n%12?" "+n%12+(n%12===1?" MONTH":" MONTHS"):"");
-function renderNew(){ // games with any activity within the last N months (column T = current month)
+function renderNew(){
+  if(!ALL.length)return; // games with any activity within the last N months (column T = current month)
   const n=+document.getElementById("prRange").value;
   document.getElementById("prVal").textContent="LAST "+fmtPeriod(n);
   const f=filterTiers(g=>g.lastOff<n),cnt=f.reduce((a,t)=>a+t.items.length,0);
   document.getElementById("prCnt").textContent=cnt+" GAMES";
-  document.getElementById("newList").innerHTML=tierHtml(f)||'<div class="msg">NO GAMES IN THIS PERIOD</div>';
+  document.getElementById("newList").innerHTML=tierHtml(f)||'<div class="msg">NO GAMES IN THIS PERIOD</div>';watchImgs(document.getElementById("newList"));
 }
 document.getElementById("prRange").addEventListener("input",renderNew);
+const viewStale={cmp:true,new:true};
+function ensureView(k){
+  if(k==="cmp"&&viewStale.cmp){renderCmp();viewStale.cmp=false}
+  if(k==="new"&&viewStale.new){renderNew();viewStale.new=false}
+}
 function prepareViews(){
   let far=0;
   ALL.forEach(g=>{if(g.un)return;const r=cellsFor(g);g.done=r.runs.some(x=>x.done);g.lastOff=r.cs.length?r.cs[0].off:Infinity;if(isFinite(g.lastOff))far=Math.max(far,g.lastOff)});
   const rg=document.getElementById("prRange"),keep=+rg.value;
   rg.max=Math.max(12,Math.min(480,far+1));rg.value=Math.min(keep,+rg.max)||12;
-  renderCmp();renderNew();
+  viewStale.cmp=viewStale.new=true;                 // Completed / New Only are built when first opened
+  document.getElementById("cmp").innerHTML="";document.getElementById("newList").innerHTML="";
+  ["cmp","new"].forEach(k=>{if(!document.getElementById(k).hidden)ensureView(k)});
 }
 function relDate(l){ // "February 2027" / "2028" -> "IN 4 MONTHS" (approximate for a bare year)
   const now=new Date(),cur=now.getFullYear()*12+now.getMonth();let t,approx=false;
@@ -1470,7 +1548,7 @@ async function getText(u){
   const list=[u+"&_="+Date.now(),...(ALT[u]||[])];
   let last;
   for(const x of list){
-    try{const r=await fetch(x);if(!r.ok)throw new Error("HTTP "+r.status);return await r.text()}
+    try{const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),20000);try{const r=await fetch(x,{signal:ctl.signal});if(!r.ok)throw new Error("HTTP "+r.status);return await r.text()}finally{clearTimeout(to)}}
     catch(e){last=e}
   }
   throw new Error(last&&last.message==="Failed to fetch"
@@ -1511,12 +1589,21 @@ function place(tiers,v){
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ini=n=>n.replace(/[^\p{L}\p{N} ]/gu,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
 
-async function load(){
-  const app=document.getElementById("app"),st=document.getElementById("status");
-  closePanel();ALL.length=0;app.innerHTML='<div class="msg">LOADING DATA…</div>';st.innerHTML='<span class="chip c">LOADING…</span>';
-  try{
-    const [mainT,cfgT,col]=await Promise.all([getText(URL_MAIN),getText(URL_CFG),COLORS_URL?fetch(COLORS_URL).then(r=>r.json()).catch(()=>null):null]);
-    COLORS=Array.isArray(col)?col:null;
+/* ---------- data: cached copy is shown instantly, fresh data is fetched (with retries) in the background ---------- */
+const CKEY="warranty_cache_v1";
+const readCache=()=>{try{return JSON.parse(localStorage.getItem(CKEY)||"null")}catch(e){return null}};
+const writeCache=o=>{try{localStorage.setItem(CKEY,JSON.stringify(o))}catch(e){}};
+async function retry(fn,tries){let last;for(let i=0;i<tries;i++){try{return await fn()}catch(e){last=e;await new Promise(r=>setTimeout(r,500*(i+1)))}}throw last}
+async function getJson(u){
+  const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),25000);
+  try{const r=await fetch(u,{signal:ctl.signal});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()}finally{clearTimeout(to)}
+}
+let STAT={total:0,tiers:0},loadBusy=false;
+const setStat=extra=>{document.getElementById("status").innerHTML=(STAT.total?`<span class="chip r">GAMES ${STAT.total}</span><span class="chip c">TIERS ${STAT.tiers}</span>`:"")+(extra||"")};
+function render(mainT,cfgT,col){
+  const app=document.getElementById("app");
+  closePanel();ALL.length=0;
+  COLORS=Array.isArray(col)?col:null;
     const main=parseCSV(mainT),cfg=parseCSV(cfgT);
     const tiers=buildTiers(cfg);
     if(!tiers.length)throw new Error("Config sheet is empty or could not be parsed");
@@ -1545,7 +1632,7 @@ async function load(){
       total++;
     });
     TIERS=tiers;
-    app.innerHTML=tierHtml(tiers,true);
+    app.innerHTML=tierHtml(tiers,true);watchImgs(app);
     prepareViews();
     const AP=["#46e3ea","#f4e63a","#ff6b3d","#7ef0c6","#5aa0ff","#ff3d3d"];
     document.getElementById("ant").innerHTML=groups.filter(x=>x.items.length).reverse().map((x,k)=>{ // soonest first
@@ -1557,26 +1644,66 @@ async function load(){
         <div class="ev-n"><i></i></div>
         <div class="ev-g">${x.items.map(g=>`<div class="ucard" data-id="${g.id}"><div class="ucov">${gimg(g)}</div><div class="uc-t"><h3>${esc(g.name)}</h3>${g.note?`<p>${esc(g.note)}</p>`:'<p class="dim">No description yet</p>'}</div></div>`).join("")}</div>
       </section>`}).join("")||'<div class="msg">NO UNRELEASED GAMES</div>';
-    st.innerHTML=`<span class="chip r">GAMES ${total}</span><span class="chip c">TIERS ${tiers.length}</span>`;
-  }catch(e){
-    app.innerHTML=`<div class="msg err">LOAD ERROR: ${esc(String(e.message||e))}<br><button class="cut btn" onclick="load()"><span>RETRY</span></button></div>`;
-    st.innerHTML='<span class="chip r">OFFLINE</span>';
+    watchImgs(document.getElementById("ant"));
+    STAT={total,tiers:tiers.length};
+}
+async function load(manual){
+  const app=document.getElementById("app");
+  if(loadBusy){if(manual)setStat('<span class="chip c">ALREADY UPDATING…</span>');return}
+  loadBusy=true;
+  const cache=readCache(),hadData=ALL.length>0;
+  let shown=hadData;
+  if(!hadData&&cache&&cache.mainT&&cache.cfgT){ // instant first paint from the last successful load
+    try{render(cache.mainT,cache.cfgT,cache.col);shown=true}catch(e){}
   }
+  if(!shown){app.innerHTML='<div class="msg">LOADING DATA…</div>'}
+  setStat('<span class="chip c">'+(shown?"UPDATING…":"LOADING…")+'</span>');
+  try{
+    const [mainT,cfgT,colRaw]=await Promise.all([
+      retry(()=>getText(URL_MAIN),2),
+      retry(()=>getText(URL_CFG),2),
+      COLORS_URL?retry(()=>getJson(COLORS_URL),3).catch(()=>null):null]);
+    const col=Array.isArray(colRaw)?colRaw:(cache&&cache.col)||COLORS||null; // keep the last good colours if the script did not answer
+    const same=shown&&cache&&cache.mainT===mainT&&cache.cfgT===cfgT&&JSON.stringify(cache.col||null)===JSON.stringify(col||null);
+    if(!same||!hadData&&!shown)render(mainT,cfgT,col);
+    writeCache({mainT,cfgT,col,t:Date.now()});
+    setStat(Array.isArray(colRaw)||!COLORS_URL?"":'<span class="chip r">COLOURS: CACHED</span>');
+  }catch(e){
+    if(!shown){
+      app.innerHTML=`<div class="msg err">LOAD ERROR: ${esc(String(e.message||e))}<br><button class="cut btn" onclick="load(true)"><span>RETRY</span></button></div>`;
+      setStat('<span class="chip r">OFFLINE</span>');
+    }else setStat('<span class="chip r">OFFLINE · CACHED</span>');
+  }finally{loadBusy=false}
 }
 const tip=document.getElementById("tip"),tt=tip.firstElementChild;
+let selFc=null,lastPtr="mouse";
 function hideTip(){tip.style.opacity=0}
-document.addEventListener("pointermove",e=>{
-  if(e.pointerType&&e.pointerType!=="mouse"){hideTip();return} // no hover tooltips on touch screens
-  const g=e.target.closest&&e.target.closest(".cell");
-  if(!g){hideTip();return}
+function clearSel(){if(selFc){selFc.classList.remove("sel");selFc=null}}
+function fillTip(g){
   tt.textContent=g.dataset.n;
-  const w=tip.offsetWidth,h=tip.offsetHeight,vw=document.documentElement.clientWidth;
-  let x=Math.min(Math.max(8,e.clientX-w/2),vw-w-8),y=e.clientY-h-18;
-  if(y<8)y=e.clientY+24;
-  tip.style.left=x+"px";tip.style.top=y+"px";tip.style.opacity=1;
+  if(g.dataset.f){const f=document.createElement("small");f.className="tf";f.textContent=g.dataset.f;tt.appendChild(f)}
+}
+function placeTip(cx,below,above,noFlip){ // centre x, y when shown below, y of the anchor when it has to flip above (not for portraits)
+  const w=tip.offsetWidth,h=tip.offsetHeight,vw=document.documentElement.clientWidth,vh=document.documentElement.clientHeight;
+  let y=below;if(y+h>vh-8)y=noFlip?vh-h-8:above-h;
+  tip.style.left=Math.min(Math.max(8,cx-w/2),vw-w-8)+"px";tip.style.top=Math.max(8,y)+"px";tip.style.opacity=1;
+}
+function showFcTip(g){const r=g.querySelector(".ff").getBoundingClientRect();fillTip(g);placeTip(r.left+r.width/2,r.bottom+8,r.top-8,true)} // always under the portrait frame, kept inside the screen
+document.addEventListener("pointermove",e=>{
+  if(e.pointerType&&e.pointerType!=="mouse")return; // touch: tooltips appear on tap
+  const g=e.target.closest&&e.target.closest(".cell,.fc");
+  if(!g){hideTip();return}
+  if(g.classList.contains("fc"))showFcTip(g);
+  else{fillTip(g);placeTip(e.clientX,e.clientY+22,e.clientY-14)} // game tiles: under the cursor
 });
-document.addEventListener("pointerdown",hideTip); // a click opens the panel: drop the tooltip at once
-window.addEventListener("scroll",hideTip,true);
+document.addEventListener("pointerdown",e=>{lastPtr=e.pointerType||"mouse";if(lastPtr==="mouse")hideTip()});
+document.addEventListener("click",e=>{ // touch: tap selects a portrait and shows its tooltip, tapping again or elsewhere clears it
+  if(lastPtr==="mouse")return;
+  const g=e.target.closest&&e.target.closest(".fc");
+  if(g&&g!==selFc){clearSel();selFc=g;g.classList.add("sel");showFcTip(g)}
+  else{clearSel();hideTip()}
+});
+window.addEventListener("scroll",()=>{hideTip();clearSel()},true);
 document.documentElement.addEventListener("mouseleave",hideTip);
 
 const RATE=[["Story","Plot & narrative","st"],["Gameplay","Mechanics & systems","gp"],["Visuals","Visual style & design","vi"],["Vibe","Atmosphere, emotion & music","vb"],["Setting","World & setting","se"]];
@@ -1591,7 +1718,7 @@ function openPanel(id){
   const g=ALL[id];if(!g)return;
   const col=g.un?(g.color||"#46e3ea"):g.tier.color;
   pin.parentElement.style.setProperty("--tc",col);pin.style.setProperty("--tc",col);
-  const cover=gimg(g);
+  const cover=gimg(g,true);
   const close=`<button class="x" id="px">${matchMedia("(max-width:760px)").matches?"← BACK":"ESC · CLOSE"}</button>`;
   if(g.un){
     pin.innerHTML=`
@@ -1631,6 +1758,14 @@ function closePanel(fromPop){
   if(selEl){selEl.classList.remove("sel");selEl=null}
   if(panelHist){panelHist=false;if(!fromPop&&was)history.back()} // drop the history entry we pushed when opening
 }
+panel.addEventListener("wheel",e=>{ // while the cursor is over the open panel only the panel scrolls, never the page behind
+  if(!panel.classList.contains("on"))return;
+  const dy=e.deltaMode===1?e.deltaY*32:e.deltaY,inPin=!!e.target.closest(".pin");
+  const atTop=pin.scrollTop<=0&&dy<0,atBottom=pin.scrollTop+pin.clientHeight>=pin.scrollHeight-1&&dy>0;
+  if(inPin&&!atTop&&!atBottom)return;   // native smooth scrolling of the panel
+  e.preventDefault();
+  if(!inPin)pin.scrollTop+=dy;          // over the border / edge: forward to the panel
+},{passive:false});
 window.addEventListener("popstate",()=>{if(panelHist){panelHist=false;closePanel(true)}}); // browser/swipe "back" only collapses the panel
 document.addEventListener("click",e=>{
   const c=e.target.closest&&e.target.closest(".cell,.ucard");
@@ -1674,6 +1809,10 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
   layout();
   st.addEventListener("click",()=>go(1));
   dots.addEventListener("click",e=>{const d=e.target.closest("i");if(d){idx=+d.dataset.j;layout()}});
+  let ax=0,ay=0; // phones: a sideways swipe over the avatars flips them
+  const avr=document.getElementById("avRow");
+  avr.addEventListener("touchstart",e=>{const t=e.touches[0];ax=t.clientX;ay=t.clientY},{passive:true});
+  avr.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-ax,dy=t.clientY-ay;if(Math.abs(dx)>35&&Math.abs(dx)>Math.abs(dy)*1.2)go(dx<0?1:-1)},{passive:true});
   let acc=0,last=0; // wheel over the avatars flips them (older = down) and never reaches the page / bottom panel
   document.getElementById("avRow").addEventListener("wheel",e=>{
     e.preventDefault();e.stopPropagation();
@@ -1702,7 +1841,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
   let SNAP=Object.entries(PLAYLIST_CSV).map(([name,csv])=>({name,tracks:csvTracks(csv)}));
   const norm=x=>String(x).toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"");
   const $=id=>document.getElementById(id);
-  const hub=$("hub"),grid=$("plGrid"),hb=$("hbPl"),box=$("plOpen"),list=$("plTracks"),flt=$("plFilter"),ttl=$("plTitle");
+  const hub=$("hub"),grid=$("plGrid"),box=$("plOpen"),list=$("plTracks"),flt=$("plFilter"),ttl=$("plTitle");
   const mmss=sec=>{sec=Math.max(0,Math.round(sec));return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0")};
   const driveImg=u=>{const m=String(u).match(/\/d\/([\w-]+)/);return m?`https://lh3.googleusercontent.com/d/${m[1]}=w400`:u};
   let open=-1,playingId=null,curPl=-1,curK=-1;
@@ -1735,7 +1874,6 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
   const covInner=p=>p.cover?`<img alt="" referrerpolicy="no-referrer" src="${esc(p.cover)}" onerror="this.parentNode.textContent=this.parentNode.dataset.ini">`:esc(ini(p.name));
   function renderPl(){
     grid.innerHTML=PLAYLISTS.map((p,i)=>`<button class="plc${open===i?" on":""}" data-i="${i}" type="button"><div class="cov" data-ini="${esc(ini(p.name))}">${covInner(p)}</div><span><b>${esc(p.name)}</b><small>${p.loading?"LOADING…":p.tracks.length?p.tracks.length+" TRACKS":"NO TRACK DATA"}</small></span></button>`).join("")||'<div class="empty">// NO PLAYLISTS</div>';
-    hb.innerHTML=PLAYLISTS.map((p,i)=>`<div class="cov" data-i="${i}" data-ini="${esc(ini(p.name))}" data-hb="1" title="${esc(p.name)}">${covInner(p)}</div>`).join("");
   }
   function renderTracks(){
     const q=flt.value.trim().toLowerCase(),p=PLAYLISTS[open];
@@ -1787,16 +1925,21 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
   const isOpen=()=>hub.classList.contains("open");
   handle.addEventListener("click",()=>setHub(!isOpen()));
   $("hubBar").addEventListener("click",e=>{
-    const c=e.target.closest("[data-hb]");
-    if(c){setHub(true);setTimeout(()=>openPl(+c.dataset.i),420);return}
+    if(e.target.closest(".soc"))return; // social buttons do not toggle the panel
     setHub(!isOpen());
   });
-  let ty=null,okStart=false,s0=0; // swipe up on the bottom panel opens it, swipe down on its top part closes it
-  const ts=e=>{ty=e.touches[0].clientY;okStart=!!e.target.closest(".handle,.hub-bar,.hc-about,.plcol");s0=document.getElementById("hubBody").scrollTop};
-  const te=e=>{if(ty==null)return;const dy=e.changedTouches[0].clientY-ty;ty=null;if(!okStart)return;
-    if(!isOpen()){if(dy<-40)setHub(true)}
-    else if(dy>50&&s0<=2)setHub(false)}; // scrolling the content back up never closes the panel; only a pull from the very top does
-  [handle,hub].forEach(el=>{el.addEventListener("touchstart",ts,{passive:true});el.addEventListener("touchend",te,{passive:true})});
+  let ty=0,tx=0,s0=0,fired=false,tracking=false; // a vertical swipe up anywhere opens the panel; a pull down from the very top closes it
+  const hubBody=$("hubBody");
+  const ts=e=>{const t=e.touches[0];ty=t.clientY;tx=t.clientX;s0=hubBody.scrollTop;fired=false;tracking=true};
+  const tm=e=>{
+    if(!tracking||fired)return;const t=e.touches[0],dy=t.clientY-ty,dx=t.clientX-tx;
+    if(Math.abs(dy)<Math.abs(dx)*1.4)return;                 // mostly sideways: that belongs to the cards / avatars / playlist row
+    if(!isOpen()){if(dy<-45){fired=true;setHub(true)}}
+    else if(s0<=2&&dy>60){fired=true;setHub(false)}          // scrolling the content back up never closes the panel by itself
+  };
+  const te=()=>{tracking=false};
+  lay.addEventListener("touchstart",ts,{passive:true});lay.addEventListener("touchmove",tm,{passive:true});
+  lay.addEventListener("touchend",te,{passive:true});lay.addEventListener("touchcancel",te,{passive:true});
   let lock=0;
   window.addEventListener("wheel",e=>{
     if(cur!=="home"||Date.now()<lock)return;
@@ -1828,27 +1971,28 @@ function showSub(k){
   closePanel();
   const map={tier:"app",cmp:"cmp",new:"new",ant:"ant"};
   Object.entries(map).forEach(([key,id])=>document.getElementById(id).hidden=key!==k);
-  document.querySelectorAll(".sub").forEach(b=>b.classList.toggle("on",b.dataset.s===k));
+  document.querySelectorAll(".sub[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===k));
+  ensureView(k);
   document.getElementById("secMode").textContent={tier:"// ALL GAMES",cmp:"// COMPLETED GAMES",new:"// NEW ONLY",ant:"// ANTICIPATED GAMES"}[k]; // shows the open mode
 }
-document.querySelectorAll(".sub").forEach(b=>b.addEventListener("click",()=>showSub(b.dataset.s)));
+document.querySelectorAll(".sub[data-s]").forEach(b=>b.addEventListener("click",()=>showSub(b.dataset.s)));
 (function(){ // drop-down with all tabs (right side of the mobile top bar)
-  const items=[["Home","#home"],["Games Tier List","#tier"],["Female Characters",""],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
+  const items=[["Home","#home"],["Games Tier List","#tier"],["Female Characters","#female"],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
   const btn=document.getElementById("mTitleBtn"),list=document.getElementById("mList");
   list.innerHTML=items.map(x=>x[1]?`<a href="${x[1]}" data-h="${x[1]}">${x[0]}</a>`:`<span class="lk">${x[0]}<small>LOCKED</small></span>`).join("");
   btn.addEventListener("click",e=>{e.stopPropagation();list.hidden=!list.hidden;btn.classList.toggle("open",!list.hidden)});
   document.addEventListener("click",e=>{if(!e.target.closest(".m-menu")){list.hidden=true;btn.classList.remove("open")}});
 })();
 (function(){ // page squares in the mobile top bar (one per section; locked sections are dim)
-  const secs=[["Games Tier List","#tier"],["Female Characters",""],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
+  const secs=[["Games Tier List","#tier"],["Female Characters","#female"],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
   const d=document.getElementById("mDots");
   d.innerHTML=secs.map(x=>`<i class="${x[1]?"ok":""}" data-h="${x[1]}" title="${x[0]}${x[1]?"":" (locked)"}"></i>`).join("");
   d.addEventListener("click",e=>{const i=e.target.closest("i");if(i&&i.dataset.h)location.hash=i.dataset.h});
 })();
-(function(){ // main menu on phones: cards overlap and follow the finger while swiping
+(function(){ // main menu: on phones the cards overlap and one swipe moves exactly one card; on desktop the hovered card widens
   const wrap=document.querySelector(".cards"),cards=[...wrap.querySelectorAll(".card")],mq=matchMedia("(max-width:760px)");
   const cd=document.getElementById("cDots");
-  let idx=0,sx=0,st=0,dx=0,drag=false,moved=false;
+  let idx=0,sx=0,sy=0,dx=0,drag=false,moved=false,axis=null,act=0;
   cd.innerHTML=cards.map((c,k)=>`<i class="${c.classList.contains("locked")?"":"ok"}" data-k="${k}"></i>`).join("");
   const lay=(f=0)=>{
     cards.forEach((c,k)=>{const d=k-idx+f;c.style.setProperty("--d",d.toFixed(3));c.style.setProperty("--ad",Math.abs(d).toFixed(3))});
@@ -1856,20 +2000,18 @@ document.querySelectorAll(".sub").forEach(b=>b.addEventListener("click",()=>show
   };
   lay();
   cd.addEventListener("click",e=>{const d=e.target.closest("i");if(d){idx=+d.dataset.k;lay()}});
-  wrap.addEventListener("touchstart",e=>{if(!mq.matches)return;sx=e.touches[0].clientX;st=Date.now();dx=0;drag=true;moved=false},{passive:true});
+  wrap.addEventListener("touchstart",e=>{if(!mq.matches)return;const t=e.touches[0];sx=t.clientX;sy=t.clientY;dx=0;drag=true;moved=false;axis=null},{passive:true});
   wrap.addEventListener("touchmove",e=>{
-    if(!drag)return;dx=e.touches[0].clientX-sx;
-    if(Math.abs(dx)>8)moved=true;
-    if(moved){wrap.classList.add("drag");let f=dx/70;if((idx===0&&f>0)||(idx===cards.length-1&&f<0))f*=.3;lay(Math.max(-1.6,Math.min(1.6,f)))}
+    if(!drag)return;const t=e.touches[0];dx=t.clientX-sx;const dy=t.clientY-sy;
+    if(!axis&&(Math.abs(dx)>8||Math.abs(dy)>8))axis=Math.abs(dx)>Math.abs(dy)*1.2?"h":"v";
+    if(axis!=="h")return;                       // vertical swipes are left to the bottom panel
+    moved=true;wrap.classList.add("drag");
+    let f=Math.max(-1,Math.min(1,dx/90));if((idx===0&&f>0)||(idx===cards.length-1&&f<0))f*=.3;
+    lay(f);
   },{passive:true});
   const end=()=>{
     if(!drag)return;drag=false;wrap.classList.remove("drag");
-    if(moved){
-      const v=dx/Math.max(1,Date.now()-st); // px per ms: a quick flick skips further
-      let steps=Math.round(-(dx+v*140)/70);
-      if(!steps&&Math.abs(dx)>16)steps=dx<0?1:-1;
-      idx=Math.max(0,Math.min(cards.length-1,idx+Math.max(-3,Math.min(3,steps))));
-    }
+    if(moved&&axis==="h"&&Math.abs(dx)>40)idx=Math.max(0,Math.min(cards.length-1,idx+(dx<0?1:-1))); // one swipe = one card
     lay();
   };
   wrap.addEventListener("touchend",end,{passive:true});wrap.addEventListener("touchcancel",end,{passive:true});
@@ -1879,25 +2021,124 @@ document.querySelectorAll(".sub").forEach(b=>b.addEventListener("click",()=>show
     const c=e.target.closest(".card"),k=cards.indexOf(c);
     if(c&&k!==idx){e.preventDefault();idx=k;lay()}  // tapping a card behind brings it forward
   });
+  /* desktop: the card under the cursor takes the wide column, the others share the rest */
+  const widen=()=>{
+    wrap.style.setProperty("--cols",cards.map((c,k)=>k===act?"minmax(0,1.8fr)":"minmax(0,1fr)").join(" "));
+    cards.forEach((c,k)=>c.classList.toggle("act",k===act));
+  };
+  cards.forEach((c,k)=>c.addEventListener("mouseenter",()=>{if(!mq.matches&&act!==k){act=k;widen()}}));
+  widen();
 })();
 let loaded=false,cur="home";
-const ORDER=["home","tier"];
+/* icons of the social buttons: assets/icons/<file> (the file name is stored in data-ic); the letters stay if the file cannot be loaded */
+function loadIcons(){
+  const PAGES="https://warranty-v2.github.io/",RAW="https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/";
+  document.querySelectorAll(".si[data-ic]").forEach(el=>{
+    const f=el.dataset.ic,c=[PAGES+"assets/icons/"+f,RAW+"assets/icons/"+f];
+    let k=0;const im=new Image();im.alt="";im.referrerPolicy="no-referrer";
+    im.onload=()=>{el.textContent="";el.appendChild(im)};
+    im.onerror=()=>{if(++k<c.length)im.src=c[k]};
+    im.src=c[0];
+  });
+}
+loadIcons();
+const FEM_SHEETS={
+  all:{url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vSaE2Mi8Q4TWBKwc6mEuwH-lDipH77pD14Jp41GjC-1a_7AXB-A-1Idr1QdzQC9_n8m9Hi840p60scn/pub?gid=621977669&single=true&output=csv",
+       key:"warranty_fem_v3",el:"femApp",dir:"assets/female%20characters/",tall:false},          // Overall: square portraits
+  hot:{url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vSaE2Mi8Q4TWBKwc6mEuwH-lDipH77pD14Jp41GjC-1a_7AXB-A-1Idr1QdzQC9_n8m9Hi840p60scn/pub?gid=1634139753&single=true&output=csv",
+       key:"warranty_fem_hot_v1",el:"femHot",dir:"assets/female%20characters/",tall:true}          // by Hotness: full-length 9:21 portraits (change dir if the files live in another folder)
+};
+/* Female characters: a "Tier" row starts a tier (name + "(description)"). Below it, one character block = FEM_L.rows rows,
+   one column per character:  [ignored] / portrait file name / full name / franchise / "NN% left|right".
+   If the sheet layout changes, only these numbers have to be adjusted. */
+const FEM_L={rows:5,file:1,name:2,fran:3,flag:4};
+const FEM_DEFAULT_PCT=100; // when the flag cell has no percentage: the sides fully hold the portrait
+function femFlag(t){
+  t=String(t||"");const m=t.match(/(\d+(?:[.,]\d+)?)/);
+  let pct=m?parseFloat(m[1].replace(",",".")):FEM_DEFAULT_PCT;pct=Math.max(0,Math.min(100,pct));
+  return{pct,dir:/\bright\b/i.test(t)?"r":/\bleft\b/i.test(t)?"l":""};
+}
+function parseFem(text){
+  const tiers=[];let cur=null,blk=[];
+  const flush=()=>{
+    if(!cur||!blk.length)return;
+    const g=i=>blk[i]||[],f=g(FEM_L.file),n=g(FEM_L.name),fr=g(FEM_L.fran),fl=g(FEM_L.flag);
+    f.forEach((c,j)=>{const file=(c||"").trim();if(file)cur.items.push({file,name:(n[j]||"").trim(),fran:(fr[j]||"").trim(),...femFlag(fl[j])})});
+    blk=[];
+  };
+  parseCSV(text).forEach(r=>{
+    if((r[0]||"").trim().toLowerCase()==="tier"){flush();cur={name:(r[1]||"").trim(),desc:(r[2]||"").trim().replace(/^\(+|\)+$/g,"").trim(),items:[]};tiers.push(cur);return}
+    if(!cur)return;
+    blk.push(r);if(blk.length===FEM_L.rows)flush();
+  });
+  flush();
+  return tiers;
+}
+const FEM_STD={w:180,h:420},FEM_TALL_W_PCT=143.75; // a standard 180x420 file is drawn 143.75% as wide as the frame; every file uses the same pixel scale
+function fitTall(im){
+  if(im.naturalWidth)im.style.width=(im.naturalWidth/FEM_STD.w*FEM_TALL_W_PCT)+"%"; // 258x420 -> same height as the standard, but wider
+}
+function fimg(n,dir,tall){
+  const base=dir+encodeURIComponent(n)+".png";
+  const c=["https://warranty-v2.github.io/"+base,"https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/"+base];
+  return `<img decoding="async" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(ini(n))}" data-s0="${esc(c[0])}" ${tall?'onload="fitTall(this)" ':""}onerror="imgNext(this)">`;
+}
+const prettyName=n=>n.replace(/[_-]+/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+function renderFem(text,kind){
+  const cfg=FEM_SHEETS[kind],tiers=parseFem(text),app=document.getElementById(cfg.el),tl=cfg.tall?" tall":"";
+  app.innerHTML=tiers.map((t,i)=>{
+    const col=PALETTE[Math.round(i*(PALETTE.length-1)/Math.max(1,tiers.length-1))],n=t.items.length;
+    return `<section class="tier ftier" style="--tc:${col}">
+      <div class="cut label"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span><i>${n} ${n===1?"CHARACTER":"CHARACTERS"}</i></div>
+      <div class="fitems${tl}">${n?t.items.map(x=>{
+        if(x.file==="?")return `<div class="fc q${tl}" data-n="?"><div class="ff"><span class="qm">?</span></div></div>`; // the unknown one: just a question mark
+        return `<div class="fc${tl}${x.dir==="r"?" fr":x.dir==="l"?" fl":""}" style="--y:${100-x.pct}%" data-n="${esc(x.name||prettyName(x.file))}" data-f="${esc(x.fran)}"><div class="ff"></div><div class="pw">${fimg(x.file,cfg.dir,cfg.tall)}</div></div>`}).join(""):'<div class="empty">// NO DATA</div>'}</div>
+    </section>`}).join("")||'<div class="msg">NO DATA</div>';
+  watchImgs(app);
+}
+const femBusy={all:false,hot:false},femLoaded={all:false,hot:false};let femSub="all";
+async function loadFem(kind){
+  kind=kind||femSub;const cfg=FEM_SHEETS[kind];
+  if(femBusy[kind])return;femBusy[kind]=true;
+  const app=document.getElementById(cfg.el);let cached=null;
+  try{cached=localStorage.getItem(cfg.key)}catch(e){}
+  if(cached){try{renderFem(cached,kind)}catch(e){cached=null}}
+  try{
+    const t=await retry(()=>getText(cfg.url),3);
+    if(t!==cached){renderFem(t,kind);try{localStorage.setItem(cfg.key,t)}catch(e){}}
+  }catch(e){
+    if(!cached)app.innerHTML=`<div class="msg err">LOAD ERROR: ${esc(String(e.message||e))}<br><button class="cut btn" onclick="loadFem('${kind}')"><span>RETRY</span></button></div>`;
+  }finally{femBusy[kind]=false}
+}
+function showFemSub(k){ // Overall / by Hotness
+  femSub=k;
+  document.getElementById("femApp").hidden=k!=="all";document.getElementById("femHot").hidden=k!=="hot";
+  document.querySelectorAll(".sub[data-fs]").forEach(b=>b.classList.toggle("on",b.dataset.fs===k));
+  document.getElementById("femMode").textContent=k==="hot"?"// BY HOTNESS":"// OVERALL";
+  if(!femLoaded[k]){femLoaded[k]=true;loadFem(k)}
+  hideTip();clearSel();
+}
+document.querySelectorAll(".sub[data-fs]").forEach(b=>b.addEventListener("click",()=>showFemSub(b.dataset.fs)));
+const ORDER=["home","tier","female"];
 function route(){
-  cur=location.hash==="#tier"?"tier":"home";
+  const h=location.hash;cur=h==="#tier"?"tier":h==="#female"?"female":"home";
   document.body.classList.toggle("home",cur==="home");
-  document.getElementById("view-home").classList.toggle("on",cur==="home");
-  document.getElementById("view-tier").classList.toggle("on",cur==="tier");
-  document.getElementById("mTitle").textContent=cur==="tier"?"Games Tier List":"Home";
+  document.body.classList.toggle("female",cur==="female");
+  ["home","tier","female"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",cur===v));
+  document.getElementById("mTitle").textContent={home:"Home",tier:"Games Tier List",female:"Female Characters"}[cur];
   document.querySelectorAll("#mList a").forEach(a=>a.classList.toggle("cur",a.dataset.h==="#"+cur));
   document.getElementById("mList").hidden=true;document.getElementById("mTitleBtn").classList.remove("open");
-  document.querySelectorAll("#mDots i").forEach((d,k)=>d.classList.toggle("on",cur==="tier"&&k===0));
+  const di={tier:0,female:1}[cur];
+  document.querySelectorAll("#mDots i").forEach((d,k)=>d.classList.toggle("on",k===di));
   document.querySelectorAll(".tab[data-r]").forEach(t=>t.classList.toggle("active",t.dataset.r===cur));
   if(cur==="tier"&&!loaded){loaded=true;load()}
+  if(cur==="female"&&!femLoaded[femSub]){femLoaded[femSub]=true;loadFem(femSub)}
 }
 window.addEventListener("hashchange",()=>{panelHist=false;closePanel(true);route()});
 document.addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();
-  if(k==="r"&&cur==="tier")load();
+  if(k==="r"&&cur==="tier")load(true);
+  if(k==="r"&&cur==="female"){femBusy[femSub]=false;loadFem(femSub)}
   if(k==="q"||k==="e"){const d=k==="e"?1:-1;location.hash="#"+ORDER[(ORDER.indexOf(cur)+d+ORDER.length)%ORDER.length]}
 });
 route();
