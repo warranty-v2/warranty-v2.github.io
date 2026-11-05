@@ -147,15 +147,15 @@ body.pan #shell{padding-right:434px}
 html,body{overscroll-behavior-y:contain}
 .hb-soc{display:flex;flex-wrap:nowrap;gap:8px;margin:0;flex:none}
 .hb-soc .soc.sm{padding:4px 12px 4px 6px}
-body.female #status{visibility:hidden}
+body.female #status,body.firearms #status{visibility:hidden}
 .ftier{content-visibility:visible!important;margin-bottom:46px}
 .fitems{position:relative;display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:16px;padding:16px;align-content:start;min-height:120px;border:2px solid #5c1c20;background:var(--pf)}
 .fitems .empty{grid-column:1/-1}
-.fc{position:relative;aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
+.fc{position:relative;aspect-ratio:1;cursor:pointer;contain:layout; /* the portrait sticks out of its frame, but never changes the size of the page (no scrollbar flicker / page shifts on hover) */ -webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;user-select:none}
 .fc .ff{position:absolute;inset:0;border:2px solid #6a2024;background:linear-gradient(180deg,#4a1418 0%,#0b0407 100%);transition:border-color .2s,box-shadow .2s}
 .fc:hover .ff,.fc.sel .ff{border-color:var(--cy);box-shadow:0 0 12px rgba(70,227,234,.28)}
-/* the portrait may leave the frame on every side except the bottom; the side edges hold it only for the lowest (100 - --y) percent */
-.fc .pw{position:absolute;inset:2px;clip-path:polygon(-160px -160px,calc(100% + 160px) -160px,calc(100% + 160px) var(--y,0%),100% var(--y,0%),100% 100%,0 100%,0 var(--y,0%),-160px var(--y,0%))}
+/* the portrait may leave the frame on every side except the bottom; each side edge holds it only for its lowest N percent (--yl = 100 - left %, --yr = 100 - right %) */
+.fc .pw{position:absolute;inset:2px;clip-path:polygon(-4000px -4000px,calc(100% + 4000px) -4000px,calc(100% + 4000px) var(--yr,0%),100% var(--yr,0%),100% 100%,0 100%,0 var(--yl,0%),-4000px var(--yl,0%))}
 .fc img{position:absolute;left:50%;bottom:0;width:115%;height:auto;aspect-ratio:1;transform:translateX(-50%);transform-origin:50% 100%;
  filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));transition:transform .22s cubic-bezier(.2,.8,.2,1);pointer-events:none;-webkit-user-drag:none}
 .fc:hover,.fc.sel{z-index:5}
@@ -167,7 +167,7 @@ body.female #status{visibility:hidden}
 .fc.q .ff{display:grid;place-items:center}
 .fc .qm{font-size:clamp(70px,7.4vw,100px);font-weight:700;line-height:1;color:var(--tc);text-shadow:0 0 20px color-mix(in srgb,var(--tc) 55%,transparent);transition:transform .2s}
 .fc.q:hover .qm{transform:scale(1.08)}
-.ftier .label b{font-size:clamp(22px,2.2vw,30px)}
+.ftier .label b{font-size:clamp(20px,1.8vw,28px);overflow-wrap:break-word}
 #tip .tf{display:block;margin-top:1px;font-size:12px;letter-spacing:.1em;color:#6f9094}
 .si img{width:62%;height:62%;object-fit:contain;display:block}
 .card.bgi{--ov:linear-gradient(180deg,rgba(11,4,7,.9) 0%,rgba(11,4,7,.42) 36%,rgba(11,4,7,.92) 100%)}
@@ -185,6 +185,66 @@ body.female #status{visibility:hidden}
 .fc.tall{aspect-ratio:1/2.216}
 .fc.tall img{aspect-ratio:auto;height:auto;width:143.75%;transform:translateX(-50%) translateY(25%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
 .fc.tall:hover img,.fc.tall.sel img{transform:translateX(-50%) translateY(0) scale(1.14)}
+body.worldview #status{visibility:hidden}
+.wvlink{display:inline-flex;align-items:center;gap:6px;padding:2px 12px;border:2px solid var(--cy);color:var(--cy);text-decoration:none;font-weight:700;letter-spacing:.05em;transition:background .15s,color .15s}
+.wvlink i{font-style:normal}
+.wvlink:hover{background:var(--cy);color:#000}
+/* worldview slides */
+.lsw{display:inline-flex;align-items:center;gap:10px;background:none;border:2px solid var(--cy);padding:3px 12px;cursor:pointer;color:var(--cy);font:700 14px Rajdhani,sans-serif;letter-spacing:.15em}
+.lsw b{font-weight:700;opacity:.4;transition:opacity .2s}
+.lsw i{position:relative;display:block;width:40px;height:18px;border:2px solid var(--cy);background:#06161a}
+.lsw i::after{content:"";position:absolute;top:1px;left:1px;width:12px;height:12px;background:var(--cy);box-shadow:0 0 8px var(--cy);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.lsw.rus i::after{transform:translateX(22px)}
+.lsw:not(.rus) b:first-child,.lsw.rus b:last-child{opacity:1}
+.lsw:hover{background:rgba(70,227,234,.12)}
+.wv{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;gap:14px;height:calc(100vh - 262px);min-height:440px}
+.wv-nav{--bd:var(--cy);--fill:#06161a;align-self:center;height:130px;width:100%;border:0;background:none;cursor:pointer;color:var(--cy);font-size:20px}
+.wv-nav:hover:not(:disabled){--fill:var(--cy);color:#000}
+.wv-nav:disabled{opacity:.25;cursor:default}
+.wv-view{overflow:hidden;min-width:0;touch-action:pan-y}
+.wv-track{display:flex;height:100%;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.wv-slide{flex:0 0 100%;min-width:0;height:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:18px;padding:2px}
+.wv-text{--bd:#5c1c20;--fill:var(--pf);min-height:0}
+.wv-text .wt{height:100%;overflow-y:auto;padding:24px 28px;scrollbar-width:none;position:relative}
+.wv-text .wt::-webkit-scrollbar{display:none}
+.wv-vis{--bd:#3a1518;--fill:#0a0407;min-height:0}
+.wv-vis .vi{height:100%;display:grid;place-items:center;padding:8px}
+.wv-svg{width:100%;height:100%;max-height:100%}
+.wv-kick{font-size:12px;letter-spacing:.35em;color:var(--rd);text-transform:uppercase}
+.wv-text.more::after{content:"▼  SCROLL";position:absolute;left:0;right:0;bottom:0;text-align:center;padding:26px 0 8px;font-size:11px;letter-spacing:.35em;color:var(--cy);background:linear-gradient(transparent,#13060a 72%);pointer-events:none;z-index:2}
+.wv-no{position:absolute;right:20px;top:8px;font-size:84px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(255,74,63,.28);pointer-events:none}
+.wv-slide h2{font-size:clamp(26px,2.7vw,40px);line-height:1.08;letter-spacing:.02em;color:#fff;margin:8px 0 6px;padding-right:70px;text-shadow:0 0 18px rgba(70,227,234,.25)}
+.wv-sub{font-size:14px;letter-spacing:.2em;color:var(--cy);margin-bottom:16px;text-transform:uppercase}
+.wv-bar{height:3px;width:90px;background:linear-gradient(90deg,var(--cy),var(--red));margin:10px 0 18px}
+.wv-b{margin-bottom:16px}
+.wv-b h4{font-size:12px;letter-spacing:.3em;color:var(--cy);text-transform:uppercase;margin-bottom:5px}
+.wv-b p{font-size:17px;line-height:1.5;color:#e6d2ce;letter-spacing:.01em;font-weight:500}
+.wv-foot{display:flex;align-items:center;gap:18px;margin-top:12px}
+.wv-back{margin:0;min-width:0;padding:6px 18px;font-size:14px}
+.wv-dots{flex:1;display:flex;justify-content:center;gap:9px}
+.wv-dots i{display:block;width:12px;height:12px;border:2px solid #7a3034;cursor:pointer;transition:all .2s}
+.wv-dots i:hover{border-color:var(--cy)}
+.wv-dots i.on{background:var(--cy);border-color:var(--cy);box-shadow:0 0 10px var(--cy)}
+.wv-count{font-size:16px;letter-spacing:.2em;color:var(--cy);min-width:70px;text-align:right}
+.vt{fill:#a86a6a;font:600 12px Rajdhani,sans-serif;letter-spacing:.2em}
+.vt.dim{fill:#5c2a2e}.vt.cy{fill:#46e3ea}.vt.rd{fill:#ff4a3f}.vt.ye{fill:#f4e63a}
+.flow{stroke-dasharray:6 7;animation:wvflow 2.4s linear infinite}
+@keyframes wvflow{to{stroke-dashoffset:-26}}
+.blink{animation:wvblink 1.4s steps(2) infinite}
+@keyframes wvblink{50%{opacity:.2}}
+.scanx{animation:wvscan 7s linear infinite}
+@keyframes wvscan{from{transform:translateX(0)}to{transform:translateX(522px)}}
+html:has(body.female){scrollbar-gutter:stable;overflow-anchor:none}
+.fsubs{display:flex;flex-wrap:wrap;gap:10px 34px;align-items:center}
+.sg{display:flex;gap:10px;flex-wrap:wrap}
+.sg.tg .sub{padding:8px 18px}
+/* Firearms: square frame for one cell, 2:1 for two equal cells in a row, 3:1 for three ... The picture is fitted whole; on hover it grows 25% beyond the frame */
+.fitems.guns{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:0;padding:6px}
+.fcell{position:relative;grid-column:span var(--sp,1);aspect-ratio:var(--sp,1)/1}
+.fc.gun{position:absolute;inset:6px;aspect-ratio:auto}
+.fc.gun img{left:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain;transform:none}
+.fc.gun:hover img,.fc.gun.sel img{transform:scale(1.25)}
+.fc.gun .ph{font-size:22px}
 .view{display:none}.view.on{display:block}
 body.home #status{visibility:hidden}
 .cards{display:grid;grid-template-columns:repeat(6,minmax(190px,1fr));gap:14px;overflow-x:auto;padding:6px 4px 14px}
@@ -464,6 +524,17 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  .ftier{gap:0;margin-bottom:14px}
  .fitems.tall{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
  .fitems{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px;padding:12px;margin-top:10px}
+ .wv{grid-template-columns:30px minmax(0,1fr) 30px;gap:6px;height:calc(100vh - 220px);min-height:380px}
+ .wv-nav{height:84px;font-size:15px}
+ .wv-slide{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(150px,36%) minmax(0,1fr);gap:10px}
+ .wv-slide .wv-vis{order:-1}
+ .wv-text .wt{padding:16px 16px}.wv-no{font-size:54px}.wv-b p{font-size:16px}
+ .wv-slide h2{font-size:22px;padding-right:46px;overflow-wrap:anywhere}
+ .wv-foot{gap:8px}.wv-foot .wv-back{min-width:0;padding:5px 12px;font-size:13px}
+ .wv-dots{gap:6px}.wv-dots i{width:10px;height:10px}.wv-count{min-width:0;font-size:13px;letter-spacing:.1em}
+ .fsubs{display:block}.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+ .sg.tg{grid-template-columns:repeat(5,1fr)}.sg.tg .sub{padding:8px 2px;font-size:12px;letter-spacing:.04em}
+ .fitems.guns{grid-template-columns:repeat(auto-fill,minmax(78px,1fr))}
  /* tier page */
  .subtabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sub{padding:8px 6px;font-size:14px;letter-spacing:.06em;text-align:center}
  .period{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px}
@@ -487,8 +558,8 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
     <a class="tab active" href="#home" data-r="home">Home</a>
     <a class="tab" href="#tier" data-r="tier">Games Tier List</a>
     <a class="tab" href="#female" data-r="female">Female Characters</a>
-    <span class="tab locked">Firearms<small>LOCKED</small></span>
-    <span class="tab locked">KSA Achievements<small>LOCKED</small></span>
+    <a class="tab" href="#firearms" data-r="firearms">Firearms</a>
+    <span class="tab locked">KSA<small>LOCKED</small></span>
     <span class="tab locked">Series<small>LOCKED</small></span>
     <span class="tab locked">Anime<small>LOCKED</small></span>
   <span class="key">E</span></nav>
@@ -502,7 +573,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
       <div class="sec"><h1>Main Menu</h1><span>// SELECT A SECTION</span></div>
       <div class="cards">
         <a class="cut card open hero bgi" href="#tier" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_games.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_games.png')"><div class="top"><span class="key">01</span><span class="chip c">OPEN</span></div><div class="big">TIER</div><div><h2>Games Tier List</h2><p>My Gaming History, ranked</p><div class="bar"></div></div></a>
-        <a class="cut card open bgi" href="#female" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_characters.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_characters.png')"><div class="top"><span class="key">02</span><span class="chip c">OPEN</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Portrait tier list</p><div class="bar"></div></div></a><div class="cut card locked"><div class="top"><span class="key">03</span><span class="chip r">LOCKED</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA Achievements</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">05</span><span class="chip r">LOCKED</span></div><div class="big">SER</div><div><h2>Series</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">06</span><span class="chip r">LOCKED</span></div><div class="big">ANI</div><div><h2>Anime</h2><p>Coming soon</p><div class="bar"></div></div></div>
+        <a class="cut card open bgi" href="#female" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_characters.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_characters.png')"><div class="top"><span class="key">02</span><span class="chip c">OPEN</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Portrait tier list</p><div class="bar"></div></div></a><a class="cut card open bgi" href="#firearms" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_firearms.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_firearms.png')"><div class="top"><span class="key">03</span><span class="chip c">OPEN</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Weapon tier list</p><div class="bar"></div></div></a><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">05</span><span class="chip r">LOCKED</span></div><div class="big">SER</div><div><h2>Series</h2><p>Coming soon</p><div class="bar"></div></div></div><div class="cut card locked"><div class="top"><span class="key">06</span><span class="chip r">LOCKED</span></div><div class="big">ANI</div><div><h2>Anime</h2><p>Coming soon</p><div class="bar"></div></div></div>
       </div>
       <div class="cdots" id="cDots"></div>
       <div class="avwrap" id="avWrap">
@@ -529,7 +600,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
             <div class="hc-about">
         <div class="ab2-h">// ABOUT ME</div>
         <div class="ab2"><small>Personality</small><span>INTJ-T · Left-Handed</span></div>
-        <div class="ab2"><small>Worldview</small><span>Fractal Holographic Multiverse</span></div>
+        <div class="ab2"><small>Worldview</small><span><a class="wvlink" href="#worldview">Fractal Holographic Multiverse <i>↗</i></a></span></div>
         <div class="ab2"><small>Temperament</small><span class="tmp"><i class="tbar"><b style="flex:75"></b><b style="flex:25"></b></i>Flegmatic 75% · Melancholic 25%</span></div>
         <div class="ab2"><small>Profession</small><span>Theoretical physicist · Astrophysicist &amp; Space engineer · IT-specialist</span></div>
         <div class="ab2"><small>Gaming</small><span>Minecraft veteran · Kerbal Space Program professional</span></div>
@@ -569,12 +640,34 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
   </section>
   <section class="view" id="view-female">
     <div class="sec"><span id="femMode">// OVERALL</span></div>
-    <div class="subtabs">
-      <button class="cut sub on" data-fs="all"><span>Overall</span></button>
-      <button class="cut sub" data-fs="hot"><span>by Hotness</span></button>
+    <div class="subtabs fsubs">
+      <div class="sg">
+        <button class="cut sub on" data-fs="all"><span>Overall</span></button>
+        <button class="cut sub" data-fs="hot"><span>by Hotness</span></button>
+      </div>
+      <div class="sg tg" title="Filter by type (several can be active)">
+        <button class="cut sub on" data-t="all"><span>All</span></button>
+        <button class="cut sub" data-t="IRL"><span>IRL</span></button>
+        <button class="cut sub" data-t="Games"><span>Games</span></button>
+        <button class="cut sub" data-t="Anime"><span>Anime</span></button>
+        <button class="cut sub" data-t="Cinema"><span>Cinema</span></button>
+      </div>
     </div>
     <div id="femApp"><div class="msg">LOADING…</div></div>
     <div id="femHot" hidden><div class="msg">LOADING…</div></div>
+  </section>
+  <section class="view" id="view-firearms">
+    <div class="sec"><span>// FIREARMS</span></div>
+    <div id="gunApp"><div class="msg">LOADING…</div></div>
+  </section>
+  <section class="view" id="view-worldview">
+    <div class="sec"><button class="lsw rus" id="wvLang" type="button" aria-label="Language ENG / RUS"><b>ENG</b><i></i><b>RUS</b></button><span>// FRACTAL HOLOGRAPHIC MULTIVERSE</span></div>
+    <div class="wv" id="wv">
+      <button class="cut wv-nav" id="wvPrev" type="button" aria-label="Previous slide"><span>◀</span></button>
+      <div class="wv-view" id="wvView"><div class="wv-track" id="wvTrack"></div></div>
+      <button class="cut wv-nav" id="wvNext" type="button" aria-label="Next slide"><span>▶</span></button>
+    </div>
+    <div class="wv-foot"><a class="cut btn wv-back" href="#home"><span>← HOME</span></a><div class="wv-dots" id="wvDots"></div><span class="wv-count" id="wvCount">01 / 06</span></div>
   </section>
 </main></div>
 <aside class="cut" id="panel" aria-label="Game details"><div class="pin" id="pin"></div></aside>
@@ -1921,6 +2014,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
 
   /* --- bottom panel: expands upward and squeezes the main menu into small buttons --- */
   const lay=$("homeLayout"),handle=$("hubHandle");
+  window.__collapseHub=()=>setHub(false);
   function setHub(o){hub.classList.toggle("open",o);lay.classList.toggle("mini",o);handle.classList.toggle("open",o);document.body.classList.toggle("hubopen",o)}
   const isOpen=()=>hub.classList.contains("open");
   handle.addEventListener("click",()=>setHub(!isOpen()));
@@ -1977,14 +2071,14 @@ function showSub(k){
 }
 document.querySelectorAll(".sub[data-s]").forEach(b=>b.addEventListener("click",()=>showSub(b.dataset.s)));
 (function(){ // drop-down with all tabs (right side of the mobile top bar)
-  const items=[["Home","#home"],["Games Tier List","#tier"],["Female Characters","#female"],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
+  const items=[["Home","#home"],["Games Tier List","#tier"],["Female Characters","#female"],["Firearms","#firearms"],["KSA",""],["Series",""],["Anime",""]];
   const btn=document.getElementById("mTitleBtn"),list=document.getElementById("mList");
   list.innerHTML=items.map(x=>x[1]?`<a href="${x[1]}" data-h="${x[1]}">${x[0]}</a>`:`<span class="lk">${x[0]}<small>LOCKED</small></span>`).join("");
   btn.addEventListener("click",e=>{e.stopPropagation();list.hidden=!list.hidden;btn.classList.toggle("open",!list.hidden)});
   document.addEventListener("click",e=>{if(!e.target.closest(".m-menu")){list.hidden=true;btn.classList.remove("open")}});
 })();
 (function(){ // page squares in the mobile top bar (one per section; locked sections are dim)
-  const secs=[["Games Tier List","#tier"],["Female Characters","#female"],["Firearms",""],["KSA Achievements",""],["Series",""],["Anime",""]];
+  const secs=[["Games Tier List","#tier"],["Female Characters","#female"],["Firearms","#firearms"],["KSA",""],["Series",""],["Anime",""]];
   const d=document.getElementById("mDots");
   d.innerHTML=secs.map(x=>`<i class="${x[1]?"ok":""}" data-h="${x[1]}" title="${x[0]}${x[1]?"":" (locked)"}"></i>`).join("");
   d.addEventListener("click",e=>{const i=e.target.closest("i");if(i&&i.dataset.h)location.hash=i.dataset.h});
@@ -2046,30 +2140,61 @@ const FEM_SHEETS={
   all:{url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vSaE2Mi8Q4TWBKwc6mEuwH-lDipH77pD14Jp41GjC-1a_7AXB-A-1Idr1QdzQC9_n8m9Hi840p60scn/pub?gid=621977669&single=true&output=csv",
        key:"warranty_fem_v3",el:"femApp",dir:"assets/female%20characters/",tall:false},          // Overall: square portraits
   hot:{url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vSaE2Mi8Q4TWBKwc6mEuwH-lDipH77pD14Jp41GjC-1a_7AXB-A-1Idr1QdzQC9_n8m9Hi840p60scn/pub?gid=1634139753&single=true&output=csv",
-       key:"warranty_fem_hot_v1",el:"femHot",dir:"assets/female%20characters/",tall:true}          // by Hotness: full-length 9:21 portraits (change dir if the files live in another folder)
+       key:"warranty_fem_hot_v1",el:"femHot",dir:"assets/female%20characters/",tall:true},
+  guns:{url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vR1yFvmUbO6ffDhsZ72gGG5WT4tO9GPIycPninQ0z3xkhXpRTslqw8e2fGpdRFYSZ7dwOMPL2piV4e_/pub?gid=599532616&single=true&output=csv",
+       key:"warranty_guns_v1",el:"gunApp",gun:true,dir:["assets/firearms/","assets/guns/","assets/weapons/"]} // Firearms: .png files, the folders are tried in this order          // by Hotness: full-length 9:21 portraits (change dir if the files live in another folder)
 };
-/* Female characters: a "Tier" row starts a tier (name + "(description)"). Below it, one character block = FEM_L.rows rows,
-   one column per character:  [ignored] / portrait file name / full name / franchise / "NN% left|right".
-   If the sheet layout changes, only these numbers have to be adjusted. */
-const FEM_L={rows:5,file:1,name:2,fran:3,flag:4};
-const FEM_DEFAULT_PCT=100; // when the flag cell has no percentage: the sides fully hold the portrait
-function femFlag(t){
-  t=String(t||"");const m=t.match(/(\d+(?:[.,]\d+)?)/);
-  let pct=m?parseFloat(m[1].replace(",",".")):FEM_DEFAULT_PCT;pct=Math.max(0,Math.min(100,pct));
-  return{pct,dir:/\bright\b/i.test(t)?"r":/\bleft\b/i.test(t)?"l":""};
+/* Female characters: a "Tier" row starts a tier (name + "(description)"). Below it, one character block = 6 rows, one column per character:
+   [ignored] / portrait file name / full name / franchise / "LEFT% RIGHT%" / type (IRL, Games, Anime, Cinema).
+   The older 5-row layout (without the type row) is detected automatically; a missing or empty type becomes "No Type". */
+const FEM_L={file:1,name:2,fran:3,flag:4,type:5};
+const FEM_DEFAULT_PCT=100; // no percentage in the cell: that side fully holds the portrait
+const FEM_TYPES=["IRL","Games","Anime","Cinema"];
+const femNums=t=>(String(t||"").match(/\d+(?:[.,]\d+)?/g)||[]).map(x=>Math.max(0,Math.min(100,parseFloat(x.replace(",",".")))));
+function femFlag(t,def){ // two numbers = left and right mask; one number = both sides; none = default
+  const D=def==null?FEM_DEFAULT_PCT:def,n=femNums(t),pl=n.length?n[0]:D,pr=n.length>1?n[1]:pl;
+  return{pl,pr,dir:/\bright\b/i.test(t||"")?"r":/\bleft\b/i.test(t||"")?"l":""}; // an optional Left/Right word still decides the hover growth
 }
-function parseFem(text){
-  const tiers=[];let cur=null,blk=[];
+const pctLike=c=>/^\s*(?:\d+(?:[.,]\d+)?\s*%?(?:\s*[,;\/ ]\s*\d+(?:[.,]\d+)?\s*%?)?\s*)?(?:left|right)?\s*$/i.test(c);
+const typeLike=c=>/^\s*(irl|games?|anime|cinema|no type)\s*$/i.test(c);
+function femNormType(t){
+  const x=String(t||"").trim().toLowerCase();
+  if(!x)return"No Type";
+  if(x==="irl")return"IRL";if(x==="game"||x==="games")return"Games";if(x==="anime")return"Anime";if(x==="cinema")return"Cinema";
+  return String(t).trim();
+}
+function femBlockSize(rows){ // 6 rows (with the type row) or 5 rows (older tables): the layout with fewer misplaced cells wins
+  let best=6,bm=1e9;
+  [6,5].forEach(S=>{
+    let m=0;
+    for(let b=0;b*S+FEM_L.flag<rows.length;b++){
+      (rows[b*S+FEM_L.flag]||[]).forEach(c=>{if((c||"").trim()&&!pctLike(c))m++});
+      if(S===6)(rows[b*S+FEM_L.type]||[]).forEach(c=>{if((c||"").trim()&&!typeLike(c))m++});
+    }
+    if(m<bm){bm=m;best=S}
+  });
+  return best;
+}
+function parseFem(text,opt){
+  opt=opt||{};const tiers=[];let cur=null;
   const flush=()=>{
-    if(!cur||!blk.length)return;
-    const g=i=>blk[i]||[],f=g(FEM_L.file),n=g(FEM_L.name),fr=g(FEM_L.fran),fl=g(FEM_L.flag);
-    f.forEach((c,j)=>{const file=(c||"").trim();if(file)cur.items.push({file,name:(n[j]||"").trim(),fran:(fr[j]||"").trim(),...femFlag(fl[j])})});
-    blk=[];
+    if(!cur||!cur.rows.length)return;
+    const S=opt.rows||femBlockSize(cur.rows);
+    for(let b=0;b*S<cur.rows.length;b++){
+      const g=i=>cur.rows[b*S+i]||[],f=g(FEM_L.file),n=g(FEM_L.name),fr=g(FEM_L.fran),fl=g(FEM_L.flag),ty=S===6?g(FEM_L.type):[];
+      const files=f.map(c=>(c||"").trim());
+      for(let j=0;j<files.length;j++){
+        const file=files[j];if(!file)continue;
+        let span=1;if(opt.merge)while(files[j+span]===file)span++;      // the same file in several cells in a row = one wide item
+        cur.items.push({file,name:(n[j]||"").trim(),fran:(fr[j]||"").trim(),type:femNormType(ty[j]),span,...femFlag(fl[j],opt.def)});
+        j+=span-1;
+      }
+    }
+    cur.rows=[];
   };
   parseCSV(text).forEach(r=>{
-    if((r[0]||"").trim().toLowerCase()==="tier"){flush();cur={name:(r[1]||"").trim(),desc:(r[2]||"").trim().replace(/^\(+|\)+$/g,"").trim(),items:[]};tiers.push(cur);return}
-    if(!cur)return;
-    blk.push(r);if(blk.length===FEM_L.rows)flush();
+    if((r[0]||"").trim().toLowerCase()==="tier"){flush();cur={name:(r[1]||"").trim(),desc:(r[2]||"").trim().replace(/^\(+|\)+$/g,"").trim(),items:[],rows:[]};tiers.push(cur);return}
+    if(cur)cur.rows.push(r);
   });
   flush();
   return tiers;
@@ -2079,24 +2204,61 @@ function fitTall(im){
   if(im.naturalWidth)im.style.width=(im.naturalWidth/FEM_STD.w*FEM_TALL_W_PCT)+"%"; // 258x420 -> same height as the standard, but wider
 }
 function fimg(n,dir,tall){
-  const base=dir+encodeURIComponent(n)+".png";
-  const c=["https://warranty-v2.github.io/"+base,"https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/"+base];
+  const dirs=[].concat(dir),c=[];
+  dirs.forEach((d,i)=>{const base=d+encodeURIComponent(n)+".png";c.push("https://warranty-v2.github.io/"+base);if(i===0)c.push("https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/"+base)});
   return `<img decoding="async" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(ini(n))}" data-s0="${esc(c[0])}" ${tall?'onload="fitTall(this)" ':""}onerror="imgNext(this)">`;
 }
-const prettyName=n=>n.replace(/[_-]+/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-function renderFem(text,kind){
-  const cfg=FEM_SHEETS[kind],tiers=parseFem(text),app=document.getElementById(cfg.el),tl=cfg.tall?" tall":"";
+function fitGuns(){ // a wide item never asks for more columns than the grid has
+  document.querySelectorAll(".fitems.guns").forEach(el=>{
+    if(!el.offsetParent)return;
+    const cols=Math.max(1,getComputedStyle(el).gridTemplateColumns.split(" ").length);
+    el.querySelectorAll(".fcell").forEach(c=>c.style.setProperty("--sp",Math.min(+c.dataset.sp,cols)));
+  });
+}
+let gunRz=0;window.addEventListener("resize",()=>{clearTimeout(gunRz);gunRz=setTimeout(fitGuns,120)});
+function renderGuns(text,kind){
+  femText[kind]=text;
+  const cfg=FEM_SHEETS[kind],tiers=parseFem(text,{rows:6,merge:true,def:0}),app=document.getElementById(cfg.el);
   app.innerHTML=tiers.map((t,i)=>{
     const col=PALETTE[Math.round(i*(PALETTE.length-1)/Math.max(1,tiers.length-1))],n=t.items.length;
     return `<section class="tier ftier" style="--tc:${col}">
-      <div class="cut label"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span><i>${n} ${n===1?"CHARACTER":"CHARACTERS"}</i></div>
-      <div class="fitems${tl}">${n?t.items.map(x=>{
-        if(x.file==="?")return `<div class="fc q${tl}" data-n="?"><div class="ff"><span class="qm">?</span></div></div>`; // the unknown one: just a question mark
-        return `<div class="fc${tl}${x.dir==="r"?" fr":x.dir==="l"?" fl":""}" style="--y:${100-x.pct}%" data-n="${esc(x.name||prettyName(x.file))}" data-f="${esc(x.fran)}"><div class="ff"></div><div class="pw">${fimg(x.file,cfg.dir,cfg.tall)}</div></div>`}).join(""):'<div class="empty">// NO DATA</div>'}</div>
+      <div class="cut label"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span><i>${n} ${n===1?"ITEM":"ITEMS"}</i></div>
+      <div class="fitems guns">${n?t.items.map(x=>{
+        const st=`style="--yl:${100-x.pl}%;--yr:${100-x.pr}%"`,dir=x.dir==="r"?" fr":x.dir==="l"?" fl":"";
+        const inner=x.file==="?"?`<div class="fc gun q" data-n="?"><div class="ff"><span class="qm">?</span></div></div>`
+          :`<div class="fc gun${dir}" ${st} data-n="${esc(x.name||x.file)}" data-f="${esc(x.fran)}"><div class="ff"></div><div class="pw">${fimg(x.file,cfg.dir,false)}</div></div>`;
+        return `<div class="fcell" data-sp="${x.span}" style="--sp:${x.span}">${inner}</div>`}).join(""):'<div class="empty">// NO DATA</div>'}</div>
     </section>`}).join("")||'<div class="msg">NO DATA</div>';
+  watchImgs(app);requestAnimationFrame(fitGuns);
+}
+const femText={all:null,hot:null,guns:null},femTypes=new Set(); // femTypes empty = "All"
+function renderFem(text,kind){
+  if(FEM_SHEETS[kind].gun)return renderGuns(text,kind);
+  femText[kind]=text;
+  const cfg=FEM_SHEETS[kind],tiers=parseFem(text),app=document.getElementById(cfg.el),tl=cfg.tall?" tall":"",flt=femTypes.size>0;
+  let any=false;
+  const html=tiers.map((t,i)=>{
+    const items=flt?t.items.filter(x=>femTypes.has(x.type)):t.items; // every tier title stays, even when nothing matches
+    any=true;
+    const col=PALETTE[Math.round(i*(PALETTE.length-1)/Math.max(1,tiers.length-1))],n=items.length;
+    return `<section class="tier ftier" style="--tc:${col}">
+      <div class="cut label"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span><i>${n} ${n===1?"CHARACTER":"CHARACTERS"}</i></div>
+      <div class="fitems${tl}">${n?items.map(x=>{
+        if(x.file==="?")return `<div class="fc q${tl}" data-n="?"><div class="ff"><span class="qm">?</span></div></div>`; // the unknown one: just a question mark
+        return `<div class="fc${tl}${x.dir==="r"?" fr":x.dir==="l"?" fl":""}" style="--yl:${100-x.pl}%;--yr:${100-x.pr}%" data-n="${esc(x.name||x.file)}" data-f="${esc(x.fran)}"><div class="ff"></div><div class="pw">${fimg(x.file,cfg.dir,cfg.tall)}</div></div>`}).join(""):`<div class="empty">${flt?"// NO MATCHES":"// NO DATA"}</div>`}</div>
+    </section>`}).join("");
+  app.innerHTML=html&&any?html:'<div class="msg">NO DATA</div>';
   watchImgs(app);
 }
-const femBusy={all:false,hot:false},femLoaded={all:false,hot:false};let femSub="all";
+function femFilterUI(){document.querySelectorAll(".sub[data-t]").forEach(b=>{const t=b.dataset.t;b.classList.toggle("on",t==="all"?!femTypes.size:femTypes.has(t))})}
+document.querySelectorAll(".sub[data-t]").forEach(b=>b.addEventListener("click",()=>{ // several type buttons can be active at once; "All" clears them
+  const t=b.dataset.t;
+  if(t==="all")femTypes.clear();else if(femTypes.has(t))femTypes.delete(t);else femTypes.add(t);
+  femFilterUI();
+  ["all","hot"].forEach(k=>{if(femText[k])renderFem(femText[k],k)});
+  hideTip();clearSel();
+}));
+const femBusy={all:false,hot:false,guns:false},femLoaded={all:false,hot:false,guns:false};let femSub="all";
 async function loadFem(kind){
   kind=kind||femSub;const cfg=FEM_SHEETS[kind];
   if(femBusy[kind])return;femBusy[kind]=true;
@@ -2119,26 +2281,226 @@ function showFemSub(k){ // Overall / by Hotness
   hideTip();clearSel();
 }
 document.querySelectorAll(".sub[data-fs]").forEach(b=>b.addEventListener("click",()=>showFemSub(b.dataset.fs)));
-const ORDER=["home","tier","female"];
+/* ---------- Worldview: 6 slides with schematic illustrations (SVG generated here) ---------- */
+let wvLang="rus";try{wvLang=localStorage.getItem("warranty_wv_lang")==="eng"?"eng":"rus"}catch(e){}
+const wvT=(ru,en)=>wvLang==="eng"?en:ru;
+const WVC={r:"#ff4a3f",c:"#46e3ea",y:"#f4e63a",d:"#5c1c20",t:"#a86a6a"};
+function wvFrame(inner,tag){ // grid, corner brackets, chip traces and the "old net" captions
+  let g="";for(let x=30;x<600;x+=30)g+=`M${x} 0V420`;for(let y=30;y<420;y+=30)g+=`M0 ${y}H600`;
+  return `<svg class="wv-svg" viewBox="0 0 600 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+  <path d="${g}" stroke="${WVC.r}" stroke-opacity=".07" fill="none"/>
+  <path d="M10 40V10H40M560 10H590V40M590 380V410H560M40 410H10V380" stroke="${WVC.c}" stroke-width="2" fill="none"/>
+  <path d="M24 372H70L88 354H150M576 48H520L502 66H450M24 58H48L62 72" stroke="${WVC.d}" stroke-width="1.5" fill="none"/>
+  <circle cx="150" cy="354" r="3" fill="${WVC.r}"/><circle cx="450" cy="66" r="3" fill="${WVC.r}"/><rect x="60" y="70" width="5" height="5" fill="${WVC.c}"/>
+  <text x="26" y="30" class="vt">// SCHEMATIC · ${tag}</text><text x="574" y="402" text-anchor="end" class="vt dim">NET://ARCHIVE · BEHIND THE BLACKWALL</text>
+  ${inner}</svg>`;
+}
+function vFractal(){ // nested squares: every one is inscribed in the previous and turned by 45 degrees
+  const cx=300,cy=215;let s="";
+  for(let i=0;i<11;i++){
+    const R=170*Math.pow(.7071,i),rot=Math.PI/4*(i+1);
+    const pts=[0,1,2,3].map(k=>{const a=rot+k*Math.PI/2;return (cx+R*Math.cos(a)).toFixed(1)+","+(cy+R*Math.sin(a)).toFixed(1)}).join(" ");
+    s+=`<polygon points="${pts}" fill="none" stroke="${i%2?WVC.c:WVC.r}" stroke-width="${Math.max(.8,2.2-i*.15).toFixed(2)}" opacity="${(1-i*.06).toFixed(2)}"/>`;
+  }
+  s+=`<path d="M120 215H480M300 40V390" stroke="${WVC.d}" stroke-dasharray="4 6" fill="none"/><circle cx="300" cy="215" r="4" fill="${WVC.y}" class="blink"/>`;
+  s+=`<text x="34" y="219" class="vt cy">← MACRO ∞</text><text x="566" y="219" text-anchor="end" class="vt rd">MICRO ∞ →</text>`;
+  s+=`<text x="300" y="52" text-anchor="middle" class="vt">5D · 6D · …</text><text x="300" y="384" text-anchor="middle" class="vt">3D · 4D</text>`;
+  s+=`<text x="300" y="72" text-anchor="middle" class="vt ye" font-size="11">SELF-SIMILAR</text>`;
+  return wvFrame(s,"00 · FRACTAL");
+}
+function vCube(){ // isometric 3D canvas: three vectors
+  const ox=300,oy=234,u=100,P=(x,y,z)=>[ox+(x-y)*.866*u,oy+(x+y)*.5*u-z*u],f=a=>a[0].toFixed(1)+","+a[1].toFixed(1);
+  let s="";
+  for(let i=-0.8;i<=1.81;i+=.8666)s+=`<path d="M${f(P(i,-0.8,0))}L${f(P(i,1.8,0))}M${f(P(-0.8,i,0))}L${f(P(1.8,i,0))}" stroke="${WVC.d}" stroke-width="1" fill="none"/>`;
+  const V=[];for(let x=0;x<2;x++)for(let y=0;y<2;y++)for(let z=0;z<2;z++)V.push([x,y,z]);
+  V.forEach((a,i)=>V.forEach((b,j)=>{
+    if(j<=i||(a[0]!==b[0])+(a[1]!==b[1])+(a[2]!==b[2])!==1)return;
+    const hid=(!a[0]&&!a[1]&&!a[2])||(!b[0]&&!b[1]&&!b[2]);
+    s+=`<path d="M${f(P(...a))}L${f(P(...b))}" stroke="${WVC.c}" stroke-width="${hid?1.2:2.2}" ${hid?'stroke-dasharray="4 5" opacity=".55"':""} fill="none"/>`;
+  }));
+  V.forEach(v=>{const [x,y]=P(...v);s+=`<rect x="${(x-3).toFixed(1)}" y="${(y-3).toFixed(1)}" width="6" height="6" fill="${WVC.y}"/>`});
+  const X=P(1.75,0,0),Y=P(0,1.75,0),Z=P(0,0,1.75);
+  s+=`<path d="M${f(P(0,0,0))}L${f(X)}M${f(P(0,0,0))}L${f(Y)}M${f(P(0,0,0))}L${f(Z)}" stroke="${WVC.r}" stroke-width="2" fill="none" class="flow"/>`;
+  s+=`<text x="${(X[0]+8).toFixed(0)}" y="${(X[1]+6).toFixed(0)}" class="vt rd">X · ${wvT("ДЛИНА","LENGTH")}</text><text x="${(Y[0]-8).toFixed(0)}" y="${(Y[1]+6).toFixed(0)}" text-anchor="end" class="vt rd">Y · ${wvT("ШИРИНА","WIDTH")}</text><text x="${Z[0].toFixed(0)}" y="${(Z[1]-10).toFixed(0)}" text-anchor="middle" class="vt rd">Z · ${wvT("ВЫСОТА","HEIGHT")}</text>`;
+  s+=`<text x="574" y="380" text-anchor="end" class="vt cy">3 VECTORS = 1 CANVAS</text>`;
+  return wvFrame(s,"03 · 3D");
+}
+function vTime(){ // frozen film strip: every frame exists at once, the "now" cursor only scans over it
+  let s=`<rect x="30" y="112" width="540" height="196" fill="none" stroke="${WVC.d}" stroke-dasharray="5 5"/><text x="40" y="106" class="vt cy">4D BLOCK UNIVERSE · STATIC</text>`;
+  let line="";
+  for(let i=0;i<9;i++){
+    const x=39+i*58,col=i<4?WVC.r:i===4?WVC.c:WVC.y,op=i===4?1:.62;
+    s+=`<rect x="${x}" y="150" width="54" height="120" fill="${i===4?"rgba(70,227,234,.08)":"none"}" stroke="${col}" stroke-width="${i===4?3:1.6}" opacity="${op}"/>`;
+    for(let k=0;k<3;k++)s+=`<rect x="${x+6+k*16}" y="134" width="8" height="8" fill="${col}" opacity=".5"/><rect x="${x+6+k*16}" y="278" width="8" height="8" fill="${col}" opacity=".5"/>`;
+    const cy=210+38*Math.sin(i*.8);line+=(i?"L":"M")+(x+27)+" "+cy.toFixed(1);
+    s+=`<rect x="${x+23}" y="${(cy-4).toFixed(1)}" width="8" height="8" fill="${col}"/>`;
+  }
+  s+=`<path d="${line}" stroke="${WVC.c}" stroke-width="1.6" fill="none" opacity=".8"/>`;
+  s+=`<rect class="scanx" x="39" y="142" width="54" height="136" fill="rgba(244,230,58,.10)" stroke="${WVC.y}" stroke-width="1.2" stroke-dasharray="3 3"/>`;
+  s+=`<text x="${39+4*58+27}" y="324" text-anchor="middle" class="vt cy">${wvT("НАСТОЯЩЕЕ","PRESENT")}</text><text x="${39+1.5*58}" y="324" text-anchor="middle" class="vt rd">${wvT("ПРОШЛОЕ","PAST")}</text><text x="${39+7*58}" y="324" text-anchor="middle" class="vt ye">${wvT("БУДУЩЕЕ","FUTURE")}</text>`;
+  s+=`<path d="M40 350H552M544 344L554 350L544 356" stroke="${WVC.r}" stroke-width="2" fill="none"/><text x="560" y="354" class="vt rd">t</text>`;
+  s+=`<text x="300" y="384" text-anchor="middle" class="vt dim">ALL FRAMES EXIST AT ONCE · THE FLOW IS ONLY A SCAN</text>`;
+  return wvFrame(s,"04 · 4D");
+}
+function vTree(){ // many-worlds branching + the Schroedinger box
+  let s="";
+  (function br(x,y,d,sp){
+    if(!d){s+=`<rect x="${x-4}" y="${y-4}" width="8" height="8" fill="${WVC.y}"/>`;return}
+    [-1,1].forEach(k=>{const nx=x+130,ny=y+k*sp;
+      s+=`<path d="M${x} ${y}C${x+60} ${y} ${x+55} ${ny} ${nx} ${ny}" stroke="${d%2?WVC.c:WVC.r}" fill="none" stroke-width="2.2" ${d===1?'class="flow"':""}/>`;
+      if(d>1)s+=`<rect x="${nx-3}" y="${ny-3}" width="6" height="6" fill="${WVC.y}"/>`;
+      br(nx,ny,d-1,sp/2);
+    });
+  })(58,218,3,92);
+  s+=`<circle cx="58" cy="218" r="6" fill="none" stroke="${WVC.y}" stroke-width="2" class="blink"/><text x="40" y="250" class="vt ye">t₀ · ${wvT("ИЗМЕРЕНИЕ","MEASUREMENT")}</text>`;
+  s+=`<rect x="178" y="62" width="116" height="26" fill="rgba(70,227,234,.10)" stroke="${WVC.c}"/><text x="236" y="80" text-anchor="middle" class="vt cy">${wvT("КОТ · ЖИВ","CAT · ALIVE")}</text><path d="M188 88V122" stroke="${WVC.c}" stroke-dasharray="3 3"/>`;
+  s+=`<rect x="178" y="348" width="116" height="26" fill="rgba(255,74,63,.10)" stroke="${WVC.r}"/><text x="236" y="366" text-anchor="middle" class="vt rd">${wvT("КОТ · МЁРТВ","CAT · DEAD")}</text><path d="M188 348V314" stroke="${WVC.r}" stroke-dasharray="3 3"/>`;
+  s+=`<text x="26" y="48" class="vt cy">5D · PROBABILITY SPACE</text><text x="26" y="392" class="vt dim">|ψ⟩ = |alive⟩ + |dead⟩</text>`;
+  return wvFrame(s,"05 · 5D");
+}
+function vMulti(){ // brane in the bulk with other universes of different constants
+  const hex=(x,y,r)=>[0,1,2,3,4,5].map(k=>(x+r*Math.cos(k*Math.PI/3)).toFixed(1)+","+(y+r*Math.sin(k*Math.PI/3)).toFixed(1)).join(" ");
+  let s=`<ellipse cx="300" cy="214" rx="262" ry="164" fill="none" stroke="${WVC.d}" stroke-dasharray="5 7"/>`;
+  const B=[[300,184],[438,229],[300,294],[162,249]]; // brane = our 3D membrane
+  s+=`<polygon points="${B.map(p=>p.join(",")).join(" ")}" fill="rgba(70,227,234,.07)" stroke="${WVC.c}" stroke-width="2"/>`;
+  for(let i=1;i<6;i++){const t=i/6,a=[B[0][0]+(B[1][0]-B[0][0])*t,B[0][1]+(B[1][1]-B[0][1])*t],b=[B[3][0]+(B[2][0]-B[3][0])*t,B[3][1]+(B[2][1]-B[3][1])*t],c=[B[0][0]+(B[3][0]-B[0][0])*t,B[0][1]+(B[3][1]-B[0][1])*t],d=[B[1][0]+(B[2][0]-B[1][0])*t,B[1][1]+(B[2][1]-B[1][1])*t];
+    s+=`<path d="M${a[0].toFixed(1)} ${a[1].toFixed(1)}L${b[0].toFixed(1)} ${b[1].toFixed(1)}M${c[0].toFixed(1)} ${c[1].toFixed(1)}L${d[0].toFixed(1)} ${d[1].toFixed(1)}" stroke="${WVC.c}" stroke-opacity=".3" fill="none"/>`}
+  s+=`<text x="300" y="246" text-anchor="middle" class="vt cy">${wvT("НАША БРАНА · 3D","OUR BRANE · 3D")}</text>`;
+  [[96,112,"G ↑"],[262,76,"c ↓"],[452,104,"∅"],[520,224,"Λ +"],[470,340,"α ≠"],[110,330,"2+1"],[300,366,"11D"]].forEach(([x,y,t],i)=>{
+    s+=`<path d="M${x} ${y}L300 239" stroke="${i%2?WVC.r:WVC.y}" stroke-opacity=".7" fill="none" class="flow"/><polygon points="${hex(x,y,32)}" fill="#0a0407" stroke="${i%2?WVC.r:WVC.c}" stroke-width="2"/><text x="${x}" y="${y+4}" text-anchor="middle" class="vt ye" font-size="11">${t}</text>`});
+  s+=`<text x="26" y="48" class="vt rd">BULK · 10–11 DIM</text><text x="26" y="392" class="vt dim">ONE NETWORK</text>`;
+  return wvFrame(s,"06 · 6D+");
+}
+function vSier(){ // Sierpinski triangle: the same pattern at every scale
+  const tri=(x,y,sz,d)=>d?tri(x,y,sz/2,d-1)+tri(x+sz/2,y,sz/2,d-1)+tri(x+sz/4,y-sz*.433,sz/2,d-1):`<polygon points="${x.toFixed(1)},${y.toFixed(1)} ${(x+sz).toFixed(1)},${y.toFixed(1)} ${(x+sz/2).toFixed(1)},${(y-sz*.866).toFixed(1)}"/>`;
+  let s=`<g fill="${WVC.r}" opacity=".78">${tri(130,338,320,5)}</g>`;
+  s+=`<polygon points="130,338 450,338 290,60.9" fill="none" stroke="${WVC.c}" stroke-width="2"/>`;
+  s+=`<polygon points="210,199.5 370,199.5 290,60.9" fill="none" stroke="${WVC.y}" stroke-width="2" stroke-dasharray="5 4" class="blink"/><text x="290" y="48" text-anchor="middle" class="vt ye">= ${wvT("ЦЕЛОЕ","THE WHOLE")}</text>`;
+  [[wvT("КОСМОС","COSMOS"),80],[wvT("ГАЛАКТИКА","GALAXY"),140],[wvT("ПЛАНЕТА","PLANET"),200],[wvT("КЛЕТКА","CELL"),260],[wvT("АТОМ","ATOM"),320]].forEach(([t,y])=>s+=`<path d="M470 ${y}H484" stroke="${WVC.c}"/><text x="490" y="${y+4}" class="vt cy" font-size="10">${t}</text>`);
+  s+=`<path d="M470 70V340" stroke="${WVC.c}" stroke-width="1.5"/><text x="30" y="98" class="vt cy">↑ MACRO ∞</text><text x="30" y="318" class="vt rd">↓ MICRO ∞</text>`;
+  s+=`<text x="26" y="392" class="vt dim">ALL SCALES</text>`;
+  return wvFrame(s,"07 · ∞");
+}
+const WV_UI={rus:{ess:"Суть",simple:"Простое описание",sci:"Научный контекст"},eng:{ess:"Essence",simple:"In simple terms",sci:"Scientific context"}};
+const WV_SLIDES=[
+ {no:"01",vis:vFractal,
+  rus:{kick:"Статья:",title:"Фрактально-Голографической Мультивселенной",sub:"Подробное объяснение моего мировоззрения",
+   b:[["Краткое объяснение (чтобы не читать лонг рид)","Реальность как бесконечный самоподобный фрактал. Привычный 3D-мир и текущее время (4D) — лишь статичный «кадр» в гигантском архиве вечности. В высших измерениях (5D, 6D и далее) одновременно существуют все возможные варианты вашей судьбы, альтернативные исходы квантовых событий (как живой и мертвый кот Шрёдингера) и параллельные вселенные с другими законами физики. Этот узор бесконечно масштабируется внутрь атомов и вглубь космоса, создавая фрактал всего мироздания."]]},
+  eng:{kick:"Article:",title:"Of the Fractal Holographic Multiverse",sub:"A detailed explanation of my worldview",
+   b:[["Short version (so you don't have to read the long read)","Reality as an infinite self-similar fractal. The familiar 3D world and the current time (4D) are only a static “frame” in a gigantic archive of eternity. In the higher dimensions (5D, 6D and beyond) all possible versions of your fate exist at once, along with alternative outcomes of quantum events (like Schrödinger's cat, both alive and dead) and parallel universes with different laws of physics. This pattern scales infinitely, inward into atoms and outward into the cosmos, creating a fractal of the whole of creation."]]}},
+ {no:"02",vis:vCube,
+  rus:{kick:"Подробная логика бытия мироздания",title:"3D — Пространственный Холст",sub:"Первая ступень",
+   b:[["Суть","Наше осознаваемое пространство, состоящее из трех векторов: высоты, длины и ширины."],["Простое описание","Это привычная нам «коробка» реальности."]]},
+  eng:{kick:"The detailed logic of existence",title:"3D — The Spatial Canvas",sub:"The first step",
+   b:[["Essence","The space we are aware of, made of three vectors: height, length and width."],["In simple terms","This is the familiar “box” of reality."]]}},
+ {no:"03",vis:vTime,
+  rus:{kick:"Подробная логика бытия мироздания",title:"4D — Голографическая Статика Времени",sub:"Блочная Вселенная",
+   b:[["Суть","Время не течет из прошлого в будущее, а существует целиком и сразу. Прошлое, настоящее и будущее — это неизменный четырехмерный пространственно-временной монолит."],
+      ["Простое описание","Если представить киноленту, для персонажа внутри фильма время идет линейно — кадр за кадром. Но для вас, держащего стопку нарезанных кадров, все кадры (начало, середина и финал фильма) существуют одновременно. Наша жизнь — это статичный 4D-рисунок."],
+      ["Научный контекст","Концепция «Блочной Вселенной» (Block Universe), вытекающая из Специальной теории относительности Альберта Эйнштейна. В физике Эйнштейна-Минковского разделение на прошлое и будущее — лишь иллюзия. Время является полноценным пространственным вектором."]]},
+  eng:{kick:"The detailed logic of existence",title:"4D — The Holographic Stillness of Time",sub:"The Block Universe",
+   b:[["Essence","Time does not flow from the past into the future but exists whole and at once. The past, the present and the future are an unchanging four-dimensional space-time monolith."],
+      ["In simple terms","Imagine a film reel: for a character inside the film time runs linearly, frame after frame. But for you, holding a stack of cut-out frames, all the frames (the beginning, the middle and the end of the film) exist at the same time. Our life is a static 4D picture."],
+      ["Scientific context","The concept of the “Block Universe”, which follows from Albert Einstein's Special Theory of Relativity. In Einstein–Minkowski physics the division into past and future is merely an illusion. Time is a full-fledged spatial vector."]]}},
+ {no:"04",vis:vTree,
+  rus:{kick:"Подробная логика бытия мироздания",title:"5D — Пространство Вероятностей",sub:"Многомировая интерпретация",
+   b:[["Суть","Плоскость, в которой распределены все возможные альтернативные сценарии развития нашей Вселенной. Любой выбор, квантовое событие или любая другая развилка создают новую временную ветку внутри 4D-блока."],
+      ["Простое описание","Если 4D — это одна неизменная кинолента, то 5D — это огромный архив, где хранятся все альтернативные концовки и режиссерские версии этого фильма. Вы повернули налево — один фильм; повернули направо — соседний фильм на той же полке."],
+      ["Научный контекст","Многомировая интерпретация квантовой механики Хью Эверетта (1957 г.). Эвереттика утверждает, что при каждом квантовом измерении Вселенная «расщепляется» на множество альтернативных копий. Все варианты событий происходят одновременно в пространстве высших измерений (квантовая суперпозиция)."],
+      ["Кот Шрёдингера","Известный эксперимент Кота Шредингера: с точки зрения 5D-вселенной, в момент открытия коробки реальность не выбирает один исход, а физически разделяется на две параллельные ветви 4D-пространства: в одной вселенной наблюдатель видит живого кота, а в другой — погибшего."]]},
+  eng:{kick:"The detailed logic of existence",title:"5D — The Space of Probabilities",sub:"The many-worlds interpretation",
+   b:[["Essence","A plane in which all possible alternative scenarios of the development of our Universe are distributed. Any choice, quantum event or other fork creates a new timeline branch inside the 4D block."],
+      ["In simple terms","If 4D is one unchanging film reel, then 5D is a huge archive storing all the alternative endings and director's cuts of that film. You turned left — one film; you turned right — the neighbouring film on the same shelf."],
+      ["Scientific context","The many-worlds interpretation of quantum mechanics by Hugh Everett (1957). Everettianism holds that at every quantum measurement the Universe “splits” into many alternative copies. All variants of events happen at once in the space of the higher dimensions (quantum superposition)."],
+      ["Schrödinger's cat","The famous Schrödinger's cat experiment: from the point of view of the 5D universe, at the moment the box is opened reality does not choose a single outcome but physically divides into two parallel branches of 4D space: in one universe the observer sees a living cat, in the other a dead one."]]}},
+ {no:"05",vis:vMulti,
+  rus:{kick:"Подробная логика бытия мироздания",title:"6D и далее — Мультиверс и Гиперпространство",sub:"Другие законы физики",
+   b:[["Суть","Шестое измерение и последующие уровни объединяют и переплетают между собой не просто альтернативные ветки нашей Вселенной, а принципиально разные миры — с другими законами физики, иными начальными условиями Большого взрыва или другими константами. Этот процесс усложнения уходит в бесконечность."],
+      ["Простое описание","Это уровень, где меняются сами правила игры. В одной вселенной гравитация сильнее, в другой — свет движется медленнее, в третьей — материя вообще не смогла сформироваться. Бесконечное множество совершенно чужих миров, связанных в единую сеть."],
+      ["Научный контекст","Теория струн и М-теория (Эдвард Виттен). Современная физика математически доказывает существование 10 или 11 измерений. Наш мир может быть трехмерной мембраной («браной»), плавающей в многомерном гиперпространстве (Bulk) рядом с другими вселенными."]]},
+  eng:{kick:"The detailed logic of existence",title:"6D and beyond — Multiverse and Hyperspace",sub:"Other laws of physics",
+   b:[["Essence","The sixth dimension and the levels after it combine and interweave not just alternative branches of our Universe but fundamentally different worlds — with other laws of physics, different initial conditions of the Big Bang or different constants. This process of growing complexity goes on into infinity."],
+      ["In simple terms","This is the level where the rules of the game themselves change. In one universe gravity is stronger, in another light moves more slowly, in a third matter could not form at all. An infinite number of completely alien worlds linked into a single network."],
+      ["Scientific context","String theory and M-theory (Edward Witten). Modern physics mathematically proves the existence of 10 or 11 dimensions. Our world may be a three-dimensional membrane (a “brane”) floating in a multidimensional hyperspace (the Bulk) next to other universes."]]}},
+ {no:"06",vis:vSier,
+  rus:{kick:"Итог",title:"Фрактальность и бесконечный масштаб",sub:"Микромир ↔ макрокосм",
+   b:[["Суть","Вся структура существующего представляет собой фрактал, включающий бесконечность вариаций всех возможностей как вглубь (в микромир), так и вширь (в макрокосм)."]]},
+  eng:{kick:"Conclusion",title:"Fractality and infinite scale",sub:"Microworld ↔ macrocosm",
+   b:[["Essence","The entire structure of what exists is a fractal that contains an infinity of variations of all possibilities, both inward (into the microworld) and outward (into the macrocosm)."]]}}
+];
+let wvInit=false,wvIdx=0;
+function initWv(){
+  const track=document.getElementById("wvTrack"),dots=document.getElementById("wvDots"),cnt=document.getElementById("wvCount"),prev=document.getElementById("wvPrev"),next=document.getElementById("wvNext"),view=document.getElementById("wvView"),sw=document.getElementById("wvLang");
+  const n=WV_SLIDES.length;
+  const hints=()=>track.querySelectorAll(".wv-text").forEach(h=>{const t=h.firstElementChild;h.classList.toggle("more",t.scrollHeight>t.clientHeight+4&&t.scrollTop+t.clientHeight<t.scrollHeight-6)});
+  function build(){ // (re)draws all slides in the chosen language
+    track.innerHTML=WV_SLIDES.map(sl=>{const t=sl[wvLang];return `<article class="wv-slide">
+      <div class="cut wv-text"><div class="wt"><span class="wv-no">${sl.no}</span><div class="wv-kick">${esc(t.kick)}</div><h2>${esc(t.title)}</h2><div class="wv-sub">${esc(t.sub)}</div><div class="wv-bar"></div>
+        ${t.b.map(b=>`<div class="wv-b"><h4>${esc(b[0])}</h4><p>${esc(b[1])}</p></div>`).join("")}</div></div>
+      <div class="cut wv-vis"><div class="vi">${sl.vis()}</div></div></article>`}).join("");
+    sw.classList.toggle("rus",wvLang==="rus");
+    setTimeout(hints,60);
+  }
+  dots.innerHTML=WV_SLIDES.map((_,i)=>`<i data-i="${i}"></i>`).join("");
+  function go(i){
+    wvIdx=Math.max(0,Math.min(n-1,i));
+    track.style.transform=`translateX(-${wvIdx*100}%)`;
+    [...dots.children].forEach((d,k)=>d.classList.toggle("on",k===wvIdx));
+    cnt.textContent=String(wvIdx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");
+    prev.disabled=wvIdx===0;next.disabled=wvIdx===n-1;
+  }
+  build();go(0);
+  sw.addEventListener("click",()=>{wvLang=wvLang==="rus"?"eng":"rus";try{localStorage.setItem("warranty_wv_lang",wvLang)}catch(e){}build()});
+  track.addEventListener("scroll",hints,true);window.addEventListener("resize",hints);
+  prev.addEventListener("click",()=>go(wvIdx-1));next.addEventListener("click",()=>go(wvIdx+1));
+  dots.addEventListener("click",e=>{const d=e.target.closest("i");if(d)go(+d.dataset.i)});
+  let lock=0,lastW=0;
+  document.getElementById("wv").addEventListener("wheel",e=>{ // wheel flips the slides; a long text scrolls first and only a NEW gesture at its end flips
+    const now=Date.now(),gap=now-lastW;lastW=now;
+    const t=e.target.closest&&e.target.closest(".wt");
+    if(t){
+      const up=e.deltaY<0;
+      if(up?t.scrollTop>0:t.scrollTop+t.clientHeight<t.scrollHeight-2)return;   // the text can still scroll
+      if(t.scrollHeight>t.clientHeight+4&&gap<450){e.preventDefault();return}    // still the same gesture / momentum that scrolled the text: do not flip
+    }
+    e.preventDefault();
+    if(now<lock||Math.abs(e.deltaY)<8)return;lock=now+550;
+    go(wvIdx+(e.deltaY>0?1:-1));
+  },{passive:false});
+  document.addEventListener("keydown",e=>{
+    if(cur!=="worldview")return;
+    if(e.key==="ArrowRight")go(wvIdx+1);else if(e.key==="ArrowLeft")go(wvIdx-1);
+  });
+  let sx=0,sy=0;
+  view.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  view.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3)go(wvIdx+(dx<0?1:-1))},{passive:true});
+}
+const ORDER=["home","tier","female","firearms"];
 function route(){
-  const h=location.hash;cur=h==="#tier"?"tier":h==="#female"?"female":"home";
+  const h=location.hash;cur=h==="#tier"?"tier":h==="#female"?"female":h==="#firearms"?"firearms":h==="#worldview"?"worldview":"home";
   document.body.classList.toggle("home",cur==="home");
   document.body.classList.toggle("female",cur==="female");
-  ["home","tier","female"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",cur===v));
-  document.getElementById("mTitle").textContent={home:"Home",tier:"Games Tier List",female:"Female Characters"}[cur];
+  document.body.classList.toggle("worldview",cur==="worldview");
+  document.body.classList.toggle("firearms",cur==="firearms");
+  ["home","tier","female","firearms","worldview"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",cur===v));
+  document.getElementById("mTitle").textContent={home:"Home",tier:"Games Tier List",female:"Female Characters",firearms:"Firearms",worldview:"Worldview"}[cur];
   document.querySelectorAll("#mList a").forEach(a=>a.classList.toggle("cur",a.dataset.h==="#"+cur));
   document.getElementById("mList").hidden=true;document.getElementById("mTitleBtn").classList.remove("open");
-  const di={tier:0,female:1}[cur];
+  const di={tier:0,female:1,firearms:2}[cur];
   document.querySelectorAll("#mDots i").forEach((d,k)=>d.classList.toggle("on",k===di));
   document.querySelectorAll(".tab[data-r]").forEach(t=>t.classList.toggle("active",t.dataset.r===cur));
+  if(cur!=="home"&&window.__collapseHub)window.__collapseHub();   // the About Me panel is closed when leaving the main page
   if(cur==="tier"&&!loaded){loaded=true;load()}
   if(cur==="female"&&!femLoaded[femSub]){femLoaded[femSub]=true;loadFem(femSub)}
+  if(cur==="firearms"&&!femLoaded.guns){femLoaded.guns=true;loadFem("guns")}
+  if(cur==="worldview"&&!wvInit){wvInit=true;initWv()}
 }
 window.addEventListener("hashchange",()=>{panelHist=false;closePanel(true);route()});
 document.addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();
   if(k==="r"&&cur==="tier")load(true);
   if(k==="r"&&cur==="female"){femBusy[femSub]=false;loadFem(femSub)}
+  if(k==="r"&&cur==="firearms"){femBusy.guns=false;loadFem("guns")}
   if(k==="q"||k==="e"){const d=k==="e"?1:-1;location.hash="#"+ORDER[(ORDER.indexOf(cur)+d+ORDER.length)%ORDER.length]}
 });
 route();
