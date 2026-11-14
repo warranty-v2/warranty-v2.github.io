@@ -258,7 +258,7 @@ html:has(body.female){scrollbar-gutter:stable;overflow-anchor:none}
 .wimg .ph{display:grid;place-items:center;font-size:34px;font-weight:700;color:var(--rd);background:repeating-linear-gradient(135deg,#150709 0 6px,#1b0a0e 6px 12px)}
 .wimg::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px),linear-gradient(180deg,transparent 55%,rgba(11,4,7,.85))}
 .q5{--rc:#46e3ea}.q4{--rc:#7ef0c6}.q3{--rc:#f4e63a}.q2{--rc:#ff9a3d}.q1{--rc:#ff3d3d}.q0{--rc:#6b2f33}
-.wrate{position:absolute;z-index:2;left:0;top:10px;display:flex;align-items:baseline;gap:3px;padding:2px 14px 2px 8px;background:rgba(11,4,7,.9);border-left:4px solid var(--rc);clip-path:polygon(0 0,100% 0,calc(100% - 9px) 100%,0 100%)}
+.wrate{position:absolute;z-index:2;left:0;top:10px;display:block;padding:4px 18px 4px 8px;background:radial-gradient(ellipse 120% 130% at 0 0,rgba(11,4,7,.5),rgba(11,4,7,.2) 55%,transparent 78%)} /* no plate: only a soft shade in the corner keeps the cells readable over a bright picture */
 .wrate b{font-size:21px;line-height:1.1;color:var(--rc);text-shadow:0 0 10px color-mix(in srgb,var(--rc) 55%,transparent)}
 .wrate em{font-style:normal;font-size:11px;letter-spacing:.1em;color:#a86a6a}
 .wst{position:absolute;z-index:2;right:0;bottom:8px;padding:2px 10px 2px 15px;font-size:11px;font-weight:700;letter-spacing:.2em;background:rgba(11,4,7,.9);clip-path:polygon(9px 0,100% 0,100% 100%,0 100%)}
@@ -266,9 +266,26 @@ html:has(body.female){scrollbar-gutter:stable;overflow-anchor:none}
 .wmeta{padding:9px 11px 11px}
 .wmeta h4{font-size:15px;line-height:1.15;color:#fff;letter-spacing:.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .wmeta p{font-size:12px;letter-spacing:.1em;color:#a86a6a;margin-top:3px}
-.wseg{display:flex;gap:2px;margin-top:7px}
-.wseg i{flex:1;height:5px;background:#2a0f13}
-.wseg i.on{background:var(--rc);box-shadow:0 0 6px var(--rc)}
+.wprog{display:flex;gap:4px;margin-top:10px}
+.wprog i{position:relative;flex:var(--w) 1 0;min-width:8px;height:14px;border:2px solid #5c1c20;background:#13060a;overflow:hidden}
+.wprog i.on{border-color:var(--cy)}
+.wprog i b{position:absolute;left:0;top:0;bottom:0;width:var(--p);background:var(--cy)}
+/* the season being watched: hatched green; the season it was dropped on: hatched red */
+.wprog i.ip{border-color:#2fe06b}.wprog i.dr{border-color:var(--red)}
+.wprog i.ip b{background:repeating-linear-gradient(135deg,color-mix(in srgb,#2fe06b 60%,transparent) 0 6px,color-mix(in srgb,#2fe06b 32%,transparent) 6px 12px)}
+.wprog i.dr b{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--red) 60%,transparent) 0 6px,color-mix(in srgb,var(--red) 32%,transparent) 6px 12px)}
+.wrate b,.wrate em{position:relative}
+.wrate .rn{display:flex;align-items:baseline;gap:3px;margin-top:3px}
+.wrate .rn b{text-shadow:0 1px 4px #000,0 0 10px color-mix(in srgb,var(--rc) 55%,transparent)}
+.wrate .rn em{color:#cdb9b6;text-shadow:0 1px 3px #000}
+/* rating = the RAM bar of the Cyberdeck: 10 slanted cells, one per half point; only the lit cells glow, the empty ones are the same colour, just dim */
+.wrate .rs{display:flex;gap:2px}
+.wrate .rg,.wrate .rd{display:flex;gap:2px}
+.wrate .rg{filter:drop-shadow(0 0 3px color-mix(in srgb,var(--rc) 75%,transparent)) drop-shadow(0 1px 2px rgba(0,0,0,.8))}
+.wrate .rd{filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))}
+.wrate .rs i{display:block;width:5px;height:12px;clip-path:polygon(0 0,100% 0,100% 100%,35% 100%,0 72%)}
+.wrate .rg i{background:var(--rc)}
+.wrate .rd i{background:color-mix(in srgb,var(--rc) 38%,#0b0407)}
 .sg.three{grid-template-columns:repeat(3,1fr)}
 .sub em{font-style:normal;font-size:11px;opacity:.7;margin-left:6px;letter-spacing:.05em}
 /* timeline */
@@ -291,13 +308,12 @@ html:has(body.female){scrollbar-gutter:stable;overflow-anchor:none}
 .tlb .dm{position:absolute;left:0;top:0;width:18px;height:18px;background:var(--c);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
 .tlb.mk:hover,.tlb.mk.on,.tlb.mk.sel{outline:0}
 .tlb.mk:hover .dm,.tlb.mk.on .dm,.tlb.mk.sel .dm{background:#fff}
-.tlb.dr{background:repeating-linear-gradient(135deg,var(--c) 0 6px,color-mix(in srgb,var(--c) 38%,#0b0407) 6px 12px)}
-.tlb .dp{position:absolute;right:0;top:0;bottom:0;width:18px;display:grid;place-items:center;background:#ff3d3d;color:#0b0407;font:700 12px/1 Rajdhani,sans-serif;font-style:normal}
-.tlb.dr .tll.in{right:22px}
-.tlv .tlb .dp{right:auto;left:0;bottom:auto;top:0;width:100%;height:18px}
-.tlv .tlb.dr .tll.in{right:0;top:23px;bottom:3px}
+.tlb .dp{position:absolute;right:0;top:-2px;bottom:-2px;width:4px;background:#ff3d3d;box-shadow:0 0 7px #ff3d3d}
+.tlb.dr .tll.in{right:10px}
+.tlv .tlb .dp{left:-2px;right:-2px;bottom:auto;top:0;width:auto;height:4px}
+.tlv .tlb.dr .tll.in{right:0;top:11px;bottom:3px}
 .tl-legend .dmd{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
-.tl-legend .lgdr{background:#ff3d3d}
+.tl-legend .lgdr{width:4px;height:14px;margin:0 9px 0 4px;background:#ff3d3d;box-shadow:0 0 6px #ff3d3d;vertical-align:-3px}
 /* a clicked line: all lines of that title / game stay sharp, everything else fades out */
 .tlhost.hasSel .tlb{opacity:.14;transition:opacity .15s}
 .tlhost.hasSel .tlb:hover{opacity:.6}
@@ -487,9 +503,27 @@ body.home .avwrap{display:flex}
 .avnick{pointer-events:none;text-shadow:0 2px 10px #000}
 .avnick small{display:block;font-size:11px;letter-spacing:.35em;color:var(--rd)}
 .avnick h2{font-size:28px;letter-spacing:.06em;color:#fff;line-height:1.1;margin:2px 0 4px;text-shadow:0 0 14px rgba(70,227,234,.45),0 2px 10px #000}
-.onl{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.2em;color:var(--cy)}
-.onl i{width:8px;height:8px;background:var(--cy);box-shadow:0 0 8px var(--cy)}
-.avdate{display:block;margin-top:2px;font-size:11px;letter-spacing:.25em;color:#8a4a4e}
+.onl{--sc:#8a4a4e;display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.2em;color:var(--sc)}
+.onl em{font-style:normal}
+.onl .plat{margin-left:4px;padding:0 5px;font-size:10px;letter-spacing:.15em;color:#8a4a4e;border:1px solid #5c1c20}
+.onl[data-st=online]{--sc:#2fe06b}.onl[data-st=idle]{--sc:var(--yl)}.onl[data-st=dnd]{--sc:var(--red)}
+.dcCustom{margin-top:5px;max-width:240px;font-size:13px;letter-spacing:.03em;line-height:1.25;color:#cdb9b6;overflow-wrap:anywhere}
+.acts{display:flex;flex-direction:column;gap:8px;margin-top:10px;width:min(240px,calc(100vw - 60px))}
+.acts a{pointer-events:auto}
+.ac{--bd:#5c1c20;--fill:rgba(13,5,8,.9);--k:9px;--ct:var(--cy);display:flex;gap:10px;align-items:center;padding:8px 10px;min-width:0;text-decoration:none;text-shadow:none}
+.ac.game{--bd:#1b7f84;--ct:var(--cy)}.ac.spo{--bd:#1f7a4b;--ct:#2fe06b}
+.ac.spo:hover{--bd:#2fe06b}
+.ac .ai{flex:none;width:44px;height:44px;display:grid;place-items:center;overflow:hidden;font-size:14px;font-weight:700;color:var(--ct);background:repeating-linear-gradient(135deg,#150709 0 6px,#1b0a0e 6px 12px)}
+.ac .ai img{width:100%;height:100%;object-fit:cover;display:block}
+.ac .at{flex:1;min-width:0}
+.ac small{display:block;font-size:10px;letter-spacing:.25em;color:var(--ct)}
+.ac b{display:block;font-size:15px;font-weight:700;letter-spacing:.02em;line-height:1.2;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac .ln{display:block;font-size:12px;letter-spacing:.03em;line-height:1.25;color:#a86a6a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac .ln.el{color:var(--ct);font-size:11px;letter-spacing:.12em}
+.ac .pbar{height:3px;margin-top:5px;background:#2a0f13}.ac .pbar i{display:block;height:100%;width:0;background:var(--ct);box-shadow:0 0 6px var(--ct)}
+.ac .tm{display:flex;justify-content:space-between;margin-top:2px;font-size:10px;letter-spacing:.1em;color:#8a4a4e}
+.onl i{flex:none;width:8px;height:8px;background:var(--sc);box-shadow:0 0 8px var(--sc)}
+.avdate{display:block;min-height:13px;margin:0 0 6px;font-size:11px;letter-spacing:.25em;color:#8a4a4e;pointer-events:none}
 /* bottom panel: same width as the menu, grows upward inside the layout */
 .hub{flex:none;position:relative;width:100%;height:74px;overflow:hidden;--bd:#5c1c20;--fill:#0d0508;transition:height .45s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
 .homeLayout.mini .hub{height:calc(100% - 150px);--bd:var(--cy)}
@@ -561,6 +595,15 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(5,220px)}}
 @media(max-width:760px){.profile{grid-template-columns:1fr}.av-rail{height:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden}.ab-row{grid-template-columns:1fr;gap:6px}.temp{grid-template-columns:1fr}body.pan #shell{padding-right:0}.topbar{grid-template-columns:1fr;padding:10px 18px 0;gap:6px}.brand{display:none}.status{justify-self:start}main{padding:22px 18px}.tier{grid-template-columns:1fr}.label{min-height:0}
  .items{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}body::before,body::after{display:none}}
+.srch{--bd:#1b7f84;--fill:#06161a;--k:9px;margin-left:auto;align-self:center;display:block;width:260px;max-width:100%}
+.srch:focus-within{--bd:var(--cy)}
+.srch input{display:block;width:100%;background:transparent;border:0;outline:0;padding:9px 16px;color:var(--cy);font:600 16px Rajdhani,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.srch input::placeholder{color:#3d7f84}
+.cell.shit::after{opacity:1}.cell.shit .g{background:var(--cy)}
+.cell.sdim,.fc.sdim,.ucard.sdim{opacity:.28;transition:opacity .15s}
+.cell.sdim:hover,.fc.sdim:hover,.ucard.sdim:hover{opacity:1}
+.fc.shit{z-index:4}.fc.shit .ff{border-color:var(--cy);box-shadow:0 0 14px rgba(70,227,234,.55)}
+.ucard.shit{border-color:var(--cy);background:#12080c;box-shadow:0 0 12px rgba(70,227,234,.35)}
 .mbar{display:none}
 @media(max-width:760px){
  .topbar{display:block;height:54px;padding:0 14px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
@@ -608,7 +651,9 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  .avrow{display:flex;flex-direction:column;align-items:flex-start}
  .avst{width:calc(104px + (var(--n,1) - 1)*22px);height:calc(104px + (var(--n,1) - 1)*8px);--dx:10px;--dy:6px}
  .avc{width:104px;height:104px}
+ .srch{width:100%;margin:0;grid-column:1/-1}
  .avnick{display:block;text-align:left}.avnick h2{font-size:22px;margin:0 0 2px}
+ .acts{width:min(46vw,200px);gap:6px;margin-top:8px}.ac{padding:6px 8px}.ac .ai{width:34px;height:34px}.ac small,.ac .pbar,.ac .tm{display:none}.dcCustom{max-width:46vw;font-size:12px}
  .hub{height:78px;clip-path:none;background:var(--fill);border:2px solid var(--bd)}
  .hub::before{display:none}
  .handle{animation:none}
@@ -694,10 +739,11 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
       <div class="cdots" id="cDots"></div>
       <div class="avwrap" id="avWrap">
         <div class="avrow" id="avRow">
+          <div class="avdate" id="avDate"></div>
           <div class="avst" id="avSt" title="Click or scroll to flip through avatars"></div>
           <div class="avdots" id="avDots"></div>
         </div>
-        <div class="avnick"><small>// OPERATOR</small><h2>warranty</h2><span class="onl"><i></i>ONLINE</span><span class="avdate" id="avDate"></span></div>
+        <div class="avnick"><small>// OPERATOR</small><h2>warranty</h2><span class="onl" id="dcSt" data-st="none"><i></i><em id="dcStT">CONNECTING…</em><span class="plat" id="dcPl" hidden></span></span><div class="dcCustom" id="dcCu" hidden></div><div class="acts" id="dcActs"></div></div>
       </div>
     </div>
       <button class="cut handle" id="hubHandle" type="button" aria-label="Expand About Me panel"><span><i class="ar">▲</i> ABOUT ME &amp; PLAYLISTS <i class="ar">▲</i></span></button>
@@ -742,6 +788,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
       <button class="cut sub" data-s="new"><span>New Only</span></button>
       <button class="cut sub" data-s="ant"><span>Anticipated Games</span></button>
       <button class="cut sub" data-s="gtl"><span>Timeline</span></button>
+      <label class="cut srch" id="srchTier"><input type="search" data-sq="tier" placeholder="SEARCH GAMES…" autocomplete="off" spellcheck="false"></label>
     </div>
     <div id="app"><div class="msg">CONNECTING TO NETWORK…</div></div>
     <div id="cmp" hidden></div>
@@ -770,12 +817,14 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
         <button class="cut sub" data-t="Anime"><span>Anime</span></button>
         <button class="cut sub" data-t="Cinema"><span>Cinema</span></button>
       </div>
+      <label class="cut srch" id="srchFem"><input type="search" data-sq="fem" placeholder="SEARCH CHARACTERS…" autocomplete="off" spellcheck="false"></label>
     </div>
     <div id="femApp"><div class="msg">LOADING…</div></div>
     <div id="femHot" hidden><div class="msg">LOADING…</div></div>
   </section>
   <section class="view" id="view-firearms">
     <div class="sec"><span>// FIREARMS</span></div>
+    <div class="subtabs fsubs"><label class="cut srch" id="srchGun"><input type="search" data-sq="gun" placeholder="SEARCH FIREARMS…" autocomplete="off" spellcheck="false"></label></div>
     <div id="gunApp"><div class="msg">LOADING…</div></div>
   </section>
   <section class="view" id="view-watch">
@@ -792,6 +841,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
         <button class="cut sub" data-o="old"><span>Oldest</span></button>
         <button class="cut sub" data-o="rate"><span>Rating</span></button>
       </div>
+      <label class="cut srch" id="srchWatch"><input type="search" data-sq="watch" placeholder="SEARCH TITLES…" autocomplete="off" spellcheck="false"></label>
     </div>
     <div id="wList"><div class="msg">LOADING…</div></div>
     <div id="wTl" class="tlhost" hidden></div>
@@ -816,42 +866,16 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
 <div id="tipLog"></div>
 <script>
 /* ===================================================================
-   EASY EDIT 1 — AVATARS
-   Add a new avatar = add one line: the image link + its date (YYYY-MM).
-   A Google Drive "share" link works as is (the file must be shared as
-   "Anyone with the link"). Order does not matter: the newest date becomes
-   the current avatar, older ones are stacked behind it.
+   EASY EDIT 1 — AVATARS (automatic)
+   The avatars are read from the GitHub repository folder below. A file is named
+   by its date: 2025-05.png / 2026-07.jpg / 2024-11.jpeg (YYYY-MM). The newest date
+   becomes the current avatar, older ones are stacked behind it. Just upload a new
+   file to the folder, nothing has to be edited here.
+   DISCORD_ID: the user whose status / activity / Spotify is shown (via Lanyard,
+   the account has to be in the Lanyard Discord server: discord.gg/lanyard).
    =================================================================== */
-const AVATARS=[
-  {url:"https://drive.google.com/file/d/1WLzxZ8249rbwGEgdpxHNz1GYaT_2Qc4s/view?usp=sharing",date:"2026-07"},
-  {url:"https://drive.google.com/file/d/1hNBT7kA2DEBd-XmkEqSBn0K9w78VpDYt/view?usp=sharing",date:"2026-06"},
-  {url:"https://drive.google.com/file/d/1xpKv8keujIxXbzbjk0UuX1YbZGMcd0UX/view?usp=sharing",date:"2025-09"},
-  {url:"https://drive.google.com/file/d/1-93yhzORSa-vcUeJtJcth8tkBemiIiW6/view?usp=sharing",date:"2025-05"},
-  {url:"https://drive.google.com/file/d/10Q3IB1MkwhFSaFFNthHDe57kRE7QFpVF/view?usp=sharing",date:"2023-02"},
-  {url:"https://drive.google.com/file/d/1719j130LCsnNLfevlcsMK6F2ahDkEg6L/view?usp=sharing",date:"2023-01"},
-  {url:"https://drive.google.com/file/d/11GLfZ0n1wcl9K8uY_EsEwUvNb59aAAaq/view?usp=sharing",date:"2022-10"},
-  {url:"https://drive.google.com/file/d/1BjWNL0J0TK2P67vAos0jDhFWz47ECX4L/view?usp=sharing",date:"2022-09"},
-  {url:"https://drive.google.com/file/d/17GZI39BPBuGIrEcs5DJVTpSNGYttskW6/view?usp=sharing",date:"2022-04"},
-  {url:"https://drive.google.com/file/d/1D5pukwg6llMgfodAPOKEDM9VcIdkxnv_/view?usp=sharing",date:"2022-02"},
-  {url:"https://drive.google.com/file/d/14ciojlmKWpwj9sqkbsb1oZd_3Rn7HhEc/view?usp=sharing",date:"2021-11"},
-  {url:"https://drive.google.com/file/d/14fwTNUqkNjhB5NGeDSDETyIUpzs3J1xT/view?usp=sharing",date:"2021-11"},
-  {url:"https://drive.google.com/file/d/14gpw_g-ulIM8EUpIExFC8lpUfyG0q3qG/view?usp=sharing",date:"2021-11"},
-  {url:"https://drive.google.com/file/d/1GFcfZndcttbsPM6eP44f1sMcxQ7yMfu7/view?usp=sharing",date:"2021-06"},
-  {url:"https://drive.google.com/file/d/1kEq8CHYUfV6xg3rJ9QpFATeSTnIQo0eA/view?usp=sharing",date:"2021-04"},
-  {url:"https://drive.google.com/file/d/169fhYLRKPIcg6kNmFnQuY07-IryH7awP/view?usp=sharing",date:"2020-11"},
-  {url:"https://drive.google.com/file/d/1sM8qJUevonZpHV-KNe5qp2YOktWhe7DA/view?usp=sharing",date:"2020-11"},
-  {url:"https://drive.google.com/file/d/1Qaynucm6uZQuyA7tVwdg3JvUs7QGAHRm/view?usp=sharing",date:"2020-11"},
-  {url:"https://drive.google.com/file/d/1oS5w7xAeuD4I8AhkIq05tfnxmmRu7lpC/view?usp=sharing",date:"2020-11"},
-  {url:"https://drive.google.com/file/d/1837U8yjgLJ-WaVjsxQmFkYHqCUXlu4yS/view?usp=sharing",date:"2020-07"},
-  {url:"https://drive.google.com/file/d/1mlrjaAw8kQ27KkxOPDd_2VCwNqznExcy/view?usp=sharing",date:"2019-09"},
-  {url:"https://drive.google.com/file/d/13w23GY-5s65STnmqnIVCfBpVZSFDd9pN/view?usp=sharing",date:"2019-08"},
-  {url:"https://drive.google.com/file/d/1Fj3pjrv8wb8shO8ckeRuKiT2z2UnW4Ok/view?usp=sharing",date:"2019-01"},
-  {url:"https://drive.google.com/file/d/1k4a7OS93vBb3Q0xw6ja3Ay6lib6DvYtj/view?usp=sharing",date:"2018-11"},
-  {url:"https://drive.google.com/file/d/1UwVcSZUOHoa5XHXu_PuYo6RG2W5327_s/view?usp=sharing",date:"2018-09"},
-  {url:"https://drive.google.com/file/d/124BH8CqqvvXh2sKPAwbuh0B4WD3aVU3XdQ/view?usp=sharing",date:"2018-08"},
-  {url:"https://drive.google.com/file/d/1CAwZbj0bWnTPTTQTDT__MGwsL6Ho3BEaxw/view?usp=sharing",date:"2018-02"},
-  {url:"https://drive.google.com/file/d/1VtpqEpCxAnzd54hWl-hkRWR4hV9V2VsE/view?usp=sharing",date:"2017-04"},
-];
+const AVATAR_REPO={user:"warranty-v2",repo:"warranty-v2.github.io",dir:"assets/avatars"};
+const DISCORD_ID="297262576427991042";
 /* ===================================================================
    EASY EDIT 2 — PLAYLISTS
    Paste Spotify playlist links, one per line. They appear on the page in the
@@ -2068,27 +2092,22 @@ document.addEventListener("click",e=>{
   if(panel.classList.contains("on")&&!e.target.closest("#panel"))closePanel();
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
-/* ---------- floating avatars: newest in front, older stacked behind to the left ---------- */
+/* ---------- floating avatars: newest in front, older stacked behind to the left. The pictures are read from the GitHub repo (assets/avatars/YYYY-MM.png|jpg|jpeg) ---------- */
 (function(){
-  const driveId=u=>{const m=String(u).match(/\/d\/([\w-]+)|[?&]id=([\w-]+)/);return m?(m[1]||m[2]):null};
-  const srcs=u=>{const id=driveId(u);return id?[`https://lh3.googleusercontent.com/d/${id}=w500`,`https://drive.google.com/thumbnail?id=${id}&sz=w500`,`https://drive.google.com/uc?export=view&id=${id}`]:[u]};
-  const list=[...AVATARS].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-  if(!list.length)list.push({url:"",date:""});
+  const R=AVATAR_REPO,AKEY="warranty_avatars_v1";
+  const srcs=f=>{const q=R.dir+"/"+encodeURIComponent(f);return["https://"+R.repo+"/"+q,"https://raw.githubusercontent.com/"+R.user+"/"+R.repo+"/main/"+q]};
+  const parse=names=>names.map(n=>{const m=/^(\d{4})-(\d{2})(?!\d)[^\/]*\.(?:png|jpe?g)$/i.exec(n);return m?{file:n,date:m[1]+"-"+m[2]}:null}).filter(Boolean).sort((a,b)=>b.date.localeCompare(a.date)||b.file.localeCompare(a.file));
+  async function listNames(){ // GitHub API first, the jsDelivr file index as a fallback (works without the API rate limit)
+    try{const j=await getJson("https://api.github.com/repos/"+R.user+"/"+R.repo+"/contents/"+R.dir);if(Array.isArray(j))return j.filter(x=>x.type==="file").map(x=>x.name)}catch(e){}
+    const j=await getJson("https://data.jsdelivr.com/v1/packages/gh/"+R.user+"/"+R.repo+"@main?structure=flat"),p="/"+R.dir+"/";
+    return j.files.map(f=>f.name).filter(n=>n.startsWith(p)&&!n.slice(p.length).includes("/")).map(n=>n.slice(p.length));
+  }
   const st=document.getElementById("avSt"),dots=document.getElementById("avDots"),dt=document.getElementById("avDate");
-  let idx=0; // 0 = newest; scrolling stops at both ends (no wrap-around)
-  st.style.setProperty("--n",Math.min(list.length,3)); // reserve room for the front avatar + 2 behind only
-  st.innerHTML=list.map((a,i)=>{
-    const c=a.url?srcs(a.url):[];
-    return `<div class="avc" data-k="${i}">${c.length?`<img alt="" referrerpolicy="no-referrer" data-c='${JSON.stringify(c).replace(/'/g,"&#39;")}' data-n="0" src="${esc(c[0])}">`:'<div class="ph3">EMPTY</div>'}</div>`}).join("");
-  dots.innerHTML=list.map((_,i)=>`<i data-j="${i}" title="${esc(list[i].date||"")}"></i>`).join("");
-  st.querySelectorAll("img").forEach(im=>im.addEventListener("error",()=>{
-    const c=JSON.parse(im.dataset.c),n=+im.dataset.n+1;
-    if(n<c.length){im.dataset.n=n;im.src=c[n]}else im.replaceWith(Object.assign(document.createElement("div"),{className:"ph3",textContent:"NO IMAGE"}));
-  }));
+  let list=[],idx=0,ready=false; // idx 0 = newest; scrolling stops at both ends (no wrap-around)
   const W=7; // at most 7 page squares are shown; the window slides with the active one
   function renderDots(){
     const n=list.length,s0=Math.max(0,Math.min(idx-3,n-W)),e0=Math.min(n,s0+W);
-    dots.innerHTML=Array.from({length:e0-s0},(_,q)=>{const j=s0+q,edge=(q===0&&s0>0)||(q===e0-s0-1&&e0<n);
+    dots.innerHTML=Array.from({length:Math.max(0,e0-s0)},(_,q)=>{const j=s0+q,edge=(q===0&&s0>0)||(q===e0-s0-1&&e0<n);
       return `<i data-j="${j}" class="${j===idx?"on ":""}${edge?"edge":""}" title="${esc(list[j].date||"")}"></i>`}).join("");
   }
   function layout(){
@@ -2098,10 +2117,31 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
       el.classList.toggle("gone",gone);el.classList.toggle("far",far);el.classList.toggle("front",k===idx);
     });
     renderDots();
-    dt.textContent=list[idx].date?"AVATAR · "+list[idx].date:"";
+    dt.textContent=list[idx]&&list[idx].date?"AVATAR · "+list[idx].date:"";
   }
-  const go=d=>{const n=Math.min(list.length-1,Math.max(0,idx+d));if(n!==idx){idx=n;layout()}};
-  layout();
+  function build(){
+    idx=0;st.style.setProperty("--n",Math.max(1,Math.min(list.length,3))); // reserve room for the front avatar + 2 behind only
+    st.innerHTML=(list.length?list:[{file:"",date:""}]).map((a,i)=>{
+      const c=a.file?srcs(a.file):[];
+      return `<div class="avc" data-k="${i}">${c.length?`<img alt="" referrerpolicy="no-referrer" data-c='${JSON.stringify(c).replace(/'/g,"&#39;")}' data-n="0" src="${esc(c[0])}">`:`<div class="ph3">${ready?"NO AVATARS":"…"}</div>`}</div>`}).join("");
+    st.querySelectorAll("img").forEach(im=>im.addEventListener("error",()=>{
+      const c=JSON.parse(im.dataset.c),n=+im.dataset.n+1;
+      if(n<c.length){im.dataset.n=n;im.src=c[n]}else im.replaceWith(Object.assign(document.createElement("div"),{className:"ph3",textContent:"NO IMAGE"}));
+    }));
+    layout();
+  }
+  const go=d=>{if(list.length<2)return;const n=Math.min(list.length-1,Math.max(0,idx+d));if(n!==idx){idx=n;layout()}};
+  build();
+  (async()=>{
+    let cached=null;try{cached=JSON.parse(localStorage.getItem(AKEY)||"null")}catch(e){}
+    if(Array.isArray(cached)){list=parse(cached);ready=true;build()} // instant paint from the last successful read
+    try{
+      const names=await retry(listNames,2);
+      try{localStorage.setItem(AKEY,JSON.stringify(names))}catch(e){}
+      const nl=parse(names);
+      if(!ready||JSON.stringify(nl)!==JSON.stringify(list)){list=nl;ready=true;build()}
+    }catch(e){if(!ready){ready=true;build()}}
+  })();
   st.addEventListener("click",()=>go(1));
   dots.addEventListener("click",e=>{const d=e.target.closest("i");if(d){idx=+d.dataset.j;layout()}});
   let ax=0,ay=0; // phones: a sideways swipe over the avatars flips them
@@ -2124,6 +2164,98 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
   });
 })();
 
+const snorm=t=>String(t||"").toLowerCase().replace(/[^\p{L}\p{N}]+/gu,""); // loose comparison key for names (search, game lookup)
+/* ---------- Discord presence (Lanyard): status, current activity, Spotify ---------- */
+(function(){
+  const $=id=>document.getElementById(id),stEl=$("dcSt"),stT=$("dcStT"),plEl=$("dcPl"),cuEl=$("dcCu"),acts=$("dcActs");
+  const LAB={online:"ONLINE",idle:"IDLE",dnd:"DO NOT DISTURB",offline:"OFFLINE"},KIND={0:"PLAYING",1:"STREAMING",2:"LISTENING",3:"WATCHING",5:"COMPETING"};
+  const mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+  const two=n=>String(n).padStart(2,"0");
+  const clock=ms=>{ms=Math.max(0,Math.floor(ms/1000));const h=Math.floor(ms/3600),m=Math.floor(ms%3600/60);return(h?h+":"+two(m):m)+":"+two(ms%60)};
+  let data=null,failed=false,last="",ws=null,hb=null,tries=0;
+  function assetUrl(a,img){
+    if(!img)return"";
+    if(img.startsWith("mp:"))return"https://media.discordapp.net/"+img.slice(3);
+    if(img.startsWith("spotify:"))return"https://i.scdn.co/image/"+img.slice(8);
+    return a.application_id?`https://cdn.discordapp.com/app-assets/${a.application_id}/${img}.png`:"";
+  }
+  function pic(box,urls){urls=[].concat(urls).filter(Boolean);if(!urls.length)return;const im=new Image();let k=0;im.alt="";im.referrerPolicy="no-referrer";im.onload=()=>{box.textContent="";box.appendChild(im)};im.onerror=()=>{if(++k<urls.length)im.src=urls[k]};im.src=urls[0]}
+  function tierUrls(name){ // the cover of the game with the same name in the Games Tier List table
+    const k=snorm(name);if(!k)return[];
+    let g=ALL.find(x=>x.img&&snorm(x.name)===k);
+    if(!g&&k.length>=4)g=ALL.find(x=>{const y=snorm(x.name);return x.img&&y.length>=4&&(y.includes(k)||k.includes(y))});
+    return g?imgCands(g.img):[];
+  }
+  function whenGames(fn,n){ // the table is loaded on demand (it is normally opened with the Games Tier List page)
+    n=n||0;if(ALL.length)return fn();
+    if(n===0&&!loaded){loaded=true;load()}
+    if(n<30)setTimeout(()=>whenGames(fn,n+1),500);else fn();
+  }
+  function gameCard(a){
+    const c=mk("div","cut ac game"),ai=mk("div","ai",ini(a.name||"?")),at=mk("div","at"),as=a.assets||{};
+    const fb=assetUrl(a,as.large_image||as.small_image);whenGames(()=>pic(ai,[...tierUrls(a.name),fb]));
+    at.append(mk("small","",KIND[a.type]||"PLAYING"),mk("b","",a.name||"—"));
+    if(a.details)at.appendChild(mk("span","ln",a.details));
+    if(a.state)at.appendChild(mk("span","ln",a.state));
+    const t0=a.timestamps&&a.timestamps.start;
+    if(t0){const e=mk("span","ln el");e.dataset.t0=t0;e.textContent=clock(Date.now()-t0)+" ELAPSED";at.appendChild(e)}
+    c.append(ai,at);return c;
+  }
+  function spoCard(sp){
+    const c=mk("a","cut ac spo"),ai=mk("div","ai","♪"),at=mk("div","at");
+    c.href="https://open.spotify.com/track/"+encodeURIComponent(sp.track_id||"");c.target="_blank";c.rel="noopener";
+    pic(ai,sp.album_art_url);
+    at.append(mk("small","","LISTENING · SPOTIFY"),mk("b","",sp.song||"—"),mk("span","ln",String(sp.artist||"").replace(/;\s*/g,", ")),mk("span","ln",sp.album||""));
+    const ts=sp.timestamps;
+    if(ts&&ts.start&&ts.end&&ts.end>ts.start){
+      const bar=mk("div","pbar"),tm=mk("div","tm");bar.appendChild(mk("i"));bar.dataset.s0=ts.start;bar.dataset.e0=ts.end;
+      tm.append(mk("span","","0:00"),mk("span","",clock(ts.end-ts.start)));at.append(bar,tm);
+    }
+    c.append(ai,at);return c;
+  }
+  function tick(){ // elapsed time of the game and the Spotify progress run locally between updates
+    const now=Date.now();
+    acts.querySelectorAll("[data-t0]").forEach(e=>{e.textContent=clock(now-+e.dataset.t0)+" ELAPSED"});
+    const p=acts.querySelector(".pbar");
+    if(p){const s=+p.dataset.s0,e=+p.dataset.e0,pos=Math.min(e-s,Math.max(0,now-s));p.firstChild.style.width=(pos/(e-s)*100)+"%";p.nextSibling.firstChild.textContent=clock(pos)}
+  }
+  function draw(){
+    if(!data){stEl.dataset.st="none";stT.textContent=failed?"STATUS N/A":"CONNECTING…";plEl.hidden=true;cuEl.hidden=true;acts.textContent="";last="";return}
+    const key=JSON.stringify([data.discord_status,data.activities,data.spotify,data.listening_to_spotify,data.active_on_discord_desktop,data.active_on_discord_mobile,data.active_on_discord_web]);
+    if(key===last)return;last=key;
+    const s=LAB[data.discord_status]?data.discord_status:"offline",list=data.activities||[];
+    stEl.dataset.st=s;stT.textContent=LAB[s];
+    const pf=s==="offline"?[]:[data.active_on_discord_desktop&&"DESKTOP",data.active_on_discord_mobile&&"MOBILE",data.active_on_discord_web&&"WEB"].filter(Boolean);
+    plEl.textContent=pf.join(" · ");plEl.hidden=!pf.length;
+    const cs=list.find(a=>a.type===4),txt=cs?((cs.emoji&&cs.emoji.name&&!cs.emoji.id?cs.emoji.name+" ":"")+(cs.state||"")).trim():"";
+    cuEl.textContent=txt;cuEl.hidden=!txt;
+    acts.textContent="";
+    if(s!=="offline"){
+      list.filter(a=>a.type!==4&&a.id!=="spotify:1"&&a.name!=="Spotify").slice(0,2).forEach(a=>acts.appendChild(gameCard(a)));
+      if(data.listening_to_spotify&&data.spotify)acts.appendChild(spoCard(data.spotify));
+    }
+    tick();
+  }
+  const apply=d=>{if(d&&d.discord_status){data=d;failed=false;draw()}else fail()};
+  const fail=()=>{if(!data){failed=true;draw()}};
+  async function rest(){try{const j=await getJson("https://api.lanyard.rest/v1/users/"+DISCORD_ID);if(j&&j.success)apply(j.data);else fail()}catch(e){fail()}}
+  function later(){tries++;setTimeout(connect,Math.min(30000,2000*tries))}
+  function connect(){
+    let w;try{w=new WebSocket("wss://api.lanyard.rest/socket")}catch(e){later();return}
+    ws=w;
+    w.onopen=()=>{tries=0};
+    w.onmessage=ev=>{
+      let m;try{m=JSON.parse(ev.data)}catch(e){return}
+      if(m.op===1){w.send(JSON.stringify({op:2,d:{subscribe_to_id:DISCORD_ID}}));clearInterval(hb);hb=setInterval(()=>{if(w.readyState===1)w.send(JSON.stringify({op:3}))},(m.d&&m.d.heartbeat_interval)||30000)}
+      else if(m.op===0&&(m.t==="INIT_STATE"||m.t==="PRESENCE_UPDATE"))apply(m.d);
+    };
+    w.onclose=()=>{clearInterval(hb);later()};
+    w.onerror=()=>{try{w.close()}catch(e){}};
+  }
+  draw();rest();connect();
+  setInterval(()=>{if(!ws||ws.readyState!==1)rest()},30000); // no socket: poll the REST endpoint
+  setInterval(tick,1000);
+})();
 /* ---------- playlists (Exportify snapshot) + custom preview player (no Spotify UI) ---------- */
 (function(){
   let PLAYLISTS=[];
@@ -2267,7 +2399,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
 function showSub(k){
   closePanel();
   const map={tier:"app",cmp:"cmp",new:"new",ant:"ant",gtl:"gtl"};tierSub=k;
-  document.getElementById("gtl").classList.toggle("tlfull",k==="gtl");document.body.classList.toggle("wtl",k==="gtl");hideTip();
+  document.getElementById("srchTier").hidden=k==="gtl";document.getElementById("gtl").classList.toggle("tlfull",k==="gtl");document.body.classList.toggle("wtl",k==="gtl");hideTip();
   Object.entries(map).forEach(([key,id])=>document.getElementById(id).hidden=key!==k);
   document.querySelectorAll(".sub[data-s]").forEach(b=>b.classList.toggle("on",b.dataset.s===k));
   ensureView(k);if(k==="gtl")tlFit("gtl","#view-tier .subtabs");
@@ -2729,8 +2861,9 @@ function wParse(tc,lc){
   const byId=new Map(),titles=[];
   parseCSV(tc).slice(1).forEach((r,i)=>{
     const id=(r[0]||"").trim();if(!id)return;
+    const se=[];for(let c=7;c<r.length;c++){const m=String(r[c]||"").match(/(\d+)\s*\/\s*(\d+)/);if(m&&+m[2]>0)se.push({n:c-6,w:Math.min(+m[1],+m[2]),t:+m[2]})} // H = Season 1, I = Season 2 ... "watched/total"
     const rt=(r[5]||"").trim()===""?null:parseFloat(String(r[5]).replace(",","."));
-    const t={id,idx:i,orig:(r[1]||"").trim(),loc:(r[2]||"").trim(),year:(r[3]||"").trim(),type:wNorm(r[4]),rating:rt==null||isNaN(rt)?null:rt,status:(r[6]||"").trim(),log:[]};
+    const t={id,idx:i,orig:(r[1]||"").trim(),loc:(r[2]||"").trim(),year:(r[3]||"").trim(),type:wNorm(r[4]),rating:rt==null||isNaN(rt)?null:rt,status:(r[6]||"").trim(),seasons:se,log:[]};
     titles.push(t);byId.set(id,t);
   });
   parseCSV(lc).slice(1).forEach(r=>{
@@ -2744,13 +2877,15 @@ function wImgTag(t){
   const base=WATCH.dir+encodeURIComponent(t.id)+".jpg",c=["https://warranty-v2.github.io/"+base,"https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/"+base];
   return `<img decoding="async" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(ini(t.loc||t.orig))}" data-s0="${esc(c[0])}" onerror="imgNext(this)">`;
 }
+const wRC=r=>r==null?"#6b2f33":r>=5?"#ffc83d":r>=4.5?"#a35bff":r>=3?"#2fe06b":r>=2?"#ff8a2b":"#ff3d3d"; // 5.0 gold (S), 4.5 purple (A), 3.0-4.0 green (B), 2.0-2.5 orange, below that red
 const wQ=r=>r==null?0:r>=4.5?5:r>=3.5?4:r>=2.5?3:r>=1.5?2:1;
 function wCard(t){
   const wide=t.type!=="Movie",name=t.loc||t.orig,sub=t.loc?t.orig:"",r=t.rating,q=wQ(r),st=(t.status||"").toLowerCase();
-  const meta=[t.year,t.last!=null?wFmt(t.last):"",t.log.length>1?t.log.length+" EP":""].filter(Boolean).join(" · ");
+  const meta=t.type==="Movie"?t.year:"",cur=t.seasons.findIndex(x=>x.w<x.t),sc=/^watching/.test(st)?" ip":/drop/.test(st)?" dr":"",
+    prog=t.seasons.length?`<div class="wprog">${t.seasons.map((x,k)=>`<i class="${x.w>0?"on":""}${k===cur?sc:""}" style="--w:${x.t};--p:${(x.w/x.t*100).toFixed(1)}%"><b></b></i>`).join("")}</div>`:"";
   return `<article class="wcard ${wide?"wide":"poster"}" data-n="${esc(name)}" data-f="${esc([sub,t.year].filter(Boolean).join(" · "))}">
-    <div class="wimg">${wImgTag(t)}<span class="wrate q${q}"><b>${r==null?"—":r.toFixed(1)}</b><em>/ 5</em></span>${st?`<span class="wst ${st}">${esc(t.status.toUpperCase())}</span>`:""}</div>
-    <div class="wmeta"><h4>${esc(name)}</h4><p>${esc(meta)}</p><div class="wseg q${q}">${Array.from({length:10},(_,i)=>`<i${r!=null&&i<Math.round(r*2)?' class="on"':""}></i>`).join("")}</div></div></article>`;
+    <div class="wimg">${wImgTag(t)}<span class="wrate q${q}" style="--rc:${wRC(r)}"><span class="rs"><span class="rg">${"<i></i>".repeat(r==null?0:Math.round(r*2))}</span><span class="rd">${"<i></i>".repeat(10-(r==null?0:Math.round(r*2)))}</span></span><span class="rn"><b>${r==null?"—":r.toFixed(1)}</b><em>/ 5</em></span></span>${st?`<span class="wst ${st}">${esc(t.status.toUpperCase())}</span>`:""}</div>
+    <div class="wmeta"><h4>${esc(name)}</h4>${meta?`<p>${esc(meta)}</p>`:""}${prog}</div></article>`;
 }
 function wCmp(){
   const byNew=(a,b)=>(b.last==null?-1:b.last)-(a.last==null?-1:a.last)||a.idx-b.idx; // newest first, titles without a date go last
@@ -2793,14 +2928,14 @@ function tlRender(host,cfg){
   items.forEach((r,i)=>{ // a0..a1 = extent of the line along the time axis in px; a diamond (marker) sits in the middle of its week
     r.i=i;r.lw=wLabelW(r.name);
     if(r.marker){r.bw=BH;r.a0=(r.s+.5)*WK-BH/2}
-    else{r.bw=Math.max((r.e-r.s+1)*WK-2,r.drop?30:0);r.a0=r.s*WK}
+    else{r.bw=Math.max((r.e-r.s+1)*WK-2,r.drop?14:0);r.a0=r.s*WK}
     r.a1=r.a0+r.bw;
   });
   /* packing: every line takes the lowest row (column on phones) where its WHOLE footprint (line + its title, inside / after / before) is free; the layout that gives the lowest row wins */
   const lanes=[],free=(L,a,b)=>L.every(x=>b+GAP<=x[0]||a>=x[1]+GAP),find=(a,b)=>{const k=lanes.findIndex(L=>free(L,a,b));return k<0?lanes.length:k};
   [...items].sort((x,y)=>x.a0-y.a0||x.i-y.i).forEach(r=>{
     const cand=[];
-    if(!r.marker&&r.lw<=r.bw-6-(r.drop?20:0))cand.push({m:"in",a:r.a0,b:r.a1});
+    if(!r.marker&&r.lw<=r.bw-6-(r.drop?8:0))cand.push({m:"in",a:r.a0,b:r.a1});
     else{
       if(r.a1+LP+r.lw<=W)cand.push({m:"after",a:r.a0,b:r.a1+LP+r.lw});
       if(r.a0-LP-r.lw>=0)cand.push({m:"before",a:r.a0-LP-r.lw,b:r.a1});
@@ -2826,7 +2961,7 @@ function tlRender(host,cfg){
   const bars=items.map(r=>{
     const label=r.mode==="in"?`<span class="tll in">${esc(r.name)}</span>`:`<span class="tll ${r.mode}" style="${V?"max-height":"max-width"}:${r.lw+LP}px">${esc(r.name)}</span>`;
     const geo=V?`left:${r.lane*LH+8}px;top:${(W-r.a1).toFixed(1)}px;height:${r.bw}px;width:18px`:`left:${r.a0.toFixed(1)}px;top:${r.lane*LH+5}px;width:${r.bw}px`;
-    return `<div class="tlb${r.marker?" mk":""}${r.drop?" dr":""}" style="--c:${r.color};${geo}" ${r.attrs} data-n="${esc(r.name)}">${r.marker?'<i class="dm"></i>':""}${r.drop?'<i class="dp">✕</i>':""}${label}</div>`;
+    return `<div class="tlb${r.marker?" mk":""}${r.drop?" dr":""}" style="--c:${r.color};${geo}" ${r.attrs} data-n="${esc(r.name)}">${r.marker?'<i class="dm"></i>':""}${r.drop?'<i class="dp"></i>':""}${label}</div>`;
   }).join("");
   const nowP=cfg.nowU*WK,nowX=nowP.toFixed(0),nowY=W-nowP;
   if(V){
@@ -2905,12 +3040,12 @@ function wRender(){
   document.getElementById("wMode").textContent="// WATCH LIST · "+W_LABEL[wView];
   document.querySelectorAll(".sub[data-w]").forEach(b=>{const v=b.dataset.w;b.classList.toggle("on",v===wView);if(v!=="timeline"){const n=WT.filter(t=>t.type===v).length;b.querySelector("span").innerHTML=({"TV Show":"TV Shows","Anime":"Anime","Movie":"Movies"})[v]+(WT.length?`<em>${n}</em>`:"")}});
   document.querySelectorAll(".sub[data-o]").forEach(b=>b.classList.toggle("on",b.dataset.o===wSort));
-  document.getElementById("wSort").hidden=isTl;list.hidden=isTl;tl.hidden=!isTl;
+  document.getElementById("wSort").hidden=isTl;document.getElementById("srchWatch").hidden=isTl;list.hidden=isTl;tl.hidden=!isTl;
   document.body.classList.toggle("wtl",isTl);tl.classList.toggle("tlfull",isTl);
   if(!WT.length)return;
   if(isTl){wTimeline();wFitTl();return}
-  const items=WT.filter(t=>t.type===wView).sort(wCmp());
-  list.innerHTML=items.length?`<div class="wgrid ${wView==="Movie"?"poster":"wide"}">${items.map(wCard).join("")}</div>`:'<div class="msg">NO TITLES</div>';
+  const sq=snorm(SQ.watch),items=WT.filter(t=>t.type===wView&&(!sq||snorm((t.loc||"")+" "+(t.orig||"")).includes(sq))).sort(wCmp());
+  list.innerHTML=items.length?`<div class="wgrid ${wView==="Movie"?"poster":"wide"}">${items.map(wCard).join("")}</div>`:`<div class="msg">${sq?"NO MATCHES":"NO TITLES"}</div>`;
   watchImgs(list);
 }
 function wApply(tc,lc){WT=wParse(tc,lc);wRender()}
@@ -2942,6 +3077,25 @@ document.querySelectorAll(".sub[data-o]").forEach(b=>b.addEventListener("click",
   window.addEventListener("pointerup",()=>{if(drag&&drag.m)window.__tlDrag=Date.now();drag=null});
 })();
 
+/* ---------- search: Games / Female / Firearms highlight the matching cards (nothing is removed); Watch List filters its list ---------- */
+const SQ={tier:"",fem:"",gun:"",watch:""},SQ_SEL={tier:"#view-tier .cell,#view-tier .ucard",fem:"#view-female .fc",gun:"#view-firearms .fc"};
+function searchApply(k){
+  const q=snorm(SQ[k]);
+  document.querySelectorAll(SQ_SEL[k]).forEach(c=>{
+    const name=c.dataset.n!=null?c.dataset.n+" "+(c.dataset.f||""):((ALL[+c.dataset.id]||{}).name||""),hit=!!q&&snorm(name).includes(q);
+    c.classList.toggle("shit",hit);c.classList.toggle("sdim",!!q&&!hit);
+  });
+}
+document.querySelectorAll("input[data-sq]").forEach(inp=>{
+  const k=inp.dataset.sq;
+  inp.addEventListener("input",()=>{SQ[k]=inp.value;if(k==="watch")wRender();else searchApply(k)});
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter"&&k!=="watch"){const h=[...document.querySelectorAll(SQ_SEL[k])].find(c=>c.classList.contains("shit")&&c.offsetParent);if(h)h.scrollIntoView({block:"center",behavior:"smooth"})}});
+});
+(function(){ // the lists are rebuilt when tabs / filters / data change: re-apply the search afterwards
+  if(!("MutationObserver" in window))return;let t=0;
+  const mo=new MutationObserver(()=>{clearTimeout(t);t=setTimeout(()=>["tier","fem","gun"].forEach(k=>{if(SQ[k])searchApply(k)}),60)});
+  ["view-tier","view-female","view-firearms"].forEach(id=>mo.observe(document.getElementById(id),{childList:true,subtree:true}));
+})();
 const ORDER=["home","tier","female","firearms","watch"];
 function route(){
   const h=location.hash;cur=h==="#tier"?"tier":h==="#female"?"female":h==="#firearms"?"firearms":h==="#watch"?"watch":h==="#worldview"?"worldview":"home";
@@ -2968,6 +3122,7 @@ function route(){
 }
 window.addEventListener("hashchange",()=>{panelHist=false;closePanel(true);route()});
 document.addEventListener("keydown",e=>{
+  if(e.target.closest&&e.target.closest("input,textarea"))return; // typing in a search field must not trigger the Q / E / R shortcuts
   const k=e.key.toLowerCase();
   if(k==="r"&&cur==="tier")load(true);
   if(k==="r"&&cur==="female"){femBusy[femSub]=false;loadFem(femSub)}
