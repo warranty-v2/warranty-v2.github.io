@@ -714,11 +714,39 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
 .tl{grid-template-columns:34px repeat(48,minmax(0,1fr))}
 .tl .h{grid-column:span 4}
 .tl .tc{margin:0 .5px;aspect-ratio:1/1.7;border-width:1px}
-.tl .tc.mb{margin-left:3px}
 .tl-pend{position:absolute;top:0;bottom:0;left:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(70,227,234,.10) 0 8px,rgba(70,227,234,.03) 8px 16px);border-right:2px dashed var(--cy)}
 .tl-pend span{position:sticky;left:14px;display:inline-block;margin:14px 0 0 14px;padding:2px 10px;font-size:12px;letter-spacing:.25em;color:var(--cy);background:rgba(6,22,26,.85);border:1px solid var(--cy);animation:wvblink 1s linear infinite}
 .tlv .tl-pend{bottom:auto;right:0;border-right:0;border-top:2px dashed var(--cy)}
 .tlv .tl-pend span{position:static}
+.p-cover{position:relative}
+.p-cover .pc,.p-ct{position:relative;z-index:1}
+.p-ct{min-width:0}
+.p-bgl{position:absolute;right:4px;top:50%;transform:translateY(-50%);max-width:55%;overflow:hidden;white-space:nowrap;font-size:130px;font-weight:700;line-height:1;color:var(--tc);opacity:.14;pointer-events:none}
+.p-cover{align-items:stretch}
+.p-ct{flex:1;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between}
+.p-tv{align-self:flex-end;display:flex;align-items:baseline;gap:8px;color:var(--tc);font-weight:700}
+.p-tv span{font-size:24px;letter-spacing:.04em}
+.p-tv b{font-size:40px;line-height:1;letter-spacing:.02em}
+.skull{display:inline-flex;align-items:center;gap:8px;margin-top:10px;padding:3px 10px;border:2px solid var(--red);background:rgba(255,61,61,.1);color:var(--red);font-size:13px;font-weight:700;letter-spacing:.15em}
+.skull i{font-style:normal;font-size:18px;line-height:1}
+.dfb{display:flex;gap:3px;margin-top:8px;filter:drop-shadow(0 0 3px color-mix(in srgb,var(--dc) 60%,transparent))}
+.dfb i{flex:none;width:8px;height:19px;background:color-mix(in srgb,var(--dc) 30%,#0b0407);clip-path:polygon(0 0,100% 0,100% 100%,35% 100%,0 72%)}
+.dfb i.on{background:var(--dc)}
+.dfrow{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;margin-bottom:12px}
+.dfrow b{font-size:22px;font-weight:700;letter-spacing:.04em;color:#fff}
+.dfrow .dfb{margin-top:0}
+.dfb i{width:6px;height:14px}
+.skull{margin-top:0;margin-bottom:12px}
+.ptm{display:flex;align-items:center;gap:10px;margin-bottom:12px;color:var(--cy)}
+.ptm span{font-size:18px;letter-spacing:.06em;color:var(--rd)}
+.ptm b{font-size:22px;font-weight:700;letter-spacing:.04em;color:#fff}
+.dfb{filter:none}
+.dfb .dg,.dfb .dd{display:flex;gap:3px}
+.dfb .dg{filter:drop-shadow(0 0 3px color-mix(in srgb,var(--dc) 80%,transparent))}
+.dfb i{background:color-mix(in srgb,var(--dc) 38%,#0b0407)}
+.dfb .dg i{background:var(--dc)}
+.dfrow{justify-content:space-between}
+.p-tv span{text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -742,7 +770,7 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
       <div class="sec"><h1>Main Menu</h1><span>// SELECT A SECTION</span></div>
       <div class="cards">
         <a class="cut card open hero bgi" href="#tier" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_games.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_games.png')"><div class="top"><span class="key">01</span><span class="chip c">OPEN</span></div><div class="big">TIER</div><div><h2>Games Tier List</h2><p>My Gaming History, ranked</p><div class="bar"></div></div></a>
-        <a class="cut card open bgi" href="#female" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_characters.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_characters.png')"><div class="top"><span class="key">02</span><span class="chip c">OPEN</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Portrait tier list</p><div class="bar"></div></div></a><a class="cut card open bgi" href="#firearms" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_firearms.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_firearms.png')"><div class="top"><span class="key">03</span><span class="chip c">OPEN</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Weapon tier list</p><div class="bar"></div></div></a><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA</h2><p>Coming soon</p><div class="bar"></div></div></div><a class="cut card open" href="#watch"><div class="top"><span class="key">05</span><span class="chip c">OPEN</span></div><div class="big">TV</div><div><h2>Watch List</h2><p>Movies, TV shows, anime</p><div class="bar"></div></div></a>
+        <a class="cut card open bgi" href="#female" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_characters.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_characters.png')"><div class="top"><span class="key">02</span><span class="chip c">OPEN</span></div><div class="big">FEM</div><div><h2>Female Characters</h2><p>Portrait tier list</p><div class="bar"></div></div></a><a class="cut card open bgi" href="#firearms" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_firearms.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_firearms.png')"><div class="top"><span class="key">03</span><span class="chip c">OPEN</span></div><div class="big">ARM</div><div><h2>Firearms</h2><p>Weapon tier list</p><div class="bar"></div></div></a><div class="cut card locked"><div class="top"><span class="key">04</span><span class="chip r">LOCKED</span></div><div class="big">KSA</div><div><h2>KSA</h2><p>Coming soon</p><div class="bar"></div></div></div><a class="cut card open bgi" href="#watch" style="--img1:url('https://warranty-v2.github.io/assets/icons/main_menu_watch.png');--img2:url('https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/assets/icons/main_menu_watch.png')"><div class="top"><span class="key">05</span><span class="chip c">OPEN</span></div><div class="big">TV</div><div><h2>Watch List</h2><p>Movies, TV shows, anime</p><div class="bar"></div></div></a>
       </div>
       <div class="cdots" id="cDots"></div>
       <div class="avwrap" id="avWrap">
@@ -1617,7 +1645,6 @@ const LIVE_PLAYLISTS_URL="";
 const BASE="https://docs.google.com/spreadsheets/d/e/2PACX-1vRnb3oGsDwoGWWIiNRmjyTqjCV5Ar5HMoGDfcakMvAtAjm6wHCxvkgg2BLnskpWios1u106VA4a-9gY/";
 const URL_MAIN=BASE+"pub?gid=0&single=true&output=csv";
 const URL_CFG=BASE+"pub?gid=78213888&single=true&output=csv";
-const COLORS_URL="https://script.google.com/macros/s/AKfycbxSU0evtXSpLWKQp8CQCbJX6KEqUa50nYli3FVXaKHct14NkLCutdwpXOX3doMNSJlG/exec"; // optional: Apps Script web-app URL that returns cell fill colours (see instructions)
 const IMG_COL=12; // column M: direct cover image URL (A=0, B=1, ... M=12)
 const PALETTE=["#ff3d3d","#ff6b3d","#ffa13d","#f4e63a","#7ef0c6","#46e3ea","#5aa0ff"];
 
@@ -1723,12 +1750,6 @@ function prepareViews(){
   document.getElementById("cmp").innerHTML="";document.getElementById("newList").innerHTML="";document.getElementById("gtl").innerHTML="";
   ["cmp","new","gtl"].forEach(k=>{if(!document.getElementById(k).hidden)ensureView(k)});
 }
-function applyColors(col){ // colours arrive in the background (Apps Script is slow): rescan lazily and refresh what is on screen
-  COLORS=col;calcBlocks();ALL.forEach(g=>{delete g._s});calcOk=false;
-  viewStale.cmp=viewStale.new=viewStale.gtl=true;
-  ["cmp","new","gtl"].forEach(k=>{if(!document.getElementById(k).hidden)ensureView(k)});
-  if(panelId!=null&&panel.classList.contains("on"))openPanel(panelId);
-}
 function relDate(l){ // "February 2027" / "2028" -> "IN 4 MONTHS" (approximate for a bare year)
   const now=new Date(),cur=now.getFullYear()*12+now.getMonth();let t,approx=false;
   const m=String(l).match(/^([A-Za-z]+)\s+(\d{4})$/);
@@ -1745,20 +1766,20 @@ const CPY=48,C0=19,CELL_DIR="desc"; // 48 cells per year (4 per month), the firs
 let HDR=[],NB=1,BY=[],BORD=[0],COLSIG=null;
 function calcBlocks(){ // year blocks: the year comes from a 4-digit number in the header row inside the block, otherwise from the current year (first block = this year, the next one = last year ...)
   let mx=0;ALL.forEach(g=>{if(g.row)mx=Math.max(mx,g.row.length)});
-  if(COLORS)COLORS.forEach(r=>{if(r)mx=Math.max(mx,r.length+C0)});
   NB=Math.max(1,Math.ceil((mx-C0)/CPY));const cy=new Date().getFullYear();BY=[];
   for(let k=0;k<NB;k++){let y=null;for(let j=0;j<CPY&&y==null;j++){const m=/^\s*((?:19|20)\d\d)\s*$/.exec(HDR[C0+k*CPY+j]||"");if(m)y=+m[1]}BY.push(y==null?cy-k:y)}
   BORD=[...BY.keys()].sort((a,b)=>BY[b]-BY[a]); // blocks are always scanned newest year first
 }
+const MARK_LV=1; // a cell that holds only a playthrough marker ("VI (Dropped at 10%)") counts as one low-intensity week
 function scanBlock(g,k){
-  const s=g._s||(g._s={q:0,cs:[],runs:{},pend:[]}),y=BY[k],d=new Date(),nm=d.getFullYear()*12+d.getMonth(),col=COLORS&&COLORS[g.ri],desc=CELL_DIR==="desc";
-  for(let t=0;t<CPY;t++){ // newest -> oldest; a roman-numeral marker sits at the OLDER edge of its playthrough and owns the coloured cells to its newer side
-    const j=desc?t:CPY-1-t,i=C0+k*CPY+j,p=desc?CPY-1-j:j,txt=(g.row[i]||"").trim(),cc=col&&col[i-C0];
-    if(!txt&&!cc)continue;
-    const parts=txt?txt.split(/\s+(?=[IVXLC]+(?![A-Za-z]))/).map(marker).filter(Boolean):[];
-    let st=null,lv=3;
-    if(COLORS){if(cc){const kk=classify(cc);st=kk.st;lv=kk.lv}}else if(parts.length)st="play";
-    if(st){const m=p>>2,c={y,m:m+1,w:p&3,u:y*CPY+p,off:nm-(y*12+m),st,lv,run:null};s.cs.push(c);s.pend.push(c)}
+  const s=g._s||(g._s={q:0,cs:[],runs:{},pend:[]}),y=BY[k],d=new Date(),nm=d.getFullYear()*12+d.getMonth(),desc=CELL_DIR==="desc";
+  for(let t=0;t<CPY;t++){ // newest -> oldest; a marker sits at the OLDER edge of its playthrough and owns the active cells to its newer side
+    const j=desc?t:CPY-1-t,i=C0+k*CPY+j,p=desc?CPY-1-j:j,txt=(g.row[i]||"").trim();
+    if(!txt)continue;
+    const hv=/^\d+(?:[.,]\d+)?\s*(?:h|ч)?$/i.test(txt)?parseFloat(txt.replace(",",".")):null, // a number = hours (0 = nothing, 50+ = maximum)
+      parts=hv==null?txt.split(/\s+(?=[IVXLC]+(?![A-Za-z]))/).map(marker).filter(Boolean):[];
+    const lv=hv!=null?(hv>0?Math.min(5,Math.max(1,Math.ceil(hv/10))):0):(parts.length?MARK_LV:0);
+    if(lv){const m=p>>2,c={y,m:m+1,w:p&3,u:y*CPY+p,off:nm-(y*12+m),st:"play",lv,run:null};s.cs.push(c);s.pend.push(c)}
     parts.forEach((pt,n)=>{
       const r=s.runs[pt.n]||(s.runs[pt.n]=newRun(pt));
       if(r.pct==null&&pt.pct!=null)r.pct=pt.pct;
@@ -1792,8 +1813,8 @@ function timeline(g){
   const {cs,runs}=cellsFor(g);
   if(!cs.length)return '<div class="note">No weekly activity found for this game.</div>';
   const map={};cs.forEach(c=>map[c.u]=c);
-  const ys=cs.map(c=>c.y),y0=Math.max(...ys),y1=Math.min(...ys);
-  let h='<div class="tl"><div></div>'+MS.map(x=>`<div class="h">${x}</div>`).join("");
+  const ys=cs.map(c=>c.y),y0=Math.max(new Date().getFullYear(),...ys),y1=Math.min(...ys);
+  let h='<div class="tl">';
   for(let y=y0;y>=y1;y--){
     h+=`<div class="y">${y}</div>`;
     for(let p=0;p<CPY;p++){
@@ -1808,9 +1829,9 @@ function timeline(g){
   const log=runs.length?`<div class="p-h">// PLAYTHROUGH LOG</div>`+runs.map(r=>{
     const cls=runStatus(r),pct=r.done?100:(r.pct||0);
     return `<div class="pt ${cls}"><div class="rn">${esc(r.r)}</div><div class="pm"><div class="pl"><span>${lab[cls]}</span><em>${r.done?"100%":(r.pct==null?"—":r.pct+"%")}</em></div><div class="pb"><i style="width:${pct}%"></i></div><small>${r.cells} WEEKS${r.oldest?" · "+fmt(r.oldest)+" → "+fmt(r.newest):""}</small></div></div>`}).join(""):"";
-  return `<div class="info"><div class="box"><small>ACTIVE WEEKS</small><strong>${cs.filter(c=>c.st==="play").length} / ${cs.length}</strong></div><div class="box"><small>SPAN</small><strong>${fmt(first)} → ${fmt(last)}</strong></div></div>`+h+
-   `<div class="lg"><span class="ramp">LOW<i class="tc play l1"></i><i class="tc play l2"></i><i class="tc play l3"></i><i class="tc play l4"></i><i class="tc play l5"></i>HIGH</span><span><i class="tc stop"></i>STOPPED</span><span><i class="tc drop"></i>DROPPED</span></div>`+
-   (COLORS?"":'<div class="note">Colour data is not connected: only run markers are shown.</div>')+log;
+  return `<div class="ptm"><span>Playtime</span><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><b>${isNaN(num(g.time))?"—":num(g.time)+(num(g.time)===1?" Hour":" Hours")}</b></div>`+h+
+   `<div class="lg"><span class="ramp">LOW<i class="tc play l1"></i><i class="tc play l2"></i><i class="tc play l3"></i><i class="tc play l4"></i><i class="tc play l5"></i>HIGH</span></div>`+
+   log;
 }
 function parseCSV(t){
   const rows=[];let r=[],f="",q=false;
@@ -1957,18 +1978,9 @@ async function load(manual){
   if(!shown){app.innerHTML='<div class="msg">LOADING DATA…</div>'}
   setStat('<span class="chip c">'+(shown?"UPDATING…":"LOADING…")+'</span>');
   try{
-    const colP=COLORS_URL?retry(()=>getJson(COLORS_URL),3).catch(()=>null):Promise.resolve(null); // slow Apps Script: loaded in parallel, never blocks the tables
     const [mainT,cfgT]=await Promise.all([retry(()=>getText(URL_MAIN),2),retry(()=>getText(URL_CFG),2)]);
-    const oldCol=(cache&&cache.col)||COLORS||null;
-    if(!(shown&&cache&&cache.mainT===mainT&&cache.cfgT===cfgT))render(mainT,cfgT,oldCol);
-    setStat(COLORS_URL?'<span class="chip c">COLOURS…</span>':"");
-    const colRaw=await colP;
-    if(Array.isArray(colRaw)){
-      if(COLSIG==null)COLSIG=COLORS?JSON.stringify(COLORS):"";
-      const sg=JSON.stringify(colRaw);
-      if(sg!==COLSIG){COLSIG=sg;applyColors(colRaw)}
-      writeCache({mainT,cfgT,col:colRaw,t:Date.now()});setStat("");
-    }else{writeCache({mainT,cfgT,col:oldCol,t:Date.now()});setStat(COLORS_URL?'<span class="chip r">COLOURS: CACHED</span>':"")}
+    if(!(shown&&cache&&cache.mainT===mainT&&cache.cfgT===cfgT))render(mainT,cfgT);
+    writeCache({mainT,cfgT,t:Date.now()});setStat("");
   }catch(e){
     if(!shown){
       app.innerHTML=`<div class="msg err">LOAD ERROR: ${esc(String(e.message||e))}<br><button class="cut btn" onclick="load(true)"><span>RETRY</span></button></div>`;
@@ -2064,6 +2076,12 @@ function rateRow(r,g){
   return `<div class="rt"><div class="l"><b>${r[0]}</b><em class="q${q}">${ok?q+"/5":"N/A"}</em></div><p>${r[1]}</p>${seg(q,5,"q"+q)}</div>`;
 }
 const panel=document.getElementById("panel"),pin=document.getElementById("pin");
+function dfBar(v,t){ // segmented bar like the rating of the Watch List; 1 = green (easiest) -> yellow -> red (hardest), in the colours of the page
+  t=Math.max(1,t);v=Math.max(0,Math.min(t,v));const r=t>1?Math.max(0,Math.min(1,(v-1)/(t-1))):1,
+    K=[[47,224,107],[244,230,58],[255,74,63]],a=r<.5?0:1,f=r<.5?r*2:(r-.5)*2,c=K[a].map((x,n)=>Math.round(x+(K[a+1][n]-x)*f)),
+    seg=n=>"<i></i>".repeat(n);
+  return `<div class="dfb" style="--dc:rgb(${c})"><span class="dg">${seg(v)}</span><span class="dd">${seg(t-v)}</span></div>`;
+}
 let selEl=null,panelHist=false,panelId=null;
 function openPanel(id){
   const g=ALL[id];if(!g)return;panelId=id;
@@ -2084,16 +2102,11 @@ function openPanel(id){
     const banner=`<div class="p-st ${si.s}" style="--w:${si.s!=="done"&&si.s!=="none"&&si.pct!=null?si.pct:0}%"><i></i><span>${lab[si.s]}</span>${showPct?`<em>${si.pct}%</em>`:""}</div>`;
     pin.innerHTML=`
       <div class="p-top">${banner}${close}</div>
-      <div class="p-cover"><div class="pc">${cover}</div><h3>${esc(g.name)}</h3></div>
-      <div class="p-tier"><div class="n">${g.v.toFixed(1)}</div><div class="t"><b>${esc(g.tier.name)}</b><small>OVERALL TIER</small></div></div>
+      <div class="p-cover"><span class="p-bgl">${esc(g.tier.name)}</span><div class="pc">${cover}</div><div class="p-ct"><h3>${esc(g.name)}</h3><div class="p-tv"><span>tier</span><b>${g.v.toFixed(1)}</b></div></div></div>
       <div class="p-h">// RATINGS</div>
       ${RATE.map(r=>rateRow(r,g)).join("")}
-      <div class="p-h">// PLAYTHROUGH</div>
-      <div class="info">
-        <div class="box"><small>PLAYTIME</small><strong>${isNaN(t)?"—":t+" H"}</strong></div>
-        <div class="box"><small>DIFFICULTY</small><strong>${esc(g.diff||"—")}</strong></div>
-        <div class="box wide"><small>DIFFICULTY LEVEL${m?" · "+m[1]+" / "+m[2]:""}</small>${m?seg(+m[1],+m[2],"dq"):"<strong>—</strong>"}</div>
-      </div>
+      <div class="p-h">// DIFFICULTY</div>
+      <div class="dfrow"><b>${esc((g.diff||"").replace(/[\u{1F480}\uFE0F]/gu,"").trim()||"—")}</b>${m?dfBar(+m[1],+m[2]):""}</div>${/\u{1F480}/u.test(g.diff||"")?'<div class="skull"><i>\u{1F480}</i><span>ONE LIFE · NO SAVE ROLLBACK</span></div>':""}
       <div class="p-h">// ACTIVITY TIMELINE</div>
       ${timeline(g)}`;
   }
@@ -2125,7 +2138,9 @@ document.addEventListener("click",e=>{
   if(c){
     if(c.classList.contains("tlb")&&(lastPtr!=="mouse"||Date.now()-(window.__tlDrag||0)<300))return; // touch: the tap only shows the tooltip
     openPanel(+(c.dataset.id!=null?c.dataset.id:c.dataset.gid));return}
-  if(panel.classList.contains("on")&&!e.target.closest("#panel"))closePanel();
+  if(panel.classList.contains("on")&&!e.target.closest("#panel")){ // a click on a tab / link: the hash change closes the panel itself (history.back() here would cancel that navigation)
+    closePanel(!!e.target.closest("a[href^='#'],#mDots i[data-h]"));
+  }
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
 /* ---------- floating avatars: newest in front, older stacked behind to the left. The pictures are read from the GitHub repo (assets/avatars/YYYY-MM.png|jpg|jpeg) ---------- */
