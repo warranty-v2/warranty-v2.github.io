@@ -41,7 +41,7 @@ body::before{left:8px}body::after{right:8px;transform:scaleX(-1)}
 .tab.active{color:var(--cy);text-shadow:0 0 12px rgba(70,227,234,.55);border-color:var(--cy)}
 .tab.locked{color:#6b2f33;cursor:not-allowed}
 .tab.locked small{font-size:10px;letter-spacing:.15em;margin-left:6px;padding:1px 4px;border:1px solid #6b2f33;vertical-align:middle}
-#shell{transition:padding-right .28s cubic-bezier(.2,.8,.2,1)}
+#shell{}
 body.pan #shell{padding-right:434px}
 .tl{display:grid;grid-template-columns:34px repeat(12,minmax(0,1fr));gap:3px 0;align-items:center;margin-bottom:10px}
 .tl .h{font-size:11px;letter-spacing:.05em;color:var(--rd);text-align:center}
@@ -315,7 +315,7 @@ html:has(body.female){scrollbar-gutter:stable;overflow-anchor:none}
 .tl-legend .dmd{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
 .tl-legend .lgdr{width:4px;height:14px;margin:0 9px 0 4px;background:#ff3d3d;box-shadow:0 0 6px #ff3d3d;vertical-align:-3px}
 /* a clicked line: all lines of that title / game stay sharp, everything else fades out */
-.tlhost.hasSel .tlb{opacity:.14;transition:opacity .15s}
+.tlhost.hasSel .tlb{opacity:.14}
 .tlhost.hasSel .tlb:hover{opacity:.6}
 .tlhost.hasSel .tlb.on{opacity:1;z-index:4;outline:2px solid #fff;box-shadow:0 0 14px var(--c)}
 .tlhost.hasSel .tlb.mk.on{outline:0;box-shadow:none}
@@ -711,6 +711,14 @@ body.pplay .homeLayout{height:calc(100vh - 240px)}
  #pp.on{transform:translate(-50%,0)}
  body.hubopen #pp{top:8px}
 }
+.tl{grid-template-columns:34px repeat(48,minmax(0,1fr))}
+.tl .h{grid-column:span 4}
+.tl .tc{margin:0 .5px;aspect-ratio:1/1.7;border-width:1px}
+.tl .tc.mb{margin-left:3px}
+.tl-pend{position:absolute;top:0;bottom:0;left:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(70,227,234,.10) 0 8px,rgba(70,227,234,.03) 8px 16px);border-right:2px dashed var(--cy)}
+.tl-pend span{position:sticky;left:14px;display:inline-block;margin:14px 0 0 14px;padding:2px 10px;font-size:12px;letter-spacing:.25em;color:var(--cy);background:rgba(6,22,26,.85);border:1px solid var(--cy);animation:wvblink 1s linear infinite}
+.tlv .tl-pend{bottom:auto;right:0;border-right:0;border-top:2px dashed var(--cy)}
+.tlv .tl-pend span{position:static}
 </style>
 </head>
 <body>
@@ -1643,6 +1651,10 @@ function newRun(mk){return{n:mk.n,r:mk.r,pct:mk.pct,done:mk.done,drop:mk.drop,st
 const driveId=u=>{const m=String(u||"").match(/\/d\/([\w-]+)|[?&]id=([\w-]+)/);return m?(m[1]||m[2]):null};
 function imgCands(u){
   u=String(u||"").trim();if(!u)return[];
+  if(!/^(https?:)?\/\//i.test(u)){ // just a file name from the sheet ("1" -> assets/games/1.jpg)
+    const ex=/\.(jpe?g|png|webp)$/i.exec(u),f=encodeURIComponent(u.replace(/\.(jpe?g|png|webp)$/i,"")),b="assets/games/"+f;
+    return["https://warranty-v2.github.io/"+b+(ex?ex[0]:".jpg"),"https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/"+b+(ex?ex[0]:".jpg"),...(ex?[]:["https://warranty-v2.github.io/"+b+".png"])];
+  }
   const id=/(^|\/\/)(drive|docs)\.google\.com/.test(u)?driveId(u):null;
   return id?[`https://lh3.googleusercontent.com/d/${id}=w256`,`https://drive.google.com/thumbnail?id=${id}&sz=w256`,`https://drive.google.com/uc?export=view&id=${id}`]:[u];
 }
@@ -1693,19 +1705,29 @@ function renderNew(){
 }
 document.getElementById("prRange").addEventListener("input",renderNew);
 const viewStale={cmp:true,new:true,gtl:true};let tierSub="tier";
+let calcOk=false;
+function ensureCalc(){ // done / last activity of every game: only needed by Completed and New Only, so it is computed when they are opened
+  if(calcOk)return;let far=0;
+  ALL.forEach(g=>{if(g.un)return;const r=cellsFor(g);g.done=r.runs.some(x=>x.done);g.lastOff=r.cs.length?r.cs[0].off:Infinity;if(isFinite(g.lastOff))far=Math.max(far,g.lastOff)});
+  const rg=document.getElementById("prRange"),keep=+rg.value;
+  rg.max=Math.max(12,Math.min(480,far+1));rg.value=Math.min(keep,+rg.max)||12;calcOk=true;
+}
 function ensureView(k){
-  if(k==="cmp"&&viewStale.cmp){renderCmp();viewStale.cmp=false}
-  if(k==="new"&&viewStale.new){renderNew();viewStale.new=false}
+  if(k==="cmp"&&viewStale.cmp){ensureCalc();renderCmp();viewStale.cmp=false}
+  if(k==="new"&&viewStale.new){ensureCalc();renderNew();viewStale.new=false}
   if(k==="gtl"&&viewStale.gtl){if(renderGtl()!==false)viewStale.gtl=false}
 }
 function prepareViews(){
-  let far=0;
-  ALL.forEach(g=>{if(g.un)return;const r=cellsFor(g);g.done=r.runs.some(x=>x.done);g.lastOff=r.cs.length?r.cs[0].off:Infinity;if(isFinite(g.lastOff))far=Math.max(far,g.lastOff)});
-  const rg=document.getElementById("prRange"),keep=+rg.value;
-  rg.max=Math.max(12,Math.min(480,far+1));rg.value=Math.min(keep,+rg.max)||12;
-  viewStale.cmp=viewStale.new=viewStale.gtl=true;                 // Completed / New Only are built when first opened
+  calcOk=false;
+  viewStale.cmp=viewStale.new=viewStale.gtl=true;
   document.getElementById("cmp").innerHTML="";document.getElementById("newList").innerHTML="";document.getElementById("gtl").innerHTML="";
   ["cmp","new","gtl"].forEach(k=>{if(!document.getElementById(k).hidden)ensureView(k)});
+}
+function applyColors(col){ // colours arrive in the background (Apps Script is slow): rescan lazily and refresh what is on screen
+  COLORS=col;calcBlocks();ALL.forEach(g=>{delete g._s});calcOk=false;
+  viewStale.cmp=viewStale.new=viewStale.gtl=true;
+  ["cmp","new","gtl"].forEach(k=>{if(!document.getElementById(k).hidden)ensureView(k)});
+  if(panelId!=null&&panel.classList.contains("on"))openPanel(panelId);
 }
 function relDate(l){ // "February 2027" / "2028" -> "IN 4 MONTHS" (approximate for a bare year)
   const now=new Date(),cur=now.getFullYear()*12+now.getMonth();let t,approx=false;
@@ -1719,26 +1741,37 @@ function relDate(l){ // "February 2027" / "2028" -> "IN 4 MONTHS" (approximate f
   if(d<12)return`IN ${pre}${d} ${d===1?"MONTH":"MONTHS"}`;
   const y=Math.round(d/12);return`IN ${pre}${y} ${y===1?"YEAR":"YEARS"}`;
 }
-function cellsFor(g){
-  // Columns run newest -> oldest. A roman-numeral marker sits at the OLDER edge of its playthrough,
-  // so it owns the coloured cells to its left (newer side) that no earlier marker has claimed.
-  const cs=[],runs={};let pend=[];
-  const n=Math.max(g.row.length,COLORS&&COLORS[g.ri]?COLORS[g.ri].length+19:0);
-  for(let i=19;i<n;i++){
-    const txt=(g.row[i]||"").trim();
+const CPY=48,C0=19,CELL_DIR="desc"; // 48 cells per year (4 per month), the first cell is column T. CELL_DIR: inside a year "desc" = the first cell is the LAST week of December, "asc" = the first week of January
+let HDR=[],NB=1,BY=[],BORD=[0],COLSIG=null;
+function calcBlocks(){ // year blocks: the year comes from a 4-digit number in the header row inside the block, otherwise from the current year (first block = this year, the next one = last year ...)
+  let mx=0;ALL.forEach(g=>{if(g.row)mx=Math.max(mx,g.row.length)});
+  if(COLORS)COLORS.forEach(r=>{if(r)mx=Math.max(mx,r.length+C0)});
+  NB=Math.max(1,Math.ceil((mx-C0)/CPY));const cy=new Date().getFullYear();BY=[];
+  for(let k=0;k<NB;k++){let y=null;for(let j=0;j<CPY&&y==null;j++){const m=/^\s*((?:19|20)\d\d)\s*$/.exec(HDR[C0+k*CPY+j]||"");if(m)y=+m[1]}BY.push(y==null?cy-k:y)}
+  BORD=[...BY.keys()].sort((a,b)=>BY[b]-BY[a]); // blocks are always scanned newest year first
+}
+function scanBlock(g,k){
+  const s=g._s||(g._s={q:0,cs:[],runs:{},pend:[]}),y=BY[k],d=new Date(),nm=d.getFullYear()*12+d.getMonth(),col=COLORS&&COLORS[g.ri],desc=CELL_DIR==="desc";
+  for(let t=0;t<CPY;t++){ // newest -> oldest; a roman-numeral marker sits at the OLDER edge of its playthrough and owns the coloured cells to its newer side
+    const j=desc?t:CPY-1-t,i=C0+k*CPY+j,p=desc?CPY-1-j:j,txt=(g.row[i]||"").trim(),cc=col&&col[i-C0];
+    if(!txt&&!cc)continue;
     const parts=txt?txt.split(/\s+(?=[IVXLC]+(?![A-Za-z]))/).map(marker).filter(Boolean):[];
     let st=null,lv=3;
-    if(COLORS){const c=COLORS[g.ri]&&COLORS[g.ri][i-19];if(c){const k=classify(c);st=k.st;lv=k.lv}}
-    else if(parts.length)st="play";
-    if(st){const d=monthOf(i-19),c={y:d.y,m:d.m,off:i-19,st,lv,run:null};cs.push(c);pend.push(c)}
-    parts.forEach((p,j)=>{
-      const r=runs[p.n]||(runs[p.n]=newRun(p));
-      if(r.pct==null&&p.pct!=null)r.pct=p.pct;
-      r.done=r.done||p.done;
-      if(j===0){pend.forEach(c=>{c.run=r;r.cells++;if(!r.newest){r.newest={y:c.y,m:c.m};r.newestSt=c.st}r.oldest={y:c.y,m:c.m}});pend=[]}
+    if(COLORS){if(cc){const kk=classify(cc);st=kk.st;lv=kk.lv}}else if(parts.length)st="play";
+    if(st){const m=p>>2,c={y,m:m+1,w:p&3,u:y*CPY+p,off:nm-(y*12+m),st,lv,run:null};s.cs.push(c);s.pend.push(c)}
+    parts.forEach((pt,n)=>{
+      const r=s.runs[pt.n]||(s.runs[pt.n]=newRun(pt));
+      if(r.pct==null&&pt.pct!=null)r.pct=pt.pct;
+      r.done=r.done||pt.done;
+      if(n===0){s.pend.forEach(c=>{c.run=r;r.cells++;if(!r.newest){r.newest={y:c.y,m:c.m,u:c.u};r.newestSt=c.st}r.oldest={y:c.y,m:c.m,u:c.u}});s.pend=[]}
     });
   }
-  return{cs,runs:Object.values(runs).sort((a,b)=>b.n-a.n)};
+  s.q++;
+}
+function cellsFor(g){ // full scan of one game (cached); cs is sorted newest -> oldest
+  const s=g._s||(g._s={q:0,cs:[],runs:{},pend:[]});
+  while(s.q<NB)scanBlock(g,BORD[s.q]);
+  return{cs:s.cs,runs:Object.values(s.runs).sort((a,b)=>b.n-a.n)};
 }
 function runStatus(r){
   if(r.done)return"done";
@@ -1757,25 +1790,25 @@ function gameStatus(g){
 }
 function timeline(g){
   const {cs,runs}=cellsFor(g);
-  if(!cs.length)return '<div class="note">No monthly activity found for this game.</div>';
-  const map={};cs.forEach(c=>map[c.y*100+c.m]=c);
+  if(!cs.length)return '<div class="note">No weekly activity found for this game.</div>';
+  const map={};cs.forEach(c=>map[c.u]=c);
   const ys=cs.map(c=>c.y),y0=Math.max(...ys),y1=Math.min(...ys);
   let h='<div class="tl"><div></div>'+MS.map(x=>`<div class="h">${x}</div>`).join("");
   for(let y=y0;y>=y1;y--){
-    h+=`<div class="y">${y}</div>`+MS.map((_,k)=>{
-      const c=map[y*100+k+1];
-      if(!c)return '<div class="tc"></div>';
-      const L=k>0&&map[y*100+k],R=k<11&&map[y*100+k+2],r=c.run?c.run.r:"";
-      const showNum=r&&!(L&&L.run===c.run); // numeral only on the first square of a connected run
-      return `<div class="tc ${c.st} l${c.lv}${L?" jl":""}${R?" jr":""}" title="${MN[k].toUpperCase()} ${y}${r?" · RUN "+r:""}">${showNum?esc(r):""}</div>`}).join("");
+    h+=`<div class="y">${y}</div>`;
+    for(let p=0;p<CPY;p++){
+      const c=map[y*CPY+p],mb=p%4===0?" mb":"";
+      if(!c){h+=`<div class="tc${mb}"></div>`;continue}
+      h+=`<div class="tc ${c.st} l${c.lv}${mb}" title="${MN[p>>2].toUpperCase()} ${y} · WEEK ${(p&3)+1}${c.run?" · RUN "+c.run.r:""}"></div>`;
+    }
   }
   h+="</div>";
   const fmt=d=>MN[d.m-1].toUpperCase()+" "+d.y,first=cs[cs.length-1],last=cs[0];
   const lab={done:"COMPLETED ✓",drop:"DROPPED",stop:"STOPPED",ip:"IN PROGRESS"};
   const log=runs.length?`<div class="p-h">// PLAYTHROUGH LOG</div>`+runs.map(r=>{
     const cls=runStatus(r),pct=r.done?100:(r.pct||0);
-    return `<div class="pt ${cls}"><div class="rn">${esc(r.r)}</div><div class="pm"><div class="pl"><span>${lab[cls]}</span><em>${r.done?"100%":(r.pct==null?"—":r.pct+"%")}</em></div><div class="pb"><i style="width:${pct}%"></i></div><small>${r.cells} MONTHS${r.oldest?" · "+fmt(r.oldest)+" → "+fmt(r.newest):""}</small></div></div>`}).join(""):"";
-  return `<div class="info"><div class="box"><small>ACTIVE MONTHS</small><strong>${cs.filter(c=>c.st==="play").length} / ${cs.length}</strong></div><div class="box"><small>SPAN</small><strong>${fmt(first)} → ${fmt(last)}</strong></div></div>`+h+
+    return `<div class="pt ${cls}"><div class="rn">${esc(r.r)}</div><div class="pm"><div class="pl"><span>${lab[cls]}</span><em>${r.done?"100%":(r.pct==null?"—":r.pct+"%")}</em></div><div class="pb"><i style="width:${pct}%"></i></div><small>${r.cells} WEEKS${r.oldest?" · "+fmt(r.oldest)+" → "+fmt(r.newest):""}</small></div></div>`}).join(""):"";
+  return `<div class="info"><div class="box"><small>ACTIVE WEEKS</small><strong>${cs.filter(c=>c.st==="play").length} / ${cs.length}</strong></div><div class="box"><small>SPAN</small><strong>${fmt(first)} → ${fmt(last)}</strong></div></div>`+h+
    `<div class="lg"><span class="ramp">LOW<i class="tc play l1"></i><i class="tc play l2"></i><i class="tc play l3"></i><i class="tc play l4"></i><i class="tc play l5"></i>HIGH</span><span><i class="tc stop"></i>STOPPED</span><span><i class="tc drop"></i>DROPPED</span></div>`+
    (COLORS?"":'<div class="note">Colour data is not connected: only run markers are shown.</div>')+log;
 }
@@ -1792,7 +1825,7 @@ function parseCSV(t){
   return rows;
 }
 const num=s=>{s=(s||"").trim().replace(",",".");return s!==""&&!isNaN(s)?parseFloat(s):NaN};
-const imgFrom=s=>{s=(s||"").trim();const m=s.match(/https?:\/\/[^\s")]+/);return m?m[0]:""};
+const imgFrom=s=>{s=(s||"").trim();const m=s.match(/https?:\/\/[^\s")]+/);return m?m[0]:(/^[^\s"'<>]+$/.test(s)?s:"")};
 
 const DOC="https://docs.google.com/spreadsheets/d/1CmoD0lO2PDJzZYQ8y-axJYh5nUlWf6Q1QeiJFF0Sl3Q/";
 const ALT={
@@ -1868,7 +1901,7 @@ function render(mainT,cfgT,col){
   const app=document.getElementById("app");
   closePanel();ALL.length=0;
   COLORS=Array.isArray(col)?col:null;
-    const main=parseCSV(mainT),cfg=parseCSV(cfgT);
+    const main=parseCSV(mainT),cfg=parseCSV(cfgT);HDR=main[0]||[];
     const tiers=buildTiers(cfg);
     if(!tiers.length)throw new Error("Config sheet is empty or could not be parsed");
     let total=0;
@@ -1898,7 +1931,7 @@ function render(mainT,cfgT,col){
     tiers.forEach(t=>t.items.sort((a,b)=>a.v-b.v)); // stable sort: equal values keep the order of the table
     TIERS=tiers;
     app.innerHTML=tierHtml(tiers,true);watchImgs(app);
-    prepareViews();
+    calcBlocks();COLSIG=null;prepareViews();
     const AP=["#46e3ea","#f4e63a","#ff6b3d","#7ef0c6","#5aa0ff","#ff3d3d"];
     document.getElementById("ant").innerHTML=groups.filter(x=>x.items.length).reverse().map((x,k)=>{ // soonest first
       x.items.reverse();
@@ -1924,15 +1957,18 @@ async function load(manual){
   if(!shown){app.innerHTML='<div class="msg">LOADING DATA…</div>'}
   setStat('<span class="chip c">'+(shown?"UPDATING…":"LOADING…")+'</span>');
   try{
-    const [mainT,cfgT,colRaw]=await Promise.all([
-      retry(()=>getText(URL_MAIN),2),
-      retry(()=>getText(URL_CFG),2),
-      COLORS_URL?retry(()=>getJson(COLORS_URL),3).catch(()=>null):null]);
-    const col=Array.isArray(colRaw)?colRaw:(cache&&cache.col)||COLORS||null; // keep the last good colours if the script did not answer
-    const same=shown&&cache&&cache.mainT===mainT&&cache.cfgT===cfgT&&JSON.stringify(cache.col||null)===JSON.stringify(col||null);
-    if(!same||!hadData&&!shown)render(mainT,cfgT,col);
-    writeCache({mainT,cfgT,col,t:Date.now()});
-    setStat(Array.isArray(colRaw)||!COLORS_URL?"":'<span class="chip r">COLOURS: CACHED</span>');
+    const colP=COLORS_URL?retry(()=>getJson(COLORS_URL),3).catch(()=>null):Promise.resolve(null); // slow Apps Script: loaded in parallel, never blocks the tables
+    const [mainT,cfgT]=await Promise.all([retry(()=>getText(URL_MAIN),2),retry(()=>getText(URL_CFG),2)]);
+    const oldCol=(cache&&cache.col)||COLORS||null;
+    if(!(shown&&cache&&cache.mainT===mainT&&cache.cfgT===cfgT))render(mainT,cfgT,oldCol);
+    setStat(COLORS_URL?'<span class="chip c">COLOURS…</span>':"");
+    const colRaw=await colP;
+    if(Array.isArray(colRaw)){
+      if(COLSIG==null)COLSIG=COLORS?JSON.stringify(COLORS):"";
+      const sg=JSON.stringify(colRaw);
+      if(sg!==COLSIG){COLSIG=sg;applyColors(colRaw)}
+      writeCache({mainT,cfgT,col:colRaw,t:Date.now()});setStat("");
+    }else{writeCache({mainT,cfgT,col:oldCol,t:Date.now()});setStat(COLORS_URL?'<span class="chip r">COLOURS: CACHED</span>':"")}
   }catch(e){
     if(!shown){
       app.innerHTML=`<div class="msg err">LOAD ERROR: ${esc(String(e.message||e))}<br><button class="cut btn" onclick="load(true)"><span>RETRY</span></button></div>`;
@@ -2028,9 +2064,9 @@ function rateRow(r,g){
   return `<div class="rt"><div class="l"><b>${r[0]}</b><em class="q${q}">${ok?q+"/5":"N/A"}</em></div><p>${r[1]}</p>${seg(q,5,"q"+q)}</div>`;
 }
 const panel=document.getElementById("panel"),pin=document.getElementById("pin");
-let selEl=null,panelHist=false;
+let selEl=null,panelHist=false,panelId=null;
 function openPanel(id){
-  const g=ALL[id];if(!g)return;
+  const g=ALL[id];if(!g)return;panelId=id;
   const col=g.un?(g.color||"#46e3ea"):g.tier.color;
   pin.parentElement.style.setProperty("--tc",col);pin.style.setProperty("--tc",col);
   const cover=gimg(g,true);
@@ -2070,7 +2106,7 @@ function openPanel(id){
 }
 function closePanel(fromPop){
   const was=panel.classList.contains("on");
-  panel.classList.remove("on");document.body.classList.remove("pan");
+  panel.classList.remove("on");document.body.classList.remove("pan");panelId=null;
   if(gtlSel!=null){gtlSel=null;tlApplySel("gtl","data-gid",null)}
   if(selEl){selEl.classList.remove("sel");selEl=null}
   if(panelHist){panelHist=false;if(!fromPop&&was)history.back()} // drop the history entry we pushed when opening
@@ -2922,6 +2958,7 @@ window.addEventListener("resize",()=>{
 /* generic timeline: cfg={items:[{s,e,name,color,attrs}] (s/e = first/last unit, an integer), endU, nowU, ticks(totalUnits)->[{p,txt,yr}], unit:[px per unit, px per unit on phones], legend}
    horizontal on desktop (oldest -> newest), vertical on phones (NOW on top, older below) */
 function tlRender(host,cfg){
+  const oldSc=cfg.keep&&host.querySelector(".tl-scroll"),keepS=oldSc?[oldSc.scrollLeft,oldSc.scrollTop]:null;
   const V=tlV=matchMedia("(max-width:760px)").matches;
   host.classList.toggle("tlvert",V);
   const WK=V?cfg.unit[1]:cfg.unit[0],LH=27,BH=18,LP=6,GAP=5,PADW=Math.ceil(270/WK),items=cfg.items,Wtot=cfg.endU+2+PADW,W=Wtot*WK;
@@ -2963,19 +3000,25 @@ function tlRender(host,cfg){
     const geo=V?`left:${r.lane*LH+8}px;top:${(W-r.a1).toFixed(1)}px;height:${r.bw}px;width:18px`:`left:${r.a0.toFixed(1)}px;top:${r.lane*LH+5}px;width:${r.bw}px`;
     return `<div class="tlb${r.marker?" mk":""}${r.drop?" dr":""}" style="--c:${r.color};${geo}" ${r.attrs} data-n="${esc(r.name)}">${r.marker?'<i class="dm"></i>':""}${r.drop?'<i class="dp"></i>':""}${label}</div>`;
   }).join("");
-  const nowP=cfg.nowU*WK,nowX=nowP.toFixed(0),nowY=W-nowP;
+  const nowP=cfg.nowU*WK,nowX=nowP.toFixed(0),nowY=W-nowP,pw=(cfg.pendU||0)*WK,
+    pend=pw>0?`<div class="tl-pend" style="${V?`top:${(W-pw).toFixed(0)}px;height:${pw.toFixed(0)}px`:`width:${pw.toFixed(0)}px`}"><span>UPDATING…</span></div>`:"";
   if(V){
     host.innerHTML=`${cfg.legend}<div class="tl-scroll"><div class="tl-canvas tlv" style="height:${W}px"><div class="tl-axis">${axis}<span class="tl-nowl" style="top:${(nowY+3).toFixed(0)}px">NOW</span></div>
-    <div class="tl-lanes">${grid}<i class="tl-now" style="top:${nowY.toFixed(0)}px"></i><div class="tl-in" style="width:${nl*LH+16}px;height:${W}px">${bars}</div></div></div></div>`;
-    const sc=host.querySelector(".tl-scroll");sc.scrollTop=Math.max(0,nowY-44); // NOW at the top, the past below
+    <div class="tl-lanes">${grid}${pend}<i class="tl-now" style="top:${nowY.toFixed(0)}px"></i><div class="tl-in" style="width:${nl*LH+16}px;height:${W}px">${bars}</div></div></div></div>`;
+    const sc=host.querySelector(".tl-scroll");sc.scrollTop=keepS?keepS[1]:Math.max(0,nowY-44); // NOW at the top, the past below
   }else{
     host.innerHTML=`${cfg.legend}<div class="tl-scroll"><div class="tl-canvas" style="width:${W}px"><div class="tl-axis">${axis}<span class="tl-nowl" style="left:${+nowX+6}px">NOW</span></div>
-    <div class="tl-lanes" data-h="${H}" style="min-height:${H}px">${grid}<i class="tl-now" style="left:${nowX}px"></i><div class="tl-in" style="height:${H}px">${bars}</div></div></div></div>`;
-    const sc=host.querySelector(".tl-scroll");sc.scrollLeft=sc.scrollWidth; // the newest titles are on the right
+    <div class="tl-lanes" data-h="${H}" style="min-height:${H}px">${grid}${pend}<i class="tl-now" style="left:${nowX}px"></i><div class="tl-in" style="height:${H}px">${bars}</div></div></div></div>`;
+    const sc=host.querySelector(".tl-scroll");sc.scrollLeft=keepS?keepS[0]:sc.scrollWidth; // the newest titles are on the right
   }
 }
 let gtlSel=null,wtlSel=null; // the title / game whose lines are highlighted
-function tlApplySel(id,attr,val){const h=document.getElementById(id);if(!h)return;h.classList.toggle("hasSel",val!=null);h.querySelectorAll(".tlb").forEach(b=>b.classList.toggle("on",val!=null&&b.getAttribute(attr)===String(val)))}
+function tlApplySel(id,attr,val){ // only the previously / newly selected bars are touched (there can be thousands)
+  const h=document.getElementById(id);if(!h)return;h.classList.toggle("hasSel",val!=null);
+  (h._on||[]).forEach(b=>b.classList.remove("on"));
+  h._on=val!=null?[...h.querySelectorAll(`.tlb[${attr}="${CSS.escape(String(val))}"]`)]:[];
+  h._on.forEach(b=>b.classList.add("on"));
+}
 document.addEventListener("click",e=>{ // Watch List timeline: click a line to follow that title, click it again or the background to release
   if(Date.now()-(window.__tlDrag||0)<300)return;
   const b=e.target.closest&&e.target.closest("#wTl .tlb");
@@ -3015,25 +3058,33 @@ function wTimeline(){
 }
 /* Games Tier List -> Timeline: the same chart, built from the monthly cells of the Main sheet (columns T and further).
    A line = months played in a row (GTL_GAP empty months in between still keep it unbroken); colour = tier of the game; click opens the game panel. */
-const GTL_GAP=0;
+const GTL_GAP=0,GTL_VIS_YEARS=4; // GTL_GAP: empty weeks that still keep a line unbroken; the newest GTL_VIS_YEARS years are drawn first, older years are filled in later
+let gtlTok=0;
 function renderGtl(){
   const host=document.getElementById("gtl");
   if(!ALL.length){host.innerHTML='<div class="msg">LOADING…</div>';return false}
-  const per=[];
-  ALL.forEach(g=>{
-    if(g.un)return;const {cs}=cellsFor(g);if(!cs.length)return;
-    const a=cs.map(c=>({c,mi:c.y*12+c.m-1})).sort((x,y)=>x.mi-y.mi);let cur=null;
-    a.forEach(x=>{if(cur&&x.mi-cur.e-1<=GTL_GAP){cur.e=x.mi;cur.cells.push(x.c)}else{cur={g,s:x.mi,e:x.mi,cells:[x.c]};per.push(cur)}});
-  });
-  per.forEach(p=>{const c=p.cells[p.cells.length-1],r=c.run;p.drop=r?(runStatus(r)==="drop"&&!!r.newest&&r.newest.y===c.y&&r.newest.m===c.m):c.st==="drop"}); // the line that ends with a dropped playthrough
-  if(!per.length){host.innerHTML='<div class="msg">NO MONTHLY ACTIVITY IN THE TABLE</div>';return}
-  const nd=new Date(),nowMi=nd.getFullYear()*12+nd.getMonth(),base=Math.min(...per.map(p=>p.s)),last=Math.max(nowMi,...per.map(p=>p.e));
-  GLR=per;
-  const items=per.map((p,i)=>({s:p.s-base,e:p.e-base,name:p.g.name,color:p.g.tier.color,attrs:`data-gl="${i}" data-gid="${p.g.id}"`,drop:p.drop}));
-  tlRender(host,{items,endU:last-base+1,nowU:nowMi-base+.5,unit:[28,20],
-    legend:`<div class="tl-legend">${TIERS.map(t=>`<span><i style="background:${t.color}"></i>${esc(t.name)}</span>`).join("")}<span><i class="lgdr"></i>DROPPED</span><span class="hint">SCROLL OR DRAG SIDEWAYS · CLICK A LINE FOR DETAILS · 1 STEP = 1 MONTH</span></div>`,
-    ticks:Wtot=>{const out=[];for(let u=0;u<=Wtot;u++){const mi=base+u,m=((mi%12)+12)%12,y=Math.floor(mi/12),yr=m===0;out.push({p:u,yr,txt:yr?y:(m%3===0?MN[m].toUpperCase()+" "+String(y).slice(2):"")})}return out}});
-  tlApplySel("gtl","data-gid",gtlSel);tlFit("gtl","#view-tier .subtabs");
+  const tok=++gtlTok,games=ALL.filter(g=>!g.un),vis=Math.min(NB,GTL_VIS_YEARS);let q=0;
+  const scan=n=>games.forEach(g=>{const s=g._s||(g._s={q:0,cs:[],runs:{},pend:[]});while(s.q<n&&s.q<NB)scanBlock(g,BORD[s.q])});
+  function draw(nd){
+    const per=[];
+    games.forEach(g=>{const s=g._s;if(!s||!s.cs.length)return;let cur=null;
+      for(let i=s.cs.length-1;i>=0;i--){const c=s.cs[i];if(cur&&c.u-cur.e-1<=GTL_GAP){cur.e=c.u;cur.cells.push(c)}else{cur={g,s:c.u,e:c.u,cells:[c]};per.push(cur)}}});
+    per.forEach(p=>{const c=p.cells[p.cells.length-1],r=c.run;p.drop=r?(runStatus(r)==="drop"&&!!r.newest&&r.newest.u===c.u):c.st==="drop"}); // the line that ends with a dropped playthrough
+    if(!per.length&&nd>=NB){host.innerHTML='<div class="msg">NO ACTIVITY IN THE TABLE</div>';return}
+    const d=new Date(),nowU=d.getFullYear()*CPY+d.getMonth()*4+Math.min(3,Math.floor((d.getDate()-1)/7.5))+.5,base=Math.min(...BY)*CPY,last=Math.max(Math.floor(nowU),...per.map(p=>p.e));
+    GLR=per;
+    const items=per.map((p,i)=>({s:p.s-base,e:p.e-base,name:p.g.name,color:p.g.tier.color,attrs:`data-gl="${i}" data-gid="${p.g.id}"`,drop:p.drop}));
+    tlRender(host,{items,endU:last-base+1,nowU:nowU-base,unit:[10,5],keep:true,pendU:nd<NB?BY[BORD[nd-1]]*CPY-base:0,
+      legend:`<div class="tl-legend">${TIERS.map(t=>`<span><i style="background:${t.color}"></i>${esc(t.name)}</span>`).join("")}<span><i class="lgdr"></i>DROPPED</span><span class="hint">SCROLL OR DRAG SIDEWAYS · CLICK A LINE FOR DETAILS · 1 STEP = ¼ MONTH</span></div>`,
+      ticks:Wtot=>{const out=[];for(let u=0;u<=Wtot;u+=4){const ab=base+u,m=Math.floor((((ab%CPY)+CPY)%CPY)/4),y=Math.floor(ab/CPY),yr=m===0;out.push({p:u,yr,txt:yr?y:(m%3===0?MN[m].toUpperCase()+" "+String(y).slice(2):"")})}return out}});
+    tlApplySel("gtl","data-gid",gtlSel);tlFit("gtl","#view-tier .subtabs");
+  }
+  (function step(){
+    if(tok!==gtlTok)return;
+    q=Math.min(NB,q?q+1:vis);scan(q);
+    if(q===vis||q>=NB)draw(q); // first picture as soon as the visible years are ready, the final one when everything is scanned
+    if(q<NB)setTimeout(step,0);
+  })();
 }
 function wRender(){
   const list=document.getElementById("wList"),tl=document.getElementById("wTl"),isTl=wView==="timeline";
