@@ -1770,6 +1770,8 @@ function calcBlocks(){ // year blocks: the year comes from a 4-digit number in t
   for(let k=0;k<NB;k++){let y=null;for(let j=0;j<CPY&&y==null;j++){const m=/^\s*((?:19|20)\d\d)\s*$/.exec(HDR[C0+k*CPY+j]||"");if(m)y=+m[1]}BY.push(y==null?cy-k:y)}
   BORD=[...BY.keys()].sort((a,b)=>BY[b]-BY[a]); // blocks are always scanned newest year first
 }
+let INT_MIN=1,INT_MAX=50; // intensity range (hours per week): config sheet, B15 = min, C15 = max
+const intLv=h=>Math.min(5,Math.max(1,Math.ceil((h-INT_MIN)/(INT_MAX-INT_MIN)*5)));
 const MARK_LV=1; // a cell that holds only a playthrough marker ("VI (Dropped at 10%)") counts as one low-intensity week
 function scanBlock(g,k){
   const s=g._s||(g._s={q:0,cs:[],runs:{},pend:[]}),y=BY[k],d=new Date(),nm=d.getFullYear()*12+d.getMonth(),desc=CELL_DIR==="desc";
@@ -1778,7 +1780,7 @@ function scanBlock(g,k){
     if(!txt)continue;
     const hv=/^\d+(?:[.,]\d+)?\s*(?:h|ч)?$/i.test(txt)?parseFloat(txt.replace(",",".")):null, // a number = hours (0 = nothing, 50+ = maximum)
       parts=hv==null?txt.split(/\s+(?=[IVXLC]+(?![A-Za-z]))/).map(marker).filter(Boolean):[];
-    const lv=hv!=null?(hv>0?Math.min(5,Math.max(1,Math.ceil(hv/10))):0):(parts.length?MARK_LV:0);
+    const lv=hv!=null?(hv>0?intLv(hv):0):(parts.length?MARK_LV:0);
     if(lv){const m=p>>2,c={y,m:m+1,w:p&3,u:y*CPY+p,off:nm-(y*12+m),st:"play",lv,run:null};s.cs.push(c);s.pend.push(c)}
     parts.forEach((pt,n)=>{
       const r=s.runs[pt.n]||(s.runs[pt.n]=newRun(pt));
@@ -1922,7 +1924,7 @@ function render(mainT,cfgT,col){
   const app=document.getElementById("app");
   closePanel();ALL.length=0;
   COLORS=Array.isArray(col)?col:null;
-    const main=parseCSV(mainT),cfg=parseCSV(cfgT);HDR=main[0]||[];
+    const main=parseCSV(mainT),cfg=parseCSV(cfgT);HDR=main[0]||[];{const a=num((cfg[14]||[])[1]),b=num((cfg[14]||[])[2]);INT_MIN=isNaN(a)?1:a;INT_MAX=isNaN(b)||b<=INT_MIN?INT_MIN+49:b}
     const tiers=buildTiers(cfg);
     if(!tiers.length)throw new Error("Config sheet is empty or could not be parsed");
     let total=0;
@@ -2619,10 +2621,13 @@ const FEM_STD={w:180,h:420},FEM_TALL_W_PCT=143.75; // a standard 180x420 file is
 function fitTall(im){
   if(im.naturalWidth)im.style.width=(im.naturalWidth/FEM_STD.w*FEM_TALL_W_PCT)+"%"; // 258x420 -> same height as the standard, but wider
 }
-function fimg(n,dir,tall){
+function fitSq(im){ // 256x256 = the standard square; a bigger file keeps the same pixel scale and grows up and sideways
+  if(im.naturalWidth){im.style.width=(im.naturalWidth/256*115)+"%";im.style.aspectRatio=im.naturalWidth+"/"+im.naturalHeight}
+}
+function fimg(n,dir,tall,sq){
   const dirs=[].concat(dir),c=[];
   dirs.forEach((d,i)=>{const base=d+encodeURIComponent(n)+".png";c.push("https://warranty-v2.github.io/"+base);if(i===0)c.push("https://raw.githubusercontent.com/warranty-v2/warranty-v2.github.io/main/"+base)});
-  return `<img decoding="async" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(ini(n))}" data-s0="${esc(c[0])}" ${tall?'onload="fitTall(this)" ':""}onerror="imgNext(this)">`;
+  return `<img decoding="async" referrerpolicy="no-referrer" alt="" data-c="${esc(JSON.stringify(c))}" data-n="0" data-i="${esc(ini(n))}" data-s0="${esc(c[0])}" ${tall?'onload="fitTall(this)" ':sq?'onload="fitSq(this)" ':""}onerror="imgNext(this)">`;
 }
 function fitGuns(){ // a wide item never asks for more columns than the grid has
   document.querySelectorAll(".fitems.guns").forEach(el=>{
@@ -2661,7 +2666,7 @@ function renderFem(text,kind){
       <div class="cut label"><b>${esc(t.name)}</b><span>${esc(t.desc)}</span><i>${n} ${n===1?"CHARACTER":"CHARACTERS"}</i></div>
       <div class="fitems${tl}">${n?items.map(x=>{
         if(x.file==="?")return `<div class="fc q${tl}" data-n="?"><div class="ff"><span class="qm">?</span></div></div>`; // the unknown one: just a question mark
-        return `<div class="fc${tl}${x.dir==="r"?" fr":x.dir==="l"?" fl":""}" style="--yl:${100-x.pl}%;--yr:${100-x.pr}%" data-n="${esc(x.name||x.file)}" data-f="${esc(x.fran)}"><div class="ff"></div><div class="pw">${fimg(x.file,cfg.dir,cfg.tall)}</div></div>`}).join(""):`<div class="empty">${flt?"// NO MATCHES":"// NO DATA"}</div>`}</div>
+        return `<div class="fc${tl}${x.dir==="r"?" fr":x.dir==="l"?" fl":""}" style="--yl:${100-x.pl}%;--yr:${100-x.pr}%" data-n="${esc(x.name||x.file)}" data-f="${esc(x.fran)}"><div class="ff"></div><div class="pw">${fimg(x.file,cfg.dir,cfg.tall,!cfg.tall)}</div></div>`}).join(""):`<div class="empty">${flt?"// NO MATCHES":"// NO DATA"}</div>`}</div>
     </section>`}).join("");
   app.innerHTML=html&&any?html:'<div class="msg">NO DATA</div>';
   watchImgs(app);
@@ -3189,7 +3194,7 @@ function route(){
 window.addEventListener("hashchange",()=>{panelHist=false;closePanel(true);route()});
 document.addEventListener("keydown",e=>{
   if(e.target.closest&&e.target.closest("input,textarea"))return; // typing in a search field must not trigger the Q / E / R shortcuts
-  const k=e.key.toLowerCase();
+  if(e.ctrlKey||e.metaKey||e.altKey)return;const k=e.code==="KeyQ"?"q":e.code==="KeyE"?"e":e.code==="KeyR"?"r":""; // physical keys: works in any layout
   if(k==="r"&&cur==="tier")load(true);
   if(k==="r"&&cur==="female"){femBusy[femSub]=false;loadFem(femSub)}
   if(k==="r"&&cur==="firearms"){femBusy.guns=false;loadFem("guns")}
